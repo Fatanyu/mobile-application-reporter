@@ -41,22 +41,34 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         self.insertNewReportType(newReportTypes: dummyValues)
         
         
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportType")
-        //request.predicate = NSPredicate(format: "age = %@", "12")
+        
+    }
+    
+    func getReportTypeData() -> [String]
+    {
+        var reportTypeDictionary = [String]()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportTypeEntity")
         request.returnsObjectsAsFaults = false
         let context = self.fetchedResultsController.managedObjectContext
         do
         {
             let result = try context.fetch(request)
-            for data in result as! [TypeReportEntity]
+            //print("here")
+            for data in result as! [ReportTypeEntity]
             {
-                print("data.typ:\(data.type!)")
+                //print("Adding data.typ:\(data.type!)")
+                if let openData = data.type
+                {
+                    reportTypeDictionary.append(openData)
+                }
             }
+            //print("here 2")
         }
         catch
         {
-            print("Failed")
+            print("Fetching dummy values from ReportType failed")
         }
+        return reportTypeDictionary
     }
     
     
@@ -133,7 +145,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     func insertNewReportType(newReportType : ReportType)
     {
         let context = self.fetchedResultsController.managedObjectContext
-        let newTypes = TypeReportEntity(context:context)
+        let newTypes = ReportTypeEntity(context:context)
         newTypes.type = newReportType.reportType
         /*
         print("newTypes.idObce:\(newTypes.idObce)")
@@ -156,11 +168,11 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     {
         let context = self.fetchedResultsController.managedObjectContext
         let newHlaseni = ReportEntity(context: context)
-        let newTyp = TypeReportEntity(context:context)
+        let newTyp = ReportTypeEntity(context: context)
         
         // If appropriate, configure the new managed object.
         
-
+/*
         newHlaseni.createTime = Date()
         newHlaseni.reportDescription = newReport.Description
         print("Popis:\(newHlaseni.reportDescription!)")
@@ -197,7 +209,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         newHlaseni.send = false
         
         //newHlaseni.foto = newReport.picture?.accessibilityIdentifier
-        
+        */
         // Save the context.
         do
         {
@@ -222,9 +234,6 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
             {
                 let object = fetchedResultsController.object(at: indexPath)
                 let controller = (segue.destination as! UINavigationController).topViewController as! ReportDetailViewController
-                /*controller.detailItem = object
-                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton = true*/
                 controller.report = object as ReportEntity?
             }
         }
@@ -232,6 +241,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         {
             let controller = (segue.destination as! UINavigationController).topViewController as! NewReportViewController
             controller.storage = self
+            controller.dataSource = self.getReportTypeData()
         }
     }
 

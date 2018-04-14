@@ -7,16 +7,6 @@
 //
 
 import UIKit
-struct GPSLocation
-{
-    let longitude : Double
-    let latitude : Double
-    
-    func equal(location : GPSLocation)-> Bool
-    {
-        return self.longitude == location.longitude && self.latitude == location.latitude
-    }
-}
 
 struct ReportType
 {

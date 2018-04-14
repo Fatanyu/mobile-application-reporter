@@ -17,6 +17,7 @@
 		0846A7E92074D6AA0094648F /* topgis_reportingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846A7E82074D6AA0094648F /* topgis_reportingTests.swift */; };
 		0846A7F42074DE790094648F /* NewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846A7F32074DE790094648F /* NewReportViewController.swift */; };
 		0846A7F62074DFAB0094648F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0846A7F52074DFAB0094648F /* Report.swift */; };
+		0860CF0F20823EA400B577D3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0860CF0E20823EA400B577D3 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		0846A7EA2074D6AA0094648F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0846A7F32074DE790094648F /* NewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportViewController.swift; sourceTree = "<group>"; };
 		0846A7F52074DFAB0094648F /* Report.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
+		0860CF0E20823EA400B577D3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				0846A7CD2074D6AA0094648F /* topgis-reporting */,
 				0846A7E72074D6AA0094648F /* topgis-reportingTests */,
 				0846A7CC2074D6AA0094648F /* Products */,
+				0860CF10208248E100B577D3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +98,7 @@
 				0846A7D02074D6AA0094648F /* topgis_reporting.xcdatamodeld */,
 				0846A7F32074DE790094648F /* NewReportViewController.swift */,
 				0846A7F52074DFAB0094648F /* Report.swift */,
+				0860CF0E20823EA400B577D3 /* LocationManager.swift */,
 			);
 			path = "topgis-reporting";
 			sourceTree = "<group>";
@@ -106,6 +110,13 @@
 				0846A7EA2074D6AA0094648F /* Info.plist */,
 			);
 			path = "topgis-reportingTests";
+			sourceTree = "<group>";
+		};
+		0860CF10208248E100B577D3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +170,11 @@
 					0846A7CA2074D6AA0094648F = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					0846A7E32074D6AA0094648F = {
 						CreatedOnToolsVersion = 9.2;
@@ -214,6 +230,7 @@
 				0846A7F42074DE790094648F /* NewReportViewController.swift in Sources */,
 				0846A7D22074D6AA0094648F /* topgis_reporting.xcdatamodeld in Sources */,
 				0846A7CF2074D6AA0094648F /* AppDelegate.swift in Sources */,
+				0860CF0F20823EA400B577D3 /* LocationManager.swift in Sources */,
 				0846A7D42074D6AA0094648F /* HistoryViewController.swift in Sources */,
 				0846A7D62074D6AA0094648F /* ReportDetailViewController.swift in Sources */,
 				0846A7F62074DFAB0094648F /* Report.swift in Sources */,

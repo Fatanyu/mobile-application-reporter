@@ -8,14 +8,14 @@
         <attribute name="reportDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="send" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="sendTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="has" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TypeReportEntity" inverseName="belongsTo" inverseEntity="TypeReportEntity" syncable="YES"/>
+        <relationship name="has" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReportTypeEntity" inverseName="belongsTo" inverseEntity="ReportTypeEntity" syncable="YES"/>
     </entity>
-    <entity name="TypeReportEntity" representedClassName="TypeReportEntity" syncable="YES" codeGenerationType="class">
+    <entity name="ReportTypeEntity" representedClassName="ReportTypeEntity" syncable="YES" codeGenerationType="class">
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="belongsTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReportEntity" inverseName="has" inverseEntity="ReportEntity" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TypeReportEntity" positionX="-414" positionY="405" width="128" height="73"/>
         <element name="ReportEntity" positionX="-182" positionY="563" width="128" height="163"/>
+        <element name="ReportTypeEntity" positionX="-414" positionY="405" width="128" height="73"/>
     </elements>
 </model>
