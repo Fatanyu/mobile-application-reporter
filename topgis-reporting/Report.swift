@@ -21,7 +21,7 @@ struct GPSLocation
 struct ReportType
 {
     let reportType : String
-    let villageId : Int
+    //let villageId : Int
 }
 
 // https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Properties.html

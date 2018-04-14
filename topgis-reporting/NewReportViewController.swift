@@ -46,7 +46,7 @@ class NewReportViewController: UIViewController
     
     func createReport() -> Report
     {
-        let newReport = Report(newDescription: "Chuj", newPicture: nil, newLocation: GPSLocation(longitude: 1, latitude: 3), newReportType: ReportType(reportType: "Skládka", villageId: 5))
+        let newReport = Report(newDescription: "Chuj", newPicture: nil, newLocation: GPSLocation(longitude: 1, latitude: 3), newReportType: ReportType(reportType: "Skládka"/*, villageId: 5*/))
         return newReport
     }
     

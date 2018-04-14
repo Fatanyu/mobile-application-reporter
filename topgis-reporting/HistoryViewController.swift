@@ -11,23 +11,53 @@ import CoreData
 
 class HistoryViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
-    private var dbVersion : Int = 0
-    
-    func addVersion()
+    private var firstRun : Bool //https://stackoverflow.com/questions/26830285/ios-app-first-launch
     {
-        self.dbVersion+=1
+        get
+        {
+            let defaults = UserDefaults.standard
+            if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce")
+            {
+                //print("App already launched")
+                return false
+            }
+            else
+            {
+                defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+                //print("App launched first time")
+                return true
+            }
+
+        }
     }
-    func addVersion(newData : [TypHlaseni])
+
+    func insertDummyValues()
     {
-        self.updateDB(newData: newData)
-        self.dbVersion+=1
-    }
-    
-    func updateDB(newData : [TypHlaseni])
-    {
+        var dummyValues = [ReportType]()
+        dummyValues.append(ReportType(reportType: "Skladka"))
+        dummyValues.append(ReportType(reportType: "Bordel"))
+        dummyValues.append(ReportType(reportType: "Mimozemstan"))
+        dummyValues.append(ReportType(reportType: "Chybny"))
+        self.insertNewReportType(newReportTypes: dummyValues)
         
+        
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportType")
+        //request.predicate = NSPredicate(format: "age = %@", "12")
+        request.returnsObjectsAsFaults = false
+        let context = self.fetchedResultsController.managedObjectContext
+        do
+        {
+            let result = try context.fetch(request)
+            for data in result as! [TypeReportEntity]
+            {
+                print("data.typ:\(data.type!)")
+            }
+        }
+        catch
+        {
+            print("Failed")
+        }
     }
-    
     
     
     var detailViewController: ReportDetailViewController? = nil
@@ -38,6 +68,12 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        if(self.firstRun)
+        {
+            self.insertDummyValues()
+        }
+        
         // Do any additional setup after loading the view, typically from a nib.
         navigationItem.leftBarButtonItem = editButtonItem
 
@@ -85,25 +121,49 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         }
     }
 */
-    static func getNewReportId() -> Int64
+    
+    func insertNewReportType(newReportTypes : [ReportType])
     {
-        idHlaseni += 1
-        return Int64(idHlaseni)
+        for oneType in newReportTypes
+        {
+            self.insertNewReportType(newReportType : oneType)
+        }
+    }
+    
+    func insertNewReportType(newReportType : ReportType)
+    {
+        let context = self.fetchedResultsController.managedObjectContext
+        let newTypes = TypeReportEntity(context:context)
+        newTypes.type = newReportType.reportType
+        /*
+        print("newTypes.idObce:\(newTypes.idObce)")
+        print("newTypes.typ:\(newTypes.typ!)")
+        */
+        do
+        {
+            try context.save()
+        }
+        catch
+        {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
     }
     
     func insertNewReport(newReport : Report)
     {
         let context = self.fetchedResultsController.managedObjectContext
-        let newHlaseni = Hlaseni(context: context)
-        let newTyp = TypHlaseni(context:context)
+        let newHlaseni = ReportEntity(context: context)
+        let newTyp = TypeReportEntity(context:context)
         
         // If appropriate, configure the new managed object.
         
 
-        newHlaseni.id = HistoryViewController.getNewReportId()
-        newHlaseni.casVytvoreni = Date()
-        newHlaseni.popis = newReport.Description
-        print("Popis:\(newHlaseni.popis!)")
+        newHlaseni.createTime = Date()
+        newHlaseni.reportDescription = newReport.Description
+        print("Popis:\(newHlaseni.reportDescription!)")
         newHlaseni.latitude = newReport.location.latitude
         print("latitude:\(newHlaseni.latitude)")
         newHlaseni.longitude = newReport.location.longitude
@@ -134,7 +194,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
        //print("Typ hlaseni:\(newHlaseni.hlaseni_typ!.typ)")
         //newHlaseni.hlaseni_typ?.idObce = Int64(newReport.reportType!.villageId)
         //print()
-        newHlaseni.odeslano = false
+        newHlaseni.send = false
         
         //newHlaseni.foto = newReport.picture?.accessibilityIdentifier
         
@@ -165,7 +225,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
                 /*controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true*/
-                controller.hlaseni = object as Hlaseni?
+                controller.report = object as ReportEntity?
             }
         }
         else if segue.identifier == "newReport"
@@ -191,8 +251,8 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let hlaseni = fetchedResultsController.object(at: indexPath)
-        configureCell(cell, withHlaseni: hlaseni)
+        let report = fetchedResultsController.object(at: indexPath)
+        configureCell(cell, withReport: report)
         return cell
     }
 
@@ -223,28 +283,28 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         }
     }
 
-    func configureCell(_ cell: UITableViewCell, withHlaseni hlaseni: Hlaseni)
+    func configureCell(_ cell: UITableViewCell, withReport report: ReportEntity)
     {
-        cell.textLabel!.text = String(hlaseni.id.description)
+        cell.textLabel!.text = String(report.createTime!.description)
     }
 
     // MARK: - Fetched results controller
 
-    var fetchedResultsController: NSFetchedResultsController<Hlaseni>
+    var fetchedResultsController: NSFetchedResultsController<ReportEntity>
     {
         if _fetchedResultsController != nil
         {
             return _fetchedResultsController!
         }
      
-        let fetchRequest: NSFetchRequest<Hlaseni> = Hlaseni.fetchRequest()
+        let fetchRequest: NSFetchRequest<ReportEntity> = ReportEntity.fetchRequest()
         
         // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
 //        let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
-        let sortDescriptor = NSSortDescriptor(key: "id", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "createTime", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -268,7 +328,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
  
         return _fetchedResultsController!
     }    
-    var _fetchedResultsController: NSFetchedResultsController<Hlaseni>? = nil
+    var _fetchedResultsController: NSFetchedResultsController<ReportEntity>? = nil
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {
@@ -297,9 +357,9 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
             case .delete:
                 tableView.deleteRows(at: [indexPath!], with: .fade)
             case .update:
-                configureCell(tableView.cellForRow(at: indexPath!)!, withHlaseni: anObject as! Hlaseni)
+                configureCell(tableView.cellForRow(at: indexPath!)!, withReport: anObject as! ReportEntity)
             case .move:
-                configureCell(tableView.cellForRow(at: indexPath!)!, withHlaseni: anObject as! Hlaseni)
+                configureCell(tableView.cellForRow(at: indexPath!)!, withReport: anObject as! ReportEntity)
                 tableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }

@@ -10,7 +10,7 @@ import UIKit
 
 class ReportDetailViewController: UIViewController
 {
-    var hlaseni : Hlaseni? = nil
+    var report : ReportEntity? = nil
 /*    {
         didSet
         {
@@ -27,28 +27,9 @@ class ReportDetailViewController: UIViewController
     func configureView()
     {
         // Update the user interface for the detail item.
-        /*if let detail = detailItem
-        {
-            if let label = detailDescriptionLabel
-            {
-                label.text = String(detail.id.description)
-            }
-        }*/
-        //print(hlaseni)
-        /*if let unwrappedHlaseni = self.hlaseni
-        {
-            if let unwrappedTypeHlaseni = unwrappedHlaseni.hlaseni_typ
-            {
-                if let unwrappedType = unwrappedTypeHlaseni.typ
-                {
-                    self.detailTypeLabel.text = unwrappedType
-                }
-            }
-            //self.detailTypeLabel.text = unwrappedHlaseni.hlaseni_typ?.typ
-        }*/
-        //self.detailTypeLabel.text = hlaseni?.typ?.typ
 
-        self.detailDescriptionLabel.text = hlaseni?.popis
+        self.detailDescriptionLabel.text = report?.reportDescription ?? Report.NOT_SET
+        
     }
 
     override func viewDidLoad()
