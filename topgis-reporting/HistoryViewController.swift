@@ -168,7 +168,9 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     {
         let context = self.fetchedResultsController.managedObjectContext
         let newHlaseni = ReportEntity(context: context)
-        let newTyp = ReportTypeEntity(context: context)
+        //let newTyp = ReportTypeEntity(context: context)
+        
+        
         
         // If appropriate, configure the new managed object.
         

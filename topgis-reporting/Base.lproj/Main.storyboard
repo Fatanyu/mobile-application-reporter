@@ -295,8 +295,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-z0-1hc">
-                                <rect key="frame" x="80" y="221" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nebylo uděleno oprávnění" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-z0-1hc">
+                                <rect key="frame" x="80" y="221" width="285" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -310,14 +310,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GPS lokalizace" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0z-vO-O70">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GPS souřadnice" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0z-vO-O70">
                                 <rect key="frame" x="10" y="190" width="355" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0SC-fH-mQV">
-                                <rect key="frame" x="80" y="252" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nebylo uděleno oprávnění" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0SC-fH-mQV">
+                                <rect key="frame" x="80" y="252" width="285" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -343,9 +343,11 @@
                             <constraint firstItem="s0z-vO-O70" firstAttribute="top" secondItem="CGp-gF-njM" secondAttribute="bottom" constant="10" id="amE-fg-ylo"/>
                             <constraint firstItem="szH-TP-mcn" firstAttribute="leading" secondItem="5h9-5H-Zlf" secondAttribute="leading" constant="10" id="bt4-Cu-VRI"/>
                             <constraint firstItem="o8b-gK-vAo" firstAttribute="leading" secondItem="5h9-5H-Zlf" secondAttribute="leading" constant="10" id="cvE-Fg-LQA"/>
+                            <constraint firstItem="5h9-5H-Zlf" firstAttribute="trailing" secondItem="0SC-fH-mQV" secondAttribute="trailing" constant="10" id="ddE-2j-MkT"/>
                             <constraint firstItem="4fs-bO-evF" firstAttribute="leading" secondItem="5h9-5H-Zlf" secondAttribute="leading" constant="10" id="eWv-Tj-9m3"/>
                             <constraint firstItem="pBm-IK-epp" firstAttribute="leading" secondItem="5h9-5H-Zlf" secondAttribute="leading" constant="10" id="hRd-5u-SJI"/>
                             <constraint firstItem="5h9-5H-Zlf" firstAttribute="trailing" secondItem="szH-TP-mcn" secondAttribute="trailing" constant="10" id="hXl-yw-VDx"/>
+                            <constraint firstItem="5h9-5H-Zlf" firstAttribute="trailing" secondItem="A1f-z0-1hc" secondAttribute="trailing" constant="10" id="jc1-3M-NKb"/>
                             <constraint firstItem="pBm-IK-epp" firstAttribute="top" secondItem="4fs-bO-evF" secondAttribute="bottom" constant="10" id="kOS-s7-vUm"/>
                             <constraint firstItem="CGp-gF-njM" firstAttribute="trailing" secondItem="5h9-5H-Zlf" secondAttribute="trailing" id="w5g-vf-qhp"/>
                         </constraints>

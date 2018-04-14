@@ -32,7 +32,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate
     let locationManager : CLLocationManager //https://stackoverflow.com/questions/26142441/cllocationdegrees-to-string-variable-in-swift
     let UNKNOWN_LOCATION : GPSLocation
     
-    private var actualLocation : GPSLocation
+    var actualLocation : GPSLocation
     
     override init()
     {
@@ -43,27 +43,39 @@ class LocationManager: NSObject, CLLocationManagerDelegate
         self.locationManager.delegate = self
     }
     
-    func getActualLocation() //-> GPSLocation
+    func requestLocationUpdate() //-> GPSLocation
     {
         //self.locationManager.requestAlwaysAuthorization() //can run on background
         self.locationManager.requestWhenInUseAuthorization() //only on frontend
-        locationManager.requestLocation()
+        if CLLocationManager.locationServicesEnabled()
+        {
+            locationManager.requestLocation()
+        }
         //self.getLocation()
         //return self.actualLocation
+    }
+    
+    func getLocation() -> GPSLocation
+    {
+        return self.actualLocation
     }
     
     
     func locationManager(_ manager: CLLocationManager , didUpdateLocations locations: [CLLocation])
     {
-        var coordinates = self.UNKNOWN_LOCATION
+        //var coordinates = self.UNKNOWN_LOCATION
         if let location = locationManager.location
         {
+            //print("here")
             let latitude: String = "\(location.coordinate.longitude)"
             let longtitude: String = "\(location.coordinate.latitude)"
-            coordinates = GPSLocation(longitude: longtitude, latitude: latitude)
+            //coordinates = GPSLocation(longitude: longtitude, latitude: latitude)
+            self.actualLocation = GPSLocation(longitude: longtitude, latitude: latitude)
+            //print("Creating notification")
+            NotificationCenter.default.post(name: Notification.Name("HasNewLocation"), object: nil)
         }
         
-        self.actualLocation = coordinates
+        //self.actualLocation = coordinates
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {

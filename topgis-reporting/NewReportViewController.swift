@@ -16,14 +16,9 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     var dataSource = [String]()     //belongs to UIPickerViewDataSource protocol
     var selectedValue = String()
     var actualLocation = GPSLocation(longitude: GPSLocation.NOT_SET,latitude: GPSLocation.NOT_SET)
-    {
-        didSet
-        {
-            self.latitudeLabel.text = self.actualLocation.latitude
-            self.longitudeLabel.text = self.actualLocation.longitude
-        }
-    }
-    
+
+
+
     @IBOutlet weak var latitudeLabel: UILabel!
     @IBOutlet weak var longitudeLabel: UILabel!
     
@@ -36,8 +31,13 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         super.viewDidLoad()
         self.reportTypePicker.dataSource = self
         self.reportTypePicker.delegate = self
-        location.getActualLocation()
         // Do any additional setup after loading the view.
+    }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        //https://stackoverflow.com/questions/24049020/nsnotificationcenter-addobserver-in-swift
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateLocation(notification:)), name: Notification.Name("HasNewLocation"), object: nil)
+        location.requestLocationUpdate()
     }
 
     override func didReceiveMemoryWarning()
@@ -54,6 +54,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     
     @IBAction func clickedSave(_ sender: Any)
     {
+        
         //self.storage?.insertNewObject(self)
         if (self.actualLocation.isDummy())
         {
@@ -75,6 +76,14 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         /*let newReport = Report(newDescription: "Chuj", newPicture: nil, newLocation: GPSLocation(longitude: 1, latitude: 3), newReportType: ReportType(reportType: "Skládka"/*, villageId: 5*/))*/
         return newReport
     }
+    
+    @objc private func updateLocation(notification: Notification)
+    {
+        self.actualLocation = self.location.getLocation()
+        self.latitudeLabel.text = self.actualLocation.latitude
+        self.longitudeLabel.text = self.actualLocation.longitude
+    }
+    
     
     /*
         Implementation of UIPickerViewDataSource, UIPickerViewDelegate protocols

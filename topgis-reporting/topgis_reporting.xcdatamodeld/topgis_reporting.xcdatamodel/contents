@@ -16,6 +16,6 @@
     </entity>
     <elements>
         <element name="ReportEntity" positionX="-182" positionY="563" width="128" height="163"/>
-        <element name="ReportTypeEntity" positionX="-414" positionY="405" width="128" height="73"/>
+        <element name="ReportTypeEntity" positionX="-414" positionY="593" width="128" height="73"/>
     </elements>
 </model>
