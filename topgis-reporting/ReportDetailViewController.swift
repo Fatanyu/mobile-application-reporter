@@ -21,14 +21,16 @@ class ReportDetailViewController: UIViewController
         }
     }*/
     
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    //@IBOutlet weak var detailDescriptionLabel: UILabel!
     @IBOutlet weak var detailTypeLabel: UILabel!
+    @IBOutlet weak var detailDescriptionLabel: UITextView!
     
     func configureView()
     {
         // Update the user interface for the detail item.
 
         self.detailDescriptionLabel.text = report?.reportDescription ?? Report.NOT_SET
+        self.detailTypeLabel.text = report?.type ?? Report.NOT_SET
         
     }
 

@@ -14,7 +14,17 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     
     var storage:HistoryViewController?
     var dataSource = [String]()     //belongs to UIPickerViewDataSource protocol
+    {
+        didSet
+        {
+            if(dataSource.count > 0)
+            {
+                selectedValue = dataSource.first ?? ""
+            }
+        }
+    }
     var selectedValue = String()
+
     var actualLocation = GPSLocation(longitude: GPSLocation.NOT_SET,latitude: GPSLocation.NOT_SET)
 
 
@@ -31,6 +41,8 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         super.viewDidLoad()
         self.reportTypePicker.dataSource = self
         self.reportTypePicker.delegate = self
+        
+
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool)

@@ -9,6 +9,27 @@
 import UIKit
 import CoreData
 
+class GlobalSettings
+{
+    static func getTimeLocale(date : Date?) -> String
+    {
+        var stringDate : String = ""
+        //https://stackoverflow.com/questions/28404154/swift-get-local-date-time
+        if let unwrappedDate = date
+        {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "DD-MM-YYYY HH:MM:SS"
+            stringDate = dateFormatter.string(from: unwrappedDate)
+        }
+        return stringDate
+    }
+    private init()
+    {
+        
+    }
+}
+
+
 class HistoryViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
     private var firstRun : Bool //https://stackoverflow.com/questions/26830285/ios-app-first-launch
@@ -167,10 +188,17 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     func insertNewReport(newReport : Report)
     {
         let context = self.fetchedResultsController.managedObjectContext
-        let newHlaseni = ReportEntity(context: context)
+        let report = ReportEntity(context: context)
         //let newTyp = ReportTypeEntity(context: context)
         
-        
+        report.latitude = Double(newReport.location.latitude)!
+        report.longitude = Double(newReport.location.longitude)!
+        report.reportDescription = newReport.Description
+        report.createTime = newReport.DateTime
+        report.send = false
+        report.image = nil //newReport.picture
+        report.type = newReport.reportType?.reportType
+        report.sendTime = nil
         
         // If appropriate, configure the new managed object.
         
@@ -297,7 +325,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
 
     func configureCell(_ cell: UITableViewCell, withReport report: ReportEntity)
     {
-        cell.textLabel!.text = String(report.createTime!.description)
+        cell.textLabel!.text = "\(GlobalSettings.getTimeLocale(date: report.createTime)) \(report.type ?? "")"
     }
 
     // MARK: - Fetched results controller
