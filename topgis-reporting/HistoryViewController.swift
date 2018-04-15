@@ -167,6 +167,9 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     
     func insertNewReport(newReport : Report)
     {
+        //https://stackoverflow.com/questions/6884562/how-do-i-save-an-image-to-the-sandbox-iphone-sdk
+        
+        
         let context = self.fetchedResultsController.managedObjectContext
         let report = ReportEntity(context: context)
         //let newTyp = ReportTypeEntity(context: context)

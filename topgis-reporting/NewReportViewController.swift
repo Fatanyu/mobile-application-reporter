@@ -13,6 +13,7 @@ import AVFoundation //camera and library request
 class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     let location = LocationManager()
+    let addPhotoImage : UIImage = UIImage(named: "ic_add_a_photo_48pt")!
     
     var storage:HistoryViewController?
     var dataSource = [String]()     //belongs to UIPickerViewDataSource protocol
@@ -76,6 +77,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         {
             return
         }
+        
         self.storage?.insertNewReport(newReport : self.createReport())
         self.dismiss(animated: true, completion: nil)
 
@@ -90,8 +92,14 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     
     func createReport() -> Report
     {
+
+        if (self.imageViewPicker.image?.isEqual(self.addPhotoImage))!
+        {
+            self.imageViewPicker.image = nil
+        }
+
         let newReport = Report(newDescription: self.reportDescriptionLabel.text,
-                               newPicture: nil,
+                               newPicture: self.imageViewPicker.image,
                                newLocation: self.actualLocation,
                                newReportType: ReportType(reportType: self.selectedValue))
         
@@ -136,7 +144,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         if (self.imageViewPicker.image == nil)
         {
             self.eraseButton.isHidden = true
-            self.imageViewPicker.image = UIImage(named: "ic_add_a_photo_48pt")
+            self.imageViewPicker.image = self.addPhotoImage
             //https://stackoverflow.com/questions/15499376/uiimageview-aspect-fit-and-center
             self.imageViewPicker.contentMode = .center
         }
