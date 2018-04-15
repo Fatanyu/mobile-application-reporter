@@ -16,6 +16,7 @@ class GlobalSettings: NSObject
     static let BOOL_STRING_YES = "Ano"
     static let BOOL_STRING_NO = "Ne"
     static let REPORT_NOT_SET = "Nebylo zadáno"
+    static let IMAGE_MISSING = "Fotografie nebyla pořízena"
 
     static func getTimeLocale(date : Date?) -> String
     {
@@ -26,7 +27,7 @@ class GlobalSettings: NSObject
             let dateFormatter = DateFormatter()
             // 'dd' and 'DD' gives different results!!
             // 'MM' == Months, 'mm' == minutes
-            dateFormatter.dateFormat = "dd. MM. yyyy - HH:mm:ss"
+            dateFormatter.dateFormat = "dd. MM. yyyy HH:mm:ss"
             stringDate = dateFormatter.string(from: unwrappedDate)
         }
         return stringDate

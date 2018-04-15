@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Pro získání fotografie z kamery potřebujeme oprávnění</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pro získání fotografie z úložiště potřebujeme oprávnění</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Pro odeslání hlášení je třeba získat Vaši pozici pomocí GPS</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

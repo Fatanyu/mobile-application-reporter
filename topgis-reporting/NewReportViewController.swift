@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import MobileCoreServices
+import AVFoundation //camera and library request
 
-class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
+class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     let location = LocationManager()
     
@@ -28,7 +30,9 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     var actualLocation = GPSLocation(longitude: GlobalSettings.GPS_NOT_SET,latitude: GlobalSettings.GPS_NOT_SET)
 
 
-
+    @IBOutlet weak var eraseButton: UIButton!
+    @IBOutlet weak var imageViewPicker: UIImageView!
+    
     @IBOutlet weak var latitudeLabel: UILabel!
     @IBOutlet weak var longitudeLabel: UILabel!
     
@@ -41,7 +45,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         super.viewDidLoad()
         self.reportTypePicker.dataSource = self
         self.reportTypePicker.delegate = self
-        
+        self.setImage()
 
         // Do any additional setup after loading the view.
     }
@@ -77,6 +81,13 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
 
     }
     
+    
+    @IBAction func eraseButtonClicked()
+    {
+        self.imageViewPicker.image = nil
+        self.setImage()
+    }
+    
     func createReport() -> Report
     {
         let newReport = Report(newDescription: self.reportDescriptionLabel.text,
@@ -96,7 +107,47 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         self.longitudeLabel.text = self.actualLocation.longitude
     }
     
+    //https://stackoverflow.com/questions/27880607/how-to-assign-an-action-for-uiimageview-object-in-swift
+    @objc func changeImage(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+
+        
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.mediaTypes = [kUTTypeImage as String]
+        
+        // virtual devices does not have camera
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
+        {
+            picker.sourceType = UIImagePickerControllerSourceType.camera;
+            //self.requestCameraAccess(picker: picker)
+        }
+        else
+        {
+            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+        }
+        self.present(picker, animated: true, completion: nil)
+    }
     
+    func setImage()
+    {
+        self.makeImageClickable()
+        
+        if (self.imageViewPicker.image == nil)
+        {
+            self.eraseButton.isHidden = true
+            self.imageViewPicker.image = UIImage(named: "ic_add_a_photo_48pt")
+            //https://stackoverflow.com/questions/15499376/uiimageview-aspect-fit-and-center
+            self.imageViewPicker.contentMode = .center
+        }
+    }
+    
+    func makeImageClickable()
+    {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(changeImage(tapGestureRecognizer:)))
+        self.imageViewPicker.isUserInteractionEnabled = true
+        self.imageViewPicker.addGestureRecognizer(tapGestureRecognizer)
+    }
     /*
         Implementation of UIPickerViewDataSource, UIPickerViewDelegate protocols
      */
@@ -121,6 +172,58 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         // using the row extract the value from your datasource (array[row])
         self.selectedValue = self.dataSource[row]
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String:Any])
+    {
+        if let possibleImage = info["UIImagePickerControllerEditedImage"] as? UIImage
+        {
+            self.imageViewPicker.image = possibleImage
+        }
+        else if let possibleImage = info["UIImagePickerControllerOriginalImage"] as? UIImage
+        {
+            self.imageViewPicker.image = possibleImage
+        }
+        self.imageViewPicker.contentMode = .scaleToFill
+        // process the result
+        
+        self.eraseButton.isHidden = false
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
+    {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func requestCameraAccess(picker : UIImagePickerController)
+    {
+    //Camera
+        AVCaptureDevice.requestAccess(for: AVMediaType.video)
+        {
+            response in if response
+            {
+                //access granted
+                self.present(picker, animated: true, completion: nil)
+            }
+            else
+            {
+    
+            }
+        }
+    }
+    /*
+    func requestLibraryAccess()
+    {
+        //Photos
+        let photos = PHPhotoLibrary.authorizationStatus()
+        if photos == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({status in
+                if status == .authorized{
+                    
+    } else {}
+    })
+    }
+    }*/
     
     
     /*

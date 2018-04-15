@@ -20,6 +20,9 @@ class ReportDetailViewController: UIViewController
     @IBOutlet weak var detailLatitudeLabel: UILabel!
     @IBOutlet weak var detailLongitudeLabel: UILabel!
     
+    @IBOutlet weak var detailImageLabel: UILabel!
+    @IBOutlet weak var detailImage: UIImageView!
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -43,6 +46,7 @@ class ReportDetailViewController: UIViewController
         self.setDescriptionLabel()
         self.setLongitudeLabel()
         self.setLatitudeLabel()
+        self.setImage()
     }
     
     func setDescriptionLabel()
@@ -98,6 +102,19 @@ class ReportDetailViewController: UIViewController
         else
         {
             self.detailLongitudeLabel.text = GlobalSettings.GPS_NOT_SET
+        }
+    }
+    
+    func setImage()
+    {
+        if let unwrappedValue = report?.image
+        {
+            
+        }
+        else
+        {
+            self.detailImageLabel.text = GlobalSettings.IMAGE_MISSING
+            self.detailImage.image = UIImage(named: "ic_highlight_off_48pt")
         }
     }
 }
