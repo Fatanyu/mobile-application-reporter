@@ -181,7 +181,12 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM"/>
                     <connections>
+                        <outlet property="detailCreateTimeLabel" destination="Ye8-R3-7cC" id="zA0-RA-SlQ"/>
                         <outlet property="detailDescriptionLabel" destination="hhz-Du-44g" id="ZCg-pM-Q8L"/>
+                        <outlet property="detailLatitudeLabel" destination="FMQ-sX-1th" id="gPN-ME-arS"/>
+                        <outlet property="detailLongitudeLabel" destination="dKS-yg-15u" id="TaG-pQ-Yo3"/>
+                        <outlet property="detailSendLabel" destination="Pk7-uy-e5h" id="seL-gA-fia"/>
+                        <outlet property="detailSendTimeLabel" destination="IME-dT-z4B" id="eTi-kM-ayV"/>
                         <outlet property="detailTypeLabel" destination="QH5-Cr-Ih5" id="un2-ia-m9I"/>
                     </connections>
                 </viewController>

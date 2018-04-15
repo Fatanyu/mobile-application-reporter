@@ -17,17 +17,16 @@ struct ReportType
 // https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Properties.html
 class Report
 {
-    static let NOT_SET = "Nebylo zadáno"
     /*
     //https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Properties.html
-    private var name : String = Report.NOT_SET
+    private var name : String = GlobalSettings.REPORT_NOT_SET
     var Name : String
     {
         set(value)
         {
             if (value == "")
             {
-                self.name = Report.NOT_SET
+                self.name = GlobalSettings.REPORT_NOT_SET
             }
             else
             {
@@ -54,14 +53,14 @@ class Report
         
     }
     
-    private var description : String = Report.NOT_SET
+    private var description : String = GlobalSettings.REPORT_NOT_SET
     var Description : String
     {
         set(value)
         {
             if (value == "")
             {
-                self.description = Report.NOT_SET
+                self.description = GlobalSettings.REPORT_NOT_SET
             }
             else
             {

@@ -12,7 +12,6 @@ import CoreLocation
 
 struct GPSLocation
 {
-    static let NOT_SET = "Neznámá"
     let longitude : String
     let latitude : String
     
@@ -23,7 +22,7 @@ struct GPSLocation
     
     func isDummy() -> Bool
     {
-        return self.equal(location: GPSLocation(longitude: GPSLocation.NOT_SET,latitude: GPSLocation.NOT_SET))
+        return self.equal(location: GPSLocation(longitude: GlobalSettings.GPS_NOT_SET,latitude: GlobalSettings.GPS_NOT_SET))
     }
 }
 
@@ -37,7 +36,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate
     override init()
     {
         self.locationManager = CLLocationManager()
-        self.UNKNOWN_LOCATION = GPSLocation(longitude: GPSLocation.NOT_SET, latitude: GPSLocation.NOT_SET)
+        self.UNKNOWN_LOCATION = GPSLocation(longitude: GlobalSettings.GPS_NOT_SET, latitude: GlobalSettings.GPS_NOT_SET)
         self.actualLocation = self.UNKNOWN_LOCATION
         super.init()
         self.locationManager.delegate = self

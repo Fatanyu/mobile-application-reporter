@@ -25,7 +25,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     var selectedValue = String()
 
-    var actualLocation = GPSLocation(longitude: GPSLocation.NOT_SET,latitude: GPSLocation.NOT_SET)
+    var actualLocation = GPSLocation(longitude: GlobalSettings.GPS_NOT_SET,latitude: GlobalSettings.GPS_NOT_SET)
 
 
 

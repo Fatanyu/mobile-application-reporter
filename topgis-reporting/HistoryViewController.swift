@@ -9,27 +9,6 @@
 import UIKit
 import CoreData
 
-class GlobalSettings
-{
-    static func getTimeLocale(date : Date?) -> String
-    {
-        var stringDate : String = ""
-        //https://stackoverflow.com/questions/28404154/swift-get-local-date-time
-        if let unwrappedDate = date
-        {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "DD-MM-YYYY HH:MM:SS"
-            stringDate = dateFormatter.string(from: unwrappedDate)
-        }
-        return stringDate
-    }
-    private init()
-    {
-        
-    }
-}
-
-
 class HistoryViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
     private var firstRun : Bool //https://stackoverflow.com/questions/26830285/ios-app-first-launch
@@ -55,10 +34,11 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     func insertDummyValues()
     {
         var dummyValues = [ReportType]()
-        dummyValues.append(ReportType(reportType: "Skladka"))
+        dummyValues.append(ReportType(reportType: "Skládka"))
         dummyValues.append(ReportType(reportType: "Bordel"))
-        dummyValues.append(ReportType(reportType: "Mimozemstan"))
-        dummyValues.append(ReportType(reportType: "Chybny"))
+        dummyValues.append(ReportType(reportType: "Mimozemšťan"))
+        dummyValues.append(ReportType(reportType: "Chybný"))
+        dummyValues.append(ReportType(reportType: "Poctivý politik"))
         self.insertNewReportType(newReportTypes: dummyValues)
         
         
@@ -202,44 +182,6 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         
         // If appropriate, configure the new managed object.
         
-/*
-        newHlaseni.createTime = Date()
-        newHlaseni.reportDescription = newReport.Description
-        print("Popis:\(newHlaseni.reportDescription!)")
-        newHlaseni.latitude = newReport.location.latitude
-        print("latitude:\(newHlaseni.latitude)")
-        newHlaseni.longitude = newReport.location.longitude
-        print("longitude:\(newHlaseni.longitude)")
-        
-        print("Typ hlaseni:\(newReport.reportType!.reportType)")
-        
-        let aaa : String = newReport.reportType!.reportType
-        print("Typ hlaseni aaa:\(aaa)")
-        //newHlaseni.hlaseni_typ? = TypHlaseni()
-        //newHlaseni.hlaseni_typ?.typ = String?()
-        /*
-        if let x = newReport.reportType?.reportType
-        {
-            print("x:\(x)")
-            newHlaseni.hlaseni_typ? = TypHlaseni()
-            if let xxx = newHlaseni.hlaseni_typ
-            {
-                xxx.typ = x
-                print("xxx:\(xxx.typ)")
-            }
-            //    newHlaseni.hlaseni_typ?.typ="x"
-            //print(newHlaseni.hlaseni_typ?.typ)
-        }*/
-//        newHlaseni.hlaseni_typ!.typ! = aaa.description
-//        newHlaseni.hlaseni_typ!.typ = aaa
-        
-       //print("Typ hlaseni:\(newHlaseni.hlaseni_typ!.typ)")
-        //newHlaseni.hlaseni_typ?.idObce = Int64(newReport.reportType!.villageId)
-        //print()
-        newHlaseni.send = false
-        
-        //newHlaseni.foto = newReport.picture?.accessibilityIdentifier
-        */
         // Save the context.
         do
         {
@@ -325,7 +267,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
 
     func configureCell(_ cell: UITableViewCell, withReport report: ReportEntity)
     {
-        cell.textLabel!.text = "\(GlobalSettings.getTimeLocale(date: report.createTime)) \(report.type ?? "")"
+        cell.textLabel!.text = "\(GlobalSettings.getTimeLocale(date: report.createTime)), \(report.type ?? "")"
     }
 
     // MARK: - Fetched results controller
