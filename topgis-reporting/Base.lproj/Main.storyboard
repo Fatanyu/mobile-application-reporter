@@ -182,6 +182,9 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xAq-AQ-mEJ">
                                 <rect key="frame" x="10" y="248" width="46.5" height="19"/>
                                 <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="acx-JX-IQk"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Popis">
                                         <attributes>
@@ -205,7 +208,7 @@
                                     <accessibilityTraits key="traits" staticText="YES"/>
                                 </accessibility>
                                 <constraints>
-                                    <constraint firstAttribute="height" priority="500" constant="128" id="dQa-Vb-PPA"/>
+                                    <constraint firstAttribute="height" constant="128" id="dQa-Vb-PPA"/>
                                 </constraints>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -213,6 +216,9 @@
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pg8-jM-spn">
                                 <rect key="frame" x="10" y="415" width="355" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="KOl-LP-sZ1"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Fotografie (náhled)">
                                         <attributes>
@@ -225,9 +231,8 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="dy9-XJ-zPI" firstAttribute="height" secondItem="QH5-Cr-Ih5" secondAttribute="height" id="0KS-mJ-4b2"/>
+                            <constraint firstItem="dy9-XJ-zPI" firstAttribute="height" secondItem="QH5-Cr-Ih5" secondAttribute="height" priority="750" id="0KS-mJ-4b2"/>
                             <constraint firstItem="BuF-uC-q5o" firstAttribute="top" secondItem="cEc-rf-2Nc" secondAttribute="bottom" constant="10" id="0s8-hm-y4E"/>
-                            <constraint firstItem="cEc-rf-2Nc" firstAttribute="height" secondItem="Ye8-R3-7cC" secondAttribute="height" id="4f2-oA-2Wk"/>
                             <constraint firstItem="4fH-Ga-ruU" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="10" id="6T4-ce-4aC"/>
                             <constraint firstItem="Pk7-uy-e5h" firstAttribute="top" secondItem="IME-dT-z4B" secondAttribute="bottom" constant="10" id="7OP-cL-HMb"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="dKS-yg-15u" secondAttribute="trailing" constant="10" id="9yy-pN-JwC"/>
@@ -250,18 +255,19 @@
                             <constraint firstItem="xAq-AQ-mEJ" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="10" id="PJh-hi-3yU"/>
                             <constraint firstItem="cEc-rf-2Nc" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="10" id="RLm-vi-4Ou"/>
                             <constraint firstItem="IME-dT-z4B" firstAttribute="top" secondItem="Ye8-R3-7cC" secondAttribute="bottom" constant="10" id="RRT-tq-F6G"/>
+                            <constraint firstItem="cEc-rf-2Nc" firstAttribute="height" secondItem="Ye8-R3-7cC" secondAttribute="height" id="S1e-jC-CAi"/>
                             <constraint firstItem="2Vp-DH-auX" firstAttribute="top" secondItem="SM6-Ur-uMs" secondAttribute="bottom" constant="10" id="TOG-So-Zvg"/>
                             <constraint firstItem="hhz-Du-44g" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="10" id="Tay-pI-Xan"/>
                             <constraint firstItem="Ye8-R3-7cC" firstAttribute="top" secondItem="QH5-Cr-Ih5" secondAttribute="bottom" constant="10" id="URu-9k-wzM"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="Ye8-R3-7cC" secondAttribute="trailing" constant="10" id="Ud1-CU-9f0"/>
                             <constraint firstItem="4fH-Ga-ruU" firstAttribute="top" secondItem="Pg8-jM-spn" secondAttribute="bottom" constant="10" id="VDW-Tw-qjc"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="4fH-Ga-ruU" secondAttribute="trailing" constant="10" id="ZzX-t7-gbP"/>
-                            <constraint firstItem="2Vp-DH-auX" firstAttribute="height" secondItem="FMQ-sX-1th" secondAttribute="height" id="aCk-BW-ThJ"/>
+                            <constraint firstItem="2Vp-DH-auX" firstAttribute="height" secondItem="FMQ-sX-1th" secondAttribute="height" priority="750" id="aCk-BW-ThJ"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="bottom" secondItem="4fH-Ga-ruU" secondAttribute="bottom" constant="10" id="aSg-lZ-M26"/>
                             <constraint firstItem="p7x-bi-Rau" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="10" id="bua-x2-YAI"/>
                             <constraint firstItem="p7x-bi-Rau" firstAttribute="height" secondItem="Pk7-uy-e5h" secondAttribute="height" id="c3s-rl-myM"/>
-                            <constraint firstItem="BuF-uC-q5o" firstAttribute="height" secondItem="IME-dT-z4B" secondAttribute="height" id="cNw-sh-iJr"/>
-                            <constraint firstItem="SM6-Ur-uMs" firstAttribute="height" secondItem="dKS-yg-15u" secondAttribute="height" id="eyq-PB-7ac"/>
+                            <constraint firstItem="SM6-Ur-uMs" firstAttribute="height" secondItem="dKS-yg-15u" secondAttribute="height" priority="750" id="eyq-PB-7ac"/>
+                            <constraint firstItem="BuF-uC-q5o" firstAttribute="height" secondItem="IME-dT-z4B" secondAttribute="height" id="f7O-wL-Xaa"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="QH5-Cr-Ih5" secondAttribute="trailing" constant="10" id="fi9-dM-mTk"/>
                             <constraint firstItem="QH5-Cr-Ih5" firstAttribute="top" secondItem="VUw-jc-0yf" secondAttribute="top" constant="10" id="haD-Mf-Q4Z"/>
                             <constraint firstItem="hhz-Du-44g" firstAttribute="top" secondItem="xAq-AQ-mEJ" secondAttribute="bottom" constant="10" id="hhE-hG-uuy"/>
@@ -374,6 +380,9 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szH-TP-mcn">
                                 <rect key="frame" x="10" y="74" width="355" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="dxc-df-FRE"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Typ">
                                         <attributes>
@@ -385,6 +394,9 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o8b-gK-vAo">
                                 <rect key="frame" x="10" y="275" width="355" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="PV0-br-UUE"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Popis">
                                         <attributes>
@@ -397,7 +409,7 @@
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGp-gF-njM">
                                 <rect key="frame" x="0.0" y="103" width="375" height="75"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="75" id="OdW-74-YGM"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="75" id="OdW-74-YGM"/>
                                 </constraints>
                             </pickerView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VZQ-md-xuR">
@@ -414,6 +426,7 @@
                                 <rect key="frame" x="10" y="217" width="60" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="2sh-g3-yUi"/>
+                                    <constraint firstAttribute="height" constant="19" id="yFD-ZY-zvH"/>
                                 </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Šířka:">
@@ -434,6 +447,7 @@
                                 <rect key="frame" x="10" y="246" width="60" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="UuM-iR-n8b"/>
+                                    <constraint firstAttribute="height" constant="19" id="YWD-nF-Yz6"/>
                                 </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Výška:">
@@ -446,6 +460,9 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0z-vO-O70">
                                 <rect key="frame" x="10" y="188" width="355" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="Rdp-di-k65"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="GPS souřadnice">
                                         <attributes>
@@ -493,7 +510,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="03s-lg-LWw" firstAttribute="leading" secondItem="6c7-u9-Lxz" secondAttribute="trailing" constant="153.5" id="0Fe-a8-mDO"/>
+                            <constraint firstItem="03s-lg-LWw" firstAttribute="leading" relation="lessThanOrEqual" secondItem="6c7-u9-Lxz" secondAttribute="trailing" constant="153" id="0Fe-a8-mDO"/>
                             <constraint firstItem="o8b-gK-vAo" firstAttribute="top" secondItem="pBm-IK-epp" secondAttribute="bottom" constant="10" id="2Bl-wI-Cpt"/>
                             <constraint firstItem="5h9-5H-Zlf" firstAttribute="trailing" secondItem="s0z-vO-O70" secondAttribute="trailing" constant="10" id="2eu-jk-JxT"/>
                             <constraint firstItem="6c7-u9-Lxz" firstAttribute="leading" secondItem="5h9-5H-Zlf" secondAttribute="leading" constant="10" id="34I-Em-kC2"/>

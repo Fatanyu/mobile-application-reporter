@@ -39,16 +39,16 @@ class Report
         }
     }
     */
-    private var dateTime : Date = Date() //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
-    private(set) var DateTime : Date
+    private var createTime : Date = Date() //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
+    private(set) var CreateTime : Date
     {
         set(value)
         {
-            self.dateTime = value
+            self.createTime = value
         }
         get
         {
-            return self.dateTime
+            return self.createTime
         }
         
     }
@@ -84,7 +84,7 @@ class Report
         self.location = newLocation
         self.picture = newPicture
         self.reportType = newReportType
-        self.DateTime = Date()
+        self.CreateTime = Date()
         /*self.Name = newName*/
         self.Description = newDescription
         //self.location = GPS()

@@ -177,9 +177,10 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         report.latitude = Double(newReport.location.latitude)!
         report.longitude = Double(newReport.location.longitude)!
         report.reportDescription = newReport.Description
-        report.createTime = newReport.DateTime
+        report.createTime = newReport.CreateTime
         report.send = false
-        report.image = nil //newReport.picture
+        //report.image = nil //newReport.picture
+        report.image = GlobalSettings.saveImage(chosenImage: newReport.picture, createTime: newReport.CreateTime)
         report.type = newReport.reportType?.reportType
         report.sendTime = nil
         
@@ -270,7 +271,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
 
     func configureCell(_ cell: UITableViewCell, withReport report: ReportEntity)
     {
-        cell.textLabel!.text = "\(GlobalSettings.getTimeLocale(date: report.createTime)), \(report.type ?? "")"
+        cell.textLabel!.text = "\(GlobalSettings.getTimeLocale(date: report.createTime))\n\(report.type ?? "")"
     }
 
     // MARK: - Fetched results controller

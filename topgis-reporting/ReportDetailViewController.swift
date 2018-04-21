@@ -61,12 +61,12 @@ class ReportDetailViewController: UIViewController
     
     func setCreateTimeLabel()
     {
-        self.detailCreateTimeLabel.text = GlobalSettings.getTimeLocale(date: report?.createTime)
+        self.detailCreateTimeLabel.text = GlobalSettings.getTimeLocaleAsTwoLines(date: report?.createTime)
     }
     
     func setSendTimeLabel()
     {
-        self.detailSendTimeLabel.text = GlobalSettings.getTimeLocale(date: report?.sendTime)
+        self.detailSendTimeLabel.text = GlobalSettings.getTimeLocaleAsTwoLines(date: report?.sendTime)
     }
     
     func setSendLabel()
@@ -107,12 +107,14 @@ class ReportDetailViewController: UIViewController
     
     func setImage()
     {
-        if let unwrappedValue = report?.image
+        if let unwrappedValue = GlobalSettings.loadImage(imagePath: report?.image)
         {
-            
+            self.detailImage.image = unwrappedValue
+            self.detailImage.contentMode = .scaleToFill
         }
         else
         {
+            self.detailImage.contentMode = .center
             self.detailImageLabel.text = GlobalSettings.IMAGE_MISSING
             self.detailImage.image = UIImage(named: "ic_highlight_off_48pt")
         }
