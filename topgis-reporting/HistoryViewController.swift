@@ -9,8 +9,14 @@
 import UIKit
 import CoreData
 
+
+/**
+ * Based on MVC, this class is controller for main app screen. It shows list of all reports
+ * It also managing core data, including inserting new data
+ */
 class HistoryViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
+    // Property for checking first app run. Inserting dummy values to DB depends on it
     private var firstRun : Bool //https://stackoverflow.com/questions/26830285/ios-app-first-launch
     {
         get
@@ -27,68 +33,28 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
                 //print("App launched first time")
                 return true
             }
-
         }
     }
 
-    func insertDummyValues()
-    {
-        var dummyValues = [ReportType]()
-        dummyValues.append(ReportType(reportType: "Skládka"))
-        dummyValues.append(ReportType(reportType: "Bordel"))
-        dummyValues.append(ReportType(reportType: "Mimozemšťan"))
-        dummyValues.append(ReportType(reportType: "Chybný"))
-        dummyValues.append(ReportType(reportType: "Poctivý politik"))
-        self.insertNewReportType(newReportTypes: dummyValues)
-        
-        
-        
-    }
-    
-    func getReportTypeData() -> [String]
-    {
-        var reportTypeDictionary = [String]()
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportTypeEntity")
-        request.returnsObjectsAsFaults = false
-        let context = self.fetchedResultsController.managedObjectContext
-        do
-        {
-            let result = try context.fetch(request)
-            //print("here")
-            for data in result as! [ReportTypeEntity]
-            {
-                //print("Adding data.typ:\(data.type!)")
-                if let openData = data.type
-                {
-                    reportTypeDictionary.append(openData)
-                }
-            }
-            //print("here 2")
-        }
-        catch
-        {
-            print("Fetching dummy values from ReportType failed")
-        }
-        return reportTypeDictionary
-    }
-    
-    
     var detailViewController: ReportDetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
 
-    private static var idHlaseni : Int = 0 //still not working
+    //private static var idHlaseni : Int = 0 //still not working
 
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
+        //insert dummy values
         if(self.firstRun)
         {
             self.insertDummyValues()
         }
         
         // Do any additional setup after loading the view, typically from a nib.
-        navigationItem.leftBarButtonItem = editButtonItem
+        let deleteButton = editButtonItem
+        deleteButton.title = "Smazat" // TODO - try use it
+        navigationItem.leftBarButtonItem = deleteButton
 
         //let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         //navigationItem.rightBarButtonItem = addButton
@@ -97,7 +63,15 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? ReportDetailViewController
         }
-    }
+        
+        // TODO
+        let networkClientManager = NetworkClientManager()
+        
+        //brno
+        networkClientManager.requestPositionId(location : GPSLocation(longitude: "16.606837", latitude: "49.195060"))
+        //sokolov
+        //networkClientManager.requestPositionId(longitude: 12.642791, latitude: 50.179958)
+}
 
     override func viewWillAppear(_ animated: Bool)
     {
@@ -110,31 +84,61 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-/*
-    @objc
-    func insertNewObject(_ sender: Any)
+    
+    /**
+     * Inserting dummy values to DB
+     *
+     */
+    func insertDummyValues()
     {
+        var dummyValues = [ReportType]()
+        dummyValues.append(ReportType(reportType: "Skládka"))
+        dummyValues.append(ReportType(reportType: "Bordel"))
+        dummyValues.append(ReportType(reportType: "Mimozemšťan"))
+        dummyValues.append(ReportType(reportType: "Chybný"))
+        dummyValues.append(ReportType(reportType: "Poctivý politik"))
+        self.insertNewReportType(newReportTypes: dummyValues)
+    }
+    
+    /**
+     * Fetch all report types to array as Strings
+     *
+     */
+    func getReportTypeData() -> [String]
+    {
+        // variable with results for method's return
+        var reportTypeDictionary = [String]()
+        
+        // Prepare fetching to get data from DB
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportTypeEntity")
+        request.returnsObjectsAsFaults = false
+        
+        // Fetching
         let context = self.fetchedResultsController.managedObjectContext
-        let newEvent = Event(context: context)
-             
-        // If appropriate, configure the new managed object.
-        newEvent.timestamp = Date()
-
-        // Save the context.
         do
         {
-            try context.save()
+            let result = try context.fetch(request)
+            
+            // Add types to dictionary
+            for data in result as! [ReportTypeEntity]
+            {
+                //print("Adding data.typ:\(data.type!)")
+                if let openData = data.type
+                {
+                    reportTypeDictionary.append(openData)
+                }
+            }
         }
         catch
         {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            print("Fetching dummy values from ReportType failed")
         }
+        return reportTypeDictionary
     }
-*/
     
+    /**
+     * Inserting reportTypes to DB
+     */
     func insertNewReportType(newReportTypes : [ReportType])
     {
         for oneType in newReportTypes
@@ -143,15 +147,27 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         }
     }
     
+    /**
+     * Inserting one reportType to DB
+     */
     func insertNewReportType(newReportType : ReportType)
     {
+        // Prepare Core Data DB
         let context = self.fetchedResultsController.managedObjectContext
+        
+        // Something like cursor, setup new record and save (execute) it
         let newTypes = ReportTypeEntity(context:context)
+        
+        // Setting actual value
         newTypes.type = newReportType.reportType
+        
+        // This is not needed right now
         /*
         print("newTypes.idObce:\(newTypes.idObce)")
         print("newTypes.typ:\(newTypes.typ!)")
         */
+        
+        // Save it to DB
         do
         {
             try context.save()
@@ -165,27 +181,28 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         }
     }
     
+    /**
+     * Insert one Report to DB
+     */
     func insertNewReport(newReport : Report)
     {
         //https://stackoverflow.com/questions/6884562/how-do-i-save-an-image-to-the-sandbox-iphone-sdk
         
-        
+        // Prepare Core Data DB
         let context = self.fetchedResultsController.managedObjectContext
         let report = ReportEntity(context: context)
-        //let newTyp = ReportTypeEntity(context: context)
-        
+
+        // Setting values
         report.latitude = Double(newReport.location.latitude)!
         report.longitude = Double(newReport.location.longitude)!
         report.reportDescription = newReport.Description
         report.createTime = newReport.CreateTime
         report.send = false
-        //report.image = nil //newReport.picture
-        report.image = GlobalSettings.saveImage(chosenImage: newReport.picture, createTime: newReport.CreateTime)
         report.type = newReport.reportType?.reportType
         report.sendTime = nil
-        
-        // If appropriate, configure the new managed object.
-        
+        // Image is stored elsewhere
+        report.image = GlobalSettings.saveImage(chosenImage: newReport.picture, createTime: newReport.CreateTime)
+
         // Save the context.
         do
         {
@@ -202,9 +219,12 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
   
     // MARK: - Segues
 
+    /**
+     * What will be done before new screen will appear
+     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        if segue.identifier == "showDetail"
+        if (segue.identifier == "showDetail")
         {
             if let indexPath = tableView.indexPathForSelectedRow
             {
@@ -213,10 +233,12 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
                 controller.report = object as ReportEntity?
             }
         }
-        else if segue.identifier == "newReport"
+        else if (segue.identifier == "newReport")
         {
+            // Set this view, so the newReport can inserting to DB
             let controller = (segue.destination as! UINavigationController).topViewController as! NewReportViewController
             controller.storage = self
+            // View needs reportTypes
             controller.dataSource = self.getReportTypeData()
         }
     }
@@ -254,7 +276,10 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         {
             let context = fetchedResultsController.managedObjectContext
             context.delete(fetchedResultsController.object(at: indexPath))
-                
+            
+            //TODO - delete pictures!!
+            
+            // Save deletion
             do
             {
                 try context.save()
@@ -289,7 +314,6 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-//        let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
         let sortDescriptor = NSSortDescriptor(key: "createTime", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]

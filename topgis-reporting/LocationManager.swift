@@ -10,6 +10,9 @@ import UIKit
 import CoreLocation
 //https://www.hackingwithswift.com/example-code/location/how-to-request-a-users-location-only-once-using-requestlocation
 
+/**
+ * Represents GPS location without elevation. Implements equal() and isDummy()
+ */
 struct GPSLocation
 {
     let longitude : String
@@ -26,11 +29,16 @@ struct GPSLocation
     }
 }
 
+/**
+ * Represents managing location, request for location is requested only when needed.
+ */
 class LocationManager: NSObject, CLLocationManagerDelegate
 {
     let locationManager : CLLocationManager //https://stackoverflow.com/questions/26142441/cllocationdegrees-to-string-variable-in-swift
+    // Dummy location
     let UNKNOWN_LOCATION : GPSLocation
     
+    // real location
     var actualLocation : GPSLocation
     
     override init()
@@ -42,6 +50,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate
         self.locationManager.delegate = self
     }
     
+    /**
+     * Request one time location update
+     */
     func requestLocationUpdate() //-> GPSLocation
     {
         //self.locationManager.requestAlwaysAuthorization() //can run on background
@@ -54,12 +65,17 @@ class LocationManager: NSObject, CLLocationManagerDelegate
         //return self.actualLocation
     }
     
+    /**
+     * Classic getter, but it can holds old location
+     */
     func getLocation() -> GPSLocation
     {
         return self.actualLocation
     }
     
-    
+    /**
+     * Classic implementation with event
+     */
     func locationManager(_ manager: CLLocationManager , didUpdateLocations locations: [CLLocation])
     {
         //var coordinates = self.UNKNOWN_LOCATION
@@ -71,11 +87,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate
             //coordinates = GPSLocation(longitude: longtitude, latitude: latitude)
             self.actualLocation = GPSLocation(longitude: longtitude, latitude: latitude)
             //print("Creating notification")
+            // send event to screen to update labels
             NotificationCenter.default.post(name: Notification.Name("HasNewLocation"), object: nil)
         }
         
         //self.actualLocation = coordinates
     }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {
         self.actualLocation = self.UNKNOWN_LOCATION

@@ -10,24 +10,34 @@ import UIKit
 import MobileCoreServices
 import AVFoundation //camera and library request
 
+/**
+ * Based on MVC, this class is controller for screen. which is using for creation of new reports.
+ * It also contains locationManager, which is getting GPS location
+ */
 class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     let location = LocationManager()
-    let addPhotoImage : UIImage = UIImage(named: "ic_add_a_photo_48pt")!
+    let addPhotoImage : UIImage = UIImage(named: "ic_add_a_photo_48pt")! // Create dummy picture
     
-    var storage:HistoryViewController?
+    // Reference to main app controller, it is needed for adding new reports
+    var storage : HistoryViewController?
+    
+    // Array of reportTypes
     var dataSource = [String]()     //belongs to UIPickerViewDataSource protocol
     {
         didSet
         {
+            // Set first item in array as selectedValue
             if(dataSource.count > 0)
             {
                 selectedValue = dataSource.first ?? ""
             }
         }
     }
-    var selectedValue = String()
+    // variable representing selected reportType from pickerView
+    var selectedValue : String = ""
 
+    // setting dummy location to actual - just in case GPS is off/do not have signal
     var actualLocation = GPSLocation(longitude: GlobalSettings.GPS_NOT_SET,latitude: GlobalSettings.GPS_NOT_SET)
 
 
@@ -77,22 +87,27 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         {
             return
         }
-        
+
         self.storage?.insertNewReport(newReport : self.createReport())
         self.dismiss(animated: true, completion: nil)
-
     }
     
-    
+    /**
+     * Drop picture and set default
+     */
     @IBAction func eraseButtonClicked()
     {
         self.imageViewPicker.image = nil
         self.setImage()
     }
     
+    /**
+     * Create report from input labels and pickers
+     */
     func createReport() -> Report
     {
 
+        // Check dummy image
         if (self.imageViewPicker.image?.isEqual(self.addPhotoImage))!
         {
             self.imageViewPicker.image = nil
@@ -108,6 +123,9 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         return newReport
     }
     
+    /**
+     * Event handler method
+     */
     @objc private func updateLocation(notification: Notification)
     {
         self.actualLocation = self.location.getLocation()
@@ -116,10 +134,12 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     
     //https://stackoverflow.com/questions/27880607/how-to-assign-an-action-for-uiimageview-object-in-swift
+    /**
+     * Event handler method
+     */
     @objc func changeImage(tapGestureRecognizer: UITapGestureRecognizer)
     {
-
-        
+        // Create picker (library/camera)
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.mediaTypes = [kUTTypeImage as String]
@@ -137,6 +157,9 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         self.present(picker, animated: true, completion: nil)
     }
     
+    /**
+     * Setter with adding Event Handler
+     */
     func setImage()
     {
         self.makeImageClickable()
@@ -150,14 +173,18 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         }
     }
     
+    /**
+     * Add events to picture
+     */
     func makeImageClickable()
     {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(changeImage(tapGestureRecognizer:)))
         self.imageViewPicker.isUserInteractionEnabled = true
         self.imageViewPicker.addGestureRecognizer(tapGestureRecognizer)
     }
-    /*
-        Implementation of UIPickerViewDataSource, UIPickerViewDelegate protocols
+    
+    /**
+     * Implementation of UIPickerViewDataSource, UIPickerViewDelegate protocols
      */
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
@@ -181,6 +208,9 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         self.selectedValue = self.dataSource[row]
     }
     
+    /**
+     * Method managing what to do with user's image pick
+     */
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String:Any])
     {
         if let possibleImage = info["UIImagePickerControllerEditedImage"] as? UIImage
@@ -192,7 +222,6 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
             self.imageViewPicker.image = possibleImage
         }
         self.imageViewPicker.contentMode = .scaleToFill
-        // process the result
         
         self.eraseButton.isHidden = false
         dismiss(animated: true, completion: nil)
@@ -215,7 +244,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
             }
             else
             {
-    
+    //TODO
             }
         }
     }

@@ -8,8 +8,12 @@
 
 import UIKit
 
+/**
+ * Based on MVC, this class is controller for screen. which is using for showing report details
+ */
 class ReportDetailViewController: UIViewController
 {
+    // One already created report with values
     var report : ReportEntity? = nil
     
     @IBOutlet weak var detailTypeLabel: UILabel!
@@ -23,10 +27,13 @@ class ReportDetailViewController: UIViewController
     @IBOutlet weak var detailImageLabel: UILabel!
     @IBOutlet weak var detailImage: UIImageView!
     
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        // prepare screen
         configureView()
     }
 
@@ -36,6 +43,9 @@ class ReportDetailViewController: UIViewController
         // Dispose of any resources that can be recreated.
     }
     
+    /**
+     * Configure/Update screen
+     */
     func configureView()
     {
         // Update the user interface for the detail item.
@@ -69,6 +79,7 @@ class ReportDetailViewController: UIViewController
         self.detailSendTimeLabel.text = GlobalSettings.getTimeLocaleAsTwoLines(date: report?.sendTime)
     }
     
+    // TODO - maybe delete?
     func setSendLabel()
     {
         if let unwrappedValue = report?.send
@@ -105,15 +116,20 @@ class ReportDetailViewController: UIViewController
         }
     }
     
+    /**
+     * Set Image from local storage. Add default when no image has been found
+     */
     func setImage()
     {
         if let unwrappedValue = GlobalSettings.loadImage(imagePath: report?.image)
         {
+            // stored picture
             self.detailImage.image = unwrappedValue
             self.detailImage.contentMode = .scaleToFill
         }
         else
         {
+            // default picture
             self.detailImage.contentMode = .center
             self.detailImageLabel.text = GlobalSettings.IMAGE_MISSING
             self.detailImage.image = UIImage(named: "ic_highlight_off_48pt")

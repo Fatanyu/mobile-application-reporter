@@ -8,7 +8,9 @@
 
 import UIKit
 
-//Static class
+/**
+ * Class for global scraps. Mostly global constants and methods for formating
+ */
 class GlobalSettings: NSObject
 {
     static let GPS_NOT_SET = "Neznámá"
@@ -20,6 +22,9 @@ class GlobalSettings: NSObject
     static let IMAGE_FORMAT = ".jpeg"
     static let IMAGE_DIRECTORY_PATH = "/Documents/"
 
+    /**
+     * Getter for czech republic time format (for eyes)
+     */
     static func getTimeLocale(date : Date?) -> String
     {
         var stringDate : String = GlobalSettings.DATE_NOT_SEND
@@ -35,6 +40,9 @@ class GlobalSettings: NSObject
         return stringDate
     }
     
+    /**
+     * Getter for czech republic time format (for eyes). Added new line for table purpose
+     */
     static func getTimeLocaleAsTwoLines(date : Date?) -> String
     {
         var stringDate : String = GlobalSettings.DATE_NOT_SEND
@@ -50,6 +58,9 @@ class GlobalSettings: NSObject
         return stringDate
     }
     
+    /**
+     * Create name for storing pictures
+     */
     static func getImageName(date : Date?) -> String
     {
         var filename : String = ""
@@ -67,6 +78,9 @@ class GlobalSettings: NSObject
         return filename
     }
     
+    /**
+     * Save image to local storage (not Core Data)
+     */
     static func saveImage(chosenImage: UIImage?, createTime : Date) -> String
     {
         var filePath : String = ""
@@ -100,11 +114,14 @@ class GlobalSettings: NSObject
                 filePath = ""
             }
         }
-        print("filePath \(filePath)")
+        //print("filePath \(filePath)")
         return filePath
     
     }
     
+    /**
+     * Load image from local storage
+     */
     static func loadImage(imagePath : String?) -> UIImage?
     {
         var storedImage : UIImage? = nil
@@ -123,52 +140,14 @@ class GlobalSettings: NSObject
         }
         return storedImage
     }
-    /*
-    func getImage(){
-        let imagePAth = (self.getDirectoryPath() as NSString).stringByAppendingPathComponent("apple.jpg")
-        if fileManager.fileExistsAtPath(imagePAth){
-            self.imageView.image = UIImage(contentsOfFile: imagePAth)
-        }else{
-            print("No Image")
-        }
-    }*/
-    
-    /*
-    var photo = yourImageFile as UIImage;
-    var documentsDirectory = Environment.GetFolderPath
-    (Environment.SpecialFolder.Personal);
-    var directoryname = Path.Combine(documentsDirectory, "FolderName");
-    Directory.CreateDirectory(directoryname);
-    string jpgFilename = System.IO.Path.Combine (directoryname, "Photo.jpg"); // hardcoded filename, overwritten each time. You can make it dynamic as per your requirement.
-    
-    NSData imgData = photo.AsJPEG();
-    NSError err = null;
-    if (imgData.Save(jpgFilename, false, out err)) {
-    Console.WriteLine("saved as " + jpgFilename);
-    } else {
-    Console.WriteLine("NOT saved as " + jpgFilename + " because" + err.LocalizedDescription);
-    }*/
-    
-    
-    
-    /*
-    func saveImage(image:UIImage,name:String){
-        let selectedImage: UIImage = image
-        let data:NSData = UIImagePNGRepresentation(selectedImage)
-        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+
+    /**
+     * TODO
+     */
+    static func deleteImage(imagePath : String?)
+    {
         
-        let success = fileManager.createFileAtPath(path, contents: data, attributes: nil)
-        print(success)
-        // Check image saved successfully
-        let getImagePath = (path as NSString).stringByAppendingPathComponent(name)
-        if fileManager.fileExistsAtPath(getImagePath) {
-            // image save success
-            let image = UIImage(contentsOfFile: getImagePath)!
-        }
-        else{
-            // image save error
-        }
-    }*/
+    }
     
     
     override private init()

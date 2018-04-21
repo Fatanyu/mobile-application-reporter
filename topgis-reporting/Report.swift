@@ -17,28 +17,9 @@ struct ReportType
 // https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Properties.html
 class Report
 {
-    /*
+    
     //https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Properties.html
-    private var name : String = GlobalSettings.REPORT_NOT_SET
-    var Name : String
-    {
-        set(value)
-        {
-            if (value == "")
-            {
-                self.name = GlobalSettings.REPORT_NOT_SET
-            }
-            else
-            {
-                self.name = value
-            }
-        }
-        get
-        {
-            return self.name
-        }
-    }
-    */
+
     private var createTime : Date = Date() //https://stackoverflow.com/questions/24070450/how-to-get-the-current-time-as-datetime
     private(set) var CreateTime : Date
     {
