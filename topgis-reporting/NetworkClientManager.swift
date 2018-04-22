@@ -63,20 +63,29 @@ struct RequestsResult
  * NetworkClientManager is managing communication with GisOnline servers over https
  *
  */
-class NetworkClientManager: NSObject
+class NetworkClientManager : NSObject
 {
     //static let SERVER_URL_ADDRESS : String = "https://go-beta.topgis.cz"  // does not work right now (VPN needed)
     static let API_VERSION_ADDRESS : String = "/api/version"                // API for getting api version, place after SERVER_URL_ADDRESS
-    static let SERVER_URL_ADDRESS : String = "https://app.gisonline.cz"     // server address
+    //static let SERVER_URL_ADDRESS : String = "https://app.gisonline.cz"     // server address
+    static let SERVER_URL_ADDRESS : String = "https://app3.gisonline.cz"
     static let API_RUIAN : String = "/api/ruian/obce"                       // API for getting ruian data, place after SERVER_URL_ADDRESS
     static let API_RUIAN_SRID : String = "srid=4326"                        // API parameter which will be always used
+    static let API_DUMMY_LOGIN : String = "tester"
+    static let API_DUMMY_PASSWORD : String = "testujo106"
+    static let API_LABEL_LOGIN : String = "login"
+    static let API_LABEL_PASSWORD : String = "psw"
+    static let API_LOGIN : String = "/api/login"
+    static let API_LOGOUT : String = "/api/logout"
     
+    let cookie : HTTPCookie?
     var requestsResult : RequestsResult         // Stored information retrieved from GisOnline server
     
     override init()
     {
         //self.requestsResult = RequestsResult(kod: -1, orp: "", nazev: "", isComplete: false)
         self.requestsResult = RequestsResult()
+        self.cookie = nil
         super.init()
     }
     
@@ -243,8 +252,105 @@ class NetworkClientManager: NSObject
     
     
     
+    /**
+     * TODO
+     */
+    func requestLogin()
+    {
+        let requestUrl : URL = URL(string: "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LOGIN)")!
+        let requestParameters : [String : Any] = [ NetworkClientManager.API_LABEL_LOGIN : NetworkClientManager.API_DUMMY_LOGIN,
+                                                   NetworkClientManager.API_LABEL_PASSWORD : NetworkClientManager.API_DUMMY_PASSWORD ]
+        let requestParametersJSON : Data
+        do
+        {
+            requestParametersJSON = try JSONSerialization.data(withJSONObject: requestParameters, options: [])
+        }
+        catch
+        {
+            print("TODO - request login")
+            return
+        }
+        
+        var requestUrlWithData = URLRequest(url: requestUrl)
+        requestUrlWithData.httpMethod = "POST"
+        requestUrlWithData.httpBody = requestParametersJSON
+        
+        
+        let request = URLSession.shared.dataTask(with: requestUrlWithData)
+        {
+            (data, response, error) in
+            if let unwrappedError = error
+            {
+                print("POST login has error:\(unwrappedError)")
+                return
+            }
+            do
+            {
+                // Check response data
+                guard let responseData = data else
+                {
+                    print("No data available (nil)")
+                    return
+                }
+                //print(responseData.description)
+                //print(response)
+                var httpUrlResponse : HTTPURLResponse = response as! HTTPURLResponse
+                // Check json format, API version always fail on this
+                /*guard let unwrappedResponseData = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else
+                {
+                    print("Could not get JSON from responseData as dictionary")
+                    return
+                }*//*
+                print("getId json result is: " + unwrappedResponseData.description) //json format
+                
+                /*
+                guard let resultDictionary = unwrappedResponseData[RequestsResult.LABEL_RESULT] as? [String : Any] else
+                {
+                    return
+                }*/
+ */
+                print(httpUrlResponse.allHeaderFields["Set-Cookie"]!)
+                let setCookieResponse = httpUrlResponse.allHeaderFields["Set-Cookie"]!
+                let cookieAsString = "\(setCookieResponse)"
+                let arrayResponse = cookieAsString.split(separator: ";")
+
+                print(arrayResponse.first!)
+                
+                    /*var aaa = HTTPCookie.cookies(withResponseHeaderFields: httpUrlResponse.allHeaderFields as! [String : String], for: (response?.url)!)
+                let cookie : HTTPCookie = aaa.popLast()!*/
+                let cookieField = ["Set-Cookie" : "\(cookieAsString)"]
+                let cookie = HTTPCookie.cookies(withResponseHeaderFields: cookieField, for: URL(string: "app3.gisonline.cz")!)
+                HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
+                
+                self.requestLogout()
+            }
+            catch
+            {
+                print("Some nasty exception:\(error)")
+            }
+
+        }
+        request.resume()
+    }
     
-    
+    /**
+     * TODO
+     */
+    func requestLogout()
+    {
+        let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LOGOUT)")!
+        let request = URLSession.shared.dataTask(with: requestUrl)
+        {
+            (data, response, error) in
+            guard let responseData = data else
+            {
+                print("No data available (nil)")
+                return
+            }
+            print(response)
+        }
+        request.resume()
+    }
     
     
     /**

@@ -36,7 +36,7 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ye8-R3-7cC">
                                 <rect key="frame" x="192.5" y="103" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.83709115932642486" green="0.83709115932642486" blue="0.83709115932642486" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="create time">
                                         <attributes>
@@ -49,7 +49,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FMQ-sX-1th">
                                 <rect key="frame" x="192.5" y="219" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.83709115932642486" green="0.83709115932642486" blue="0.83709115932642486" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="latitude">
                                         <attributes>
@@ -61,7 +61,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKS-yg-15u">
                                 <rect key="frame" x="192.5" y="190" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.83709115932642486" green="0.83709115932642486" blue="0.83709115932642486" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="longitude">
                                         <attributes>
@@ -73,7 +73,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pk7-uy-e5h">
                                 <rect key="frame" x="192.5" y="161" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.83709115932642486" green="0.83709115932642486" blue="0.83709115932642486" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="send">
                                         <attributes>
@@ -85,7 +85,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IME-dT-z4B">
                                 <rect key="frame" x="192.5" y="132" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.83709115932642486" green="0.83709115932642486" blue="0.83709115932642486" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="send time">
                                         <attributes>
@@ -97,7 +97,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QH5-Cr-Ih5">
                                 <rect key="frame" x="192.5" y="74" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.83709115932642486" green="0.83709115932642486" blue="0.83709115932642486" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="type">
                                         <attributes>
@@ -109,7 +109,6 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dy9-XJ-zPI">
                                 <rect key="frame" x="10" y="74" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Typ">
                                         <attributes>
@@ -121,7 +120,6 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cEc-rf-2Nc">
                                 <rect key="frame" x="10" y="103" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Čas vytvoření">
                                         <attributes>
@@ -133,7 +131,6 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BuF-uC-q5o">
                                 <rect key="frame" x="10" y="132" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Čas odeslání">
                                         <attributes>
@@ -145,7 +142,6 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p7x-bi-Rau">
                                 <rect key="frame" x="10" y="161" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Odesláno">
                                         <attributes>
@@ -157,7 +153,6 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SM6-Ur-uMs">
                                 <rect key="frame" x="10" y="190" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Zeměpisná délka">
                                         <attributes>
@@ -169,7 +164,6 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Vp-DH-auX">
                                 <rect key="frame" x="10" y="219" width="172.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Zeměpisná šířka">
                                         <attributes>
@@ -180,8 +174,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xAq-AQ-mEJ">
-                                <rect key="frame" x="10" y="248" width="46.5" height="19"/>
-                                <color key="backgroundColor" red="0.32395214154877977" green="0.83709115932642486" blue="0.19453409012928263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="10" y="248" width="355" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="19" id="acx-JX-IQk"/>
                                 </constraints>
@@ -196,7 +189,7 @@
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4fH-Ga-ruU">
                                 <rect key="frame" x="10" y="444" width="355" height="213"/>
-                                <color key="backgroundColor" red="0.96876758337020874" green="0.96462231874465942" blue="0.96863216161727905" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="500" constant="128" id="d9j-8m-bAk"/>
                                 </constraints>
@@ -285,6 +278,7 @@
                             <constraint firstItem="FMQ-sX-1th" firstAttribute="top" secondItem="dKS-yg-15u" secondAttribute="bottom" constant="10" id="ski-IK-aez"/>
                             <constraint firstItem="dy9-XJ-zPI" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="10" id="tXg-dW-707"/>
                             <constraint firstItem="SM6-Ur-uMs" firstAttribute="width" secondItem="dKS-yg-15u" secondAttribute="width" id="zVp-mO-dDr"/>
+                            <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="xAq-AQ-mEJ" secondAttribute="trailing" constant="10" id="zmF-wO-YIN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VUw-jc-0yf"/>
                     </view>
@@ -358,7 +352,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Historie" id="Zdf-7t-Un8">
-                        <barButtonItem key="leftBarButtonItem" title="Upravit" id="Aek-rj-eDJ"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="79M-gw-ckr">
                             <connections>
                                 <segue destination="lSW-DC-VV4" kind="presentation" identifier="newReport" id="oxJ-sQ-FNb"/>
@@ -414,7 +407,7 @@
                             </pickerView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VZQ-md-xuR">
                                 <rect key="frame" x="10" y="304" width="355" height="128"/>
-                                <color key="backgroundColor" red="0.96876758337020874" green="0.96462231874465942" blue="0.96863216161727905" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="G4s-t9-svj"/>
                                 </constraints>
@@ -439,6 +432,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nebylo uděleno oprávnění" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1f-z0-1hc">
                                 <rect key="frame" x="80" y="217" width="285" height="21"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -474,6 +468,7 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nebylo uděleno oprávnění" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0SC-fH-mQV">
                                 <rect key="frame" x="80" y="248" width="285" height="21"/>
+                                <color key="backgroundColor" red="0.96668555700000003" green="0.96668555700000003" blue="0.96668555700000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

@@ -142,11 +142,38 @@ class GlobalSettings: NSObject
     }
 
     /**
-     * TODO
+     * Delete image from local storage
      */
     static func deleteImage(imagePath : String?)
     {
+        guard let unwrappedPath = imagePath else
+        {
+            print("Picture path is nil. Something nasty is with DB")
+            return
+        }
         
+        let fileManager = FileManager.default
+        
+        guard fileManager.fileExists(atPath : unwrappedPath) else
+        {
+            print("Picture '\(unwrappedPath)' does not exist")
+            return
+        }
+
+        guard fileManager.isDeletableFile(atPath: unwrappedPath) else
+        {
+            print("Picture '\(unwrappedPath)' is undeletable")
+            return
+        }
+        
+        do
+        {
+            try fileManager.removeItem(atPath: unwrappedPath)
+        }
+        catch
+        {
+            print("Picture '\(unwrappedPath)' has not been deleted")
+        }
     }
     
     

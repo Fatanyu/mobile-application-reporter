@@ -53,7 +53,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         
         // Do any additional setup after loading the view, typically from a nib.
         let deleteButton = editButtonItem
-        deleteButton.title = "Smazat" // TODO - try use it
+        //deleteButton.title = "Smazat" // TODO - try use it
         navigationItem.leftBarButtonItem = deleteButton
 
         //let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
@@ -66,6 +66,10 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         
         // TODO
         let networkClientManager = NetworkClientManager()
+        
+        networkClientManager.requestLogin()
+        
+        //networkClientManager.requestLogout()
         
         //brno
         networkClientManager.requestPositionId(location : GPSLocation(longitude: "16.606837", latitude: "49.195060"))
@@ -275,9 +279,9 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         if editingStyle == .delete
         {
             let context = fetchedResultsController.managedObjectContext
+            //delete picture from local storage
+            GlobalSettings.deleteImage(imagePath: fetchedResultsController.object(at: indexPath).image)
             context.delete(fetchedResultsController.object(at: indexPath))
-            
-            //TODO - delete pictures!!
             
             // Save deletion
             do
