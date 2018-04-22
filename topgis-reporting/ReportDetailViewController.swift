@@ -49,7 +49,7 @@ class ReportDetailViewController: UIViewController
     func configureView()
     {
         // Update the user interface for the detail item.
-        self.setSendLabel()
+        //self.setSendLabel()
         self.setTypeLabel()
         self.setSendTimeLabel()
         self.setCreateTimeLabel()
@@ -126,6 +126,8 @@ class ReportDetailViewController: UIViewController
             // stored picture
             self.detailImage.image = unwrappedValue
             self.detailImage.contentMode = .scaleToFill
+            self.detailImage.isHidden = false
+            self.detailImageLabel.isHidden = false
         }
         else
         {

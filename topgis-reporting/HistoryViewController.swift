@@ -67,7 +67,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         // TODO
         let networkClientManager = NetworkClientManager()
         
-        networkClientManager.requestLogin()
+        //networkClientManager.requestLogin()
         
         //networkClientManager.requestLogout()
         

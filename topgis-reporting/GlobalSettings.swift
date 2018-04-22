@@ -14,7 +14,7 @@ import UIKit
 class GlobalSettings: NSObject
 {
     static let GPS_NOT_SET = "Neznámá"
-    static let DATE_NOT_SEND = "Neznám"
+    static let DATE_NOT_SEND = "Neposláno"
     static let BOOL_STRING_YES = "Ano"
     static let BOOL_STRING_NO = "Ne"
     static let REPORT_NOT_SET = "Nebylo zadáno"
