@@ -177,6 +177,33 @@ class GlobalSettings: NSObject
     }
     
     
+    
+    static func sendReport(oneReport : ReportEntity)
+    {
+        print("\(oneReport.type) + \(oneReport.createTime)")
+        
+        // TODO
+        let networkClientManager = NetworkClientManager(report : oneReport)
+        networkClientManager.sendReport()
+        //networkClientManager.requestLogin()
+        
+        //networkClientManager.requestLogout()
+        
+        //brno
+        //networkClientManager.requestPositionId(location : GPSLocation(longitude: "16.606837", latitude: "49.195060"))
+        //sokolov
+        //networkClientManager.requestPositionId(longitude: 12.642791, latitude: 50.179958)
+    }
+    
+    static func sendReports(reports : [ReportEntity])
+    {
+        for oneReport in reports
+        {
+            sendReport(oneReport: oneReport)
+            break
+        }
+    }
+    
     override private init()
     {
     }

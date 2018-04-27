@@ -64,18 +64,11 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? ReportDetailViewController
         }
         
-        // TODO
-        let networkClientManager = NetworkClientManager()
+     
+        print("here")
+        sendReports(reports: getReportsToSend())
         
-        networkClientManager.requestLogin()
-        
-        //networkClientManager.requestLogout()
-        
-        //brno
-        networkClientManager.requestPositionId(location : GPSLocation(longitude: "16.606837", latitude: "49.195060"))
-        //sokolov
-        //networkClientManager.requestPositionId(longitude: 12.642791, latitude: 50.179958)
-}
+    }
 
     override func viewWillAppear(_ animated: Bool)
     {
@@ -103,6 +96,65 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         dummyValues.append(ReportType(reportType: "Poctivý politik"))
         self.insertNewReportType(newReportTypes: dummyValues)
     }
+    
+    func sendReport(oneReport : ReportEntity)
+    {
+        print("\(oneReport.type) + \(oneReport.createTime)")
+        
+        // TODO
+        //let networkClientManager = NetworkClientManager()
+        
+        //networkClientManager.requestLogin()
+        
+        //networkClientManager.requestLogout()
+        
+        //brno
+        //networkClientManager.requestPositionId(location : GPSLocation(longitude: "16.606837", latitude: "49.195060"))
+        //sokolov
+        //networkClientManager.requestPositionId(longitude: 12.642791, latitude: 50.179958)
+    }
+    
+    func sendReports(reports : [ReportEntity])
+    {
+        for oneReport in reports
+        {
+            sendReport(oneReport: oneReport)
+            break
+        }
+    }
+    
+    func getReportsToSend() -> [ReportEntity]
+    {
+        // variable with results for method's return
+        var reportTypeDictionary = [ReportEntity]()
+        
+        // Prepare fetching to get data from DB
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportEntity")
+        request.returnsObjectsAsFaults = false
+        
+        // Fetching
+        let context = self.fetchedResultsController.managedObjectContext
+        do
+        {
+            let result = try context.fetch(request)
+            
+            // Add types to dictionary
+            for data in result as! [ReportEntity]
+            {
+                //print("Adding data.typ:\(data.type!)")
+                if (!data.send)
+                {
+                    reportTypeDictionary.append(data)
+                }
+            }
+        }
+        catch
+        {
+            print("Fetching dummy values from ReportType failed")
+        }
+        return reportTypeDictionary
+    }
+    
     
     /**
      * Fetch all report types to array as Strings

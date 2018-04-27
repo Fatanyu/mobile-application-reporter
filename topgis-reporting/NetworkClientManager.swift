@@ -81,11 +81,14 @@ class NetworkClientManager : NSObject
     let cookie : HTTPCookie?
     var requestsResult : RequestsResult         // Stored information retrieved from GisOnline server
     
-    override init()
+    var reportToSend : ReportEntity
+    
+    init(report : ReportEntity)
     {
         //self.requestsResult = RequestsResult(kod: -1, orp: "", nazev: "", isComplete: false)
         self.requestsResult = RequestsResult()
         self.cookie = nil
+        self.reportToSend = report
         super.init()
     }
     
@@ -94,6 +97,11 @@ class NetworkClientManager : NSObject
     {
         //NetworkClientManager.giveMeApiVersion()
         //NetworkClientManager.postWhereAmI(longitude: 16.606837, latitude: 49.195060)
+    }
+    
+    func sendReport()
+    {
+        self.requestLogin()
     }
     
     //working example of GET API
@@ -117,140 +125,7 @@ class NetworkClientManager : NSObject
         // run request
         request.resume()
     }
-    
-    //some prototype from stackoverflow
-    func makeGetCall()
-    {
-        // Set up the URL request
-        let todoEndpoint: String = "https://jsonplaceholder.typicode.com/todos/1"
-        guard let url = URL(string: todoEndpoint) else
-        {
-            print("Error: cannot create URL")
-            return
-        }
-        let urlRequest = URLRequest(url: url)
-        
-        // set up the session
-        let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
-        
-        // make the request
-        let task = session.dataTask(with: urlRequest)
-        {
-            (data, response, error) in
-            // check for any errors
-            guard error == nil else
-            {
-                print("error calling GET on /todos/1")
-                print(error!)
-                return
-            }
-            // make sure we got data
-            guard let responseData = data else
-            {
-                print("Error: did not receive data")
-                return
-            }
-            // parse the result as JSON, since that's what the API provides
-            do
-            {
-                guard let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else
-                {
-                        print("error trying to convert data to JSON")
-                        return
-                }
-                // now we have the todo
-                // let's just print it to prove we can access it
-                print("The todo is: " + todo.description)
-                
-                // the todo object is a dictionary
-                // so we just access the title using the "title" key
-                // so check for a title and print it if we have one
-                guard let todoTitle = todo["title"] as? String else
-                {
-                    print("Could not get todo title from JSON")
-                    return
-                }
-                print("The title is: " + todoTitle)
-            }
-            catch
-            {
-                print("error trying to convert data to JSON")
-                return
-            }
-        }
-        task.resume()
-    }
-    
-    //some prototype from stackoverflow
-    func makePostCall()
-    {
-        let todosEndpoint: String = "https://jsonplaceholder.typicode.com/todos"
-        guard let todosURL = URL(string: todosEndpoint) else
-        {
-            print("Error: cannot create URL")
-            return
-        }
-        var todosUrlRequest = URLRequest(url: todosURL)
-        todosUrlRequest.httpMethod = "POST"
-        let newTodo: [String: Any] = ["title": "My First todo", "completed": false, "userId": 1]
-        let jsonTodo: Data
-        do
-        {
-            jsonTodo = try JSONSerialization.data(withJSONObject: newTodo, options: [])
-            todosUrlRequest.httpBody = jsonTodo
-        }
-        catch
-        {
-            print("Error: cannot create JSON from todo")
-            return
-        }
-        
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: todosUrlRequest)
-        {
-            (data, response, error) in
-            guard error == nil else
-            {
-                print("error calling POST on /todos/1")
-                print(error!)
-                return
-            }
-            guard let responseData = data else
-            {
-                print("Error: did not receive data")
-                return
-            }
-            
-            // parse the result as JSON, since that's what the API provides
-            do
-            {
-                guard let receivedTodo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else
-                {
-                    print("Could not get JSON from responseData as dictionary")
-                    return
-                }
-                print("The todo is: " + receivedTodo.description)
-                
-                guard let todoID = receivedTodo["id"] as? Int else
-                {
-                    print("Could not get todoID as int from JSON")
-                    return
-                }
-                print("The ID is: \(todoID)")
-            }
-            catch
-            {
-                print("error parsing response from POST on /todos")
-                return
-            }
-        }
-        task.resume()
-    }
-    
-    
-    
+   
     
     /**
      * TODO
@@ -305,7 +180,9 @@ class NetworkClientManager : NSObject
                 //HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
                 HTTPCookieStorage.shared.setCookie(cookie.first!)
                 
-                self.requestLogout()
+                self.requestPositionId(/*location: GPSLocation*/)
+                
+                //self.requestLogout()
             }
             catch
             {
@@ -402,7 +279,8 @@ class NetworkClientManager : NSObject
                         print("WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
                     }
                 }
-                
+                //here should continue TODO
+                self.requestLogout()
             }
             catch
             {
@@ -420,12 +298,16 @@ class NetworkClientManager : NSObject
      * * ID is internal number for specific village
      * * GPS coordinates are needed for creating API request and getting location
      */
-    func requestPositionId(location : GPSLocation)
+    func requestPositionId(/*location : GPSLocation*/)
     {
         //x == longitude
         //y == latitude
-        let urlParameterX="x=\(location.longitude)"
-        let urlParameterY="y=\(location.latitude)"
+        //let urlParameterX="x=\(location.longitude)"
+        //let urlParameterY="y=\(location.latitude)"
+        
+        let urlParameterX="x=\(self.reportToSend.longitude)"
+        let urlParameterY="y=\(self.reportToSend.latitude)"
+        
         
         // Example: https://app.gisonline.cz/api/ruian/obce?x=16.606837&y=49.195060&srid=4326
         // Create API URL
@@ -480,6 +362,7 @@ class NetworkClientManager : NSObject
                         print("WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
                     }
                 }
+                self.requestLayerInfo()
             }
             catch
             {
