@@ -292,35 +292,18 @@ class NetworkClientManager : NSObject
                     print("No data available (nil)")
                     return
                 }
-                //print(responseData.description)
-                //print(response)
-                var httpUrlResponse : HTTPURLResponse = response as! HTTPURLResponse
-                // Check json format, API version always fail on this
-                /*guard let unwrappedResponseData = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else
-                {
-                    print("Could not get JSON from responseData as dictionary")
-                    return
-                }*//*
-                print("getId json result is: " + unwrappedResponseData.description) //json format
+
+                let httpUrlResponse : HTTPURLResponse = response as! HTTPURLResponse
                 
-                /*
-                guard let resultDictionary = unwrappedResponseData[RequestsResult.LABEL_RESULT] as? [String : Any] else
-                {
-                    return
-                }*/
- */
-                print(httpUrlResponse.allHeaderFields["Set-Cookie"]!)
+                //print(httpUrlResponse.allHeaderFields["Set-Cookie"]!)
+                
                 let setCookieResponse = httpUrlResponse.allHeaderFields["Set-Cookie"]!
                 let cookieAsString = "\(setCookieResponse)"
-                let arrayResponse = cookieAsString.split(separator: ";")
-
-                print(arrayResponse.first!)
-                
-                    /*var aaa = HTTPCookie.cookies(withResponseHeaderFields: httpUrlResponse.allHeaderFields as! [String : String], for: (response?.url)!)
-                let cookie : HTTPCookie = aaa.popLast()!*/
                 let cookieField = ["Set-Cookie" : "\(cookieAsString)"]
-                let cookie = HTTPCookie.cookies(withResponseHeaderFields: cookieField, for: URL(string: "app3.gisonline.cz")!)
-                HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
+
+                let cookie = HTTPCookie.cookies(withResponseHeaderFields: cookieField, for: URL(string: NetworkClientManager.SERVER_URL_ADDRESS)!)
+                //HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
+                HTTPCookieStorage.shared.setCookie(cookie.first!)
                 
                 self.requestLogout()
             }
@@ -339,7 +322,10 @@ class NetworkClientManager : NSObject
     func requestLogout()
     {
         let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LOGOUT)")!
-        let request = URLSession.shared.dataTask(with: requestUrl)
+        let urlSession = URLSession(configuration: .default)
+        
+        //let request = URLSession.shared.dataTask(with: requestUrl)
+        let request = urlSession.dataTask(with: requestUrl)
         {
             (data, response, error) in
             guard let responseData = data else
