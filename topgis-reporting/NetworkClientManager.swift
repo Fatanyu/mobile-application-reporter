@@ -8,6 +8,36 @@
 
 import UIKit
 
+// Report
+struct ReportToInsert : Encodable
+{
+    let gid, login, name, date, status, type, geom, description : String
+}
+
+//Report sugar for transport
+struct TransferReport : Encodable
+{
+    let inserts : [ReportToInsert]
+    let fidName : String = "gid"
+    let geomName : String = "geom"
+    let srs : String = "4326"
+    /*
+    func toJSON() -> String? {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            return String(data: jsonData, encoding: String.Encoding.utf8)
+        } catch let error {
+            print("error converting to json: \(error)")
+            return nil
+        }
+    }*/
+}
+
+/*
+var reportValues = ["gid" : "", "login" : "", "name" : "", "date" : "", "status" : "1", "type" : "4", "geom" : "POINT(12.135165,31.1358135)", "description" : "sakmdlkasjdla"]
+
+*/
+
 /**
  * Contains information from GisOnline server (responses)
  * *
@@ -82,6 +112,7 @@ class NetworkClientManager : NSObject
     let cookie : HTTPCookie?
     var requestsResult : RequestsResult         // Stored information retrieved from GisOnline server
     
+    var reportAsData : Data? = nil
     var reportToSend : ReportEntity
     var alreadyLogin : Bool = false
     
@@ -93,44 +124,17 @@ class NetworkClientManager : NSObject
         self.reportToSend = report
         super.init()
     }
-    
-    //dev method
-    static func wtf()
-    {
-        //NetworkClientManager.giveMeApiVersion()
-        //NetworkClientManager.postWhereAmI(longitude: 16.606837, latitude: 49.195060)
-    }
-    
+
+    /**
+     * Start sending sequence
+     */
     func sendReport()
     {
         self.requestLogin()
     }
     
-    //working example of GET API
-    static func giveMeApiVersion()
-    {
-        // create string for API URL
-        let urlString: String = "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_VERSION_ADDRESS)"
-        // create API URL, urlString will be always defined
-        let url : URL = URL(string: urlString)!
-        
-        // create request which will send request to API defined in urlString
-        let request = URLSession.shared.dataTask(with: url)
-        {
-            // request returns up to 3 variables (all can be nil)
-            (data, response, error) in
-            //print("\(data)")
-            //print("\(response)")
-            //print("\(error)")
-        }
-        
-        // run request
-        request.resume()
-    }
-   
-    
     /**
-     * TODO
+     * Send request login to server. Accept response and set given cookie
      */
     func requestLogin()
     {
@@ -338,8 +342,9 @@ class NetworkClientManager : NSObject
                 return
             }
         }
+        self.sendData()
         //here should continue TODO
-        self.requestLogout()
+        //self.requestLogout()
         
         // run request
         request.resume()
@@ -448,11 +453,44 @@ class NetworkClientManager : NSObject
     
     func sendData()
     {
+       
+        self.getDecodedReport()
+        self.sendPhoto()
         //URLSessionUploadTask
     }
     
     func sendPhoto()
     {
+        self.updateReport()
         //URLSessionUploadTask
+    }
+    
+    func updateReport()
+    {
+        self.requestLogout()
+    }
+    
+    func getDecodedReport()
+    {
+        //dummy value
+        let reportToInsert = ReportToInsert(gid: "", login: NetworkClientManager.API_DUMMY_LOGIN, name: "Name", date: GlobalSettings.getDate(date: self.reportToSend.createTime), status: "1", type: "4", geom: "POINT(16.606837,49.195060)", description: self.reportToSend.reportDescription!)
+        print(JSONSerialization.isValidJSONObject(reportToInsert))
+        
+        let transferReport = TransferReport(inserts: [reportToInsert])
+        print(JSONSerialization.isValidJSONObject(transferReport))
+        
+        let jsonEncoder = JSONEncoder()
+        do
+        {
+            let jsonData = try jsonEncoder.encode(transferReport)
+            self.reportAsData = jsonData
+            //let jsonString = String(data: jsonData, encoding: .utf8)
+            //print("\(jsonString!)")
+        }
+        catch
+        {
+            print("erorr")
+            self.reportAsData = nil
+        }
     }
 }

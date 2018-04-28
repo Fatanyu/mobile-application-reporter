@@ -59,6 +59,24 @@ class GlobalSettings: NSObject
     }
     
     /**
+     * Getter for server date
+     */
+    static func getDate(date : Date?) -> String
+    {
+        var stringDate : String = GlobalSettings.DATE_NOT_SEND
+        //https://stackoverflow.com/questions/28404154/swift-get-local-date-time
+        if let unwrappedDate = date
+        {
+            let dateFormatter = DateFormatter()
+            // 'dd' and 'DD' gives different results!!
+            // 'MM' == Months, 'mm' == minutes
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            stringDate = dateFormatter.string(from: unwrappedDate)
+        }
+        return stringDate
+    }
+    
+    /**
      * Create name for storing pictures
      */
     static func getImageName(date : Date?) -> String
