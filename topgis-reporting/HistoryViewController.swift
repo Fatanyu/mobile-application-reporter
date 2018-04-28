@@ -101,10 +101,10 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     
     func sendReport(oneReport : ReportEntity)
     {
-        print("\(oneReport.type) + \(oneReport.createTime)")
+        //print("\(oneReport.type) + \(oneReport.createTime)")
         
         // TODO
-        let networkClientManager = NetworkClientManager(report: oneReport)
+        let networkClientManager = NetworkClientManager(report: oneReport, historyViewController : self)
         
         networkClientManager.sendReport()
         //networkClientManager.requestLogin()
@@ -139,7 +139,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     func getReportsToSend() -> [ReportEntity]
     {
         // variable with results for method's return
-        var reportTypeDictionary = [ReportEntity]()
+        var reportDictionary = [ReportEntity]()
         
         // Prepare fetching to get data from DB
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportEntity")
@@ -157,15 +157,15 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
                 //print("Adding data.typ:\(data.type!)")
                 if (!data.send)
                 {
-                    reportTypeDictionary.append(data)
+                    reportDictionary.append(data)
                 }
             }
         }
         catch
         {
-            print("Fetching dummy values from ReportType failed")
+            print("Fetching values from ReportEntity failed")
         }
-        return reportTypeDictionary
+        return reportDictionary
     }
     
     
@@ -200,7 +200,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         }
         catch
         {
-            print("Fetching dummy values from ReportType failed")
+            print("Fetching dummy values from ReportTypeEntity failed")
         }
         return reportTypeDictionary
     }
@@ -457,5 +457,40 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
      }
      */
 
+    /**
+     * Update record in coreData
+     */
+    func updateReport(createTime : Date)
+    {
+        // Prepare fetching to get data from DB
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "ReportEntity")
+        request.returnsObjectsAsFaults = false
+        
+        // Fetching
+        let context = self.fetchedResultsController.managedObjectContext
+        do
+        {
+            let result = try context.fetch(request)
+            
+            // Add types to dictionary
+            for data in result as! [ReportEntity]
+            {
+                //print("Adding data.typ:\(data.type!)")
+                if (!data.send && data.createTime == createTime)
+                {
+                    data.sendTime = Date()
+                    data.send = true
+                    try context.save()
+                    //print("Update report ok")
+                    break;
+                }
+            }
+
+        }
+        catch
+        {
+            print("Update sendTime failed")
+        }
+    }
 }
 

@@ -21,16 +21,6 @@ struct TransferReport : Encodable
     let fidName : String = "gid"
     let geomName : String = "geom"
     let srs : String = "4326"
-    /*
-    func toJSON() -> String? {
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
-            return String(data: jsonData, encoding: String.Encoding.utf8)
-        } catch let error {
-            print("error converting to json: \(error)")
-            return nil
-        }
-    }*/
 }
 
 /*
@@ -66,6 +56,13 @@ struct RequestsResult
     var info : String
     var title : String
     
+    static let LABEL_SEND_STATUS : String = "status"
+    static let LABEL_SEND_INSERTIDS : String = "insertIds"
+    static let LABEL_SEND_INSERTED : String = "inserted"
+    var status : String
+    var insertedids : String
+    var inserted : String
+    
     // JSON Constants
     static let LABEL_RESULT = "result"
     
@@ -86,6 +83,9 @@ struct RequestsResult
         self.layer = ""
         self.info = ""
         self.title = ""
+        self.inserted = ""
+        self.insertedids = ""
+        self.status = ""
     }
 }
 
@@ -105,23 +105,26 @@ class NetworkClientManager : NSObject
     static let API_DUMMY_PASSWORD : String = "testujo106"
     static let API_LABEL_LOGIN : String = "login"
     static let API_LABEL_PASSWORD : String = "psw"
-    static let API_LABEL_LAYER : String = "/layers"
+    static let LABEL_LAYER : String = "/layers"
+    static let API_LABEL_LAYER : String = "/api/layers/"
     static let API_LOGIN : String = "/api/login"
     static let API_LOGOUT : String = "/api/logout"
     
     let cookie : HTTPCookie?
     var requestsResult : RequestsResult         // Stored information retrieved from GisOnline server
+    let historyViewController : HistoryViewController
     
     var reportAsData : Data? = nil
     var reportToSend : ReportEntity
     var alreadyLogin : Bool = false
     
-    init(report : ReportEntity)
+    init(report : ReportEntity, historyViewController : HistoryViewController)
     {
         //self.requestsResult = RequestsResult(kod: -1, orp: "", nazev: "", isComplete: false)
         self.requestsResult = RequestsResult()
         self.cookie = nil
         self.reportToSend = report
+        self.historyViewController = historyViewController
         super.init()
     }
 
@@ -266,7 +269,7 @@ class NetworkClientManager : NSObject
     func requestLayerInfo()
     {
         // Create layer API ending for URL
-        let urlParameterLayers = "/\(self.requestsResult.kod)\(NetworkClientManager.API_LABEL_LAYER)"
+        let urlParameterLayers = "/\(self.requestsResult.kod)\(NetworkClientManager.LABEL_LAYER)"
         
         // Create layer API URL
         let requestUrl : URL = URL(string: "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_RUIAN)\(urlParameterLayers)")!
@@ -341,10 +344,11 @@ class NetworkClientManager : NSObject
                 self.fail(message: "Error parsing response from requestLayerInfo:\(error.localizedDescription)")
                 return
             }
+            //here should continue TODO
+            //self.requestLogout()
+            self.sendData()
         }
-        self.sendData()
-        //here should continue TODO
-        //self.requestLogout()
+
         
         // run request
         request.resume()
@@ -453,31 +457,218 @@ class NetworkClientManager : NSObject
     
     func sendData()
     {
-       
-        self.getDecodedReport()
-        self.sendPhoto()
-        //URLSessionUploadTask
+        if(!self.getDecodedReport())
+        {
+            self.fail(message: "Report encoding failed")
+            return
+        }
+        
+        let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LABEL_LAYER)\(self.self.requestsResult.layer)")!
+        print(requestUrl)
+        var requestUrlWithData = URLRequest(url: requestUrl)
+        requestUrlWithData.httpMethod = "POST"
+        //let requestParameters : [String : Any] = [ NetworkClientManager.API_LABEL_LOGIN : NetworkClientManager.API_DUMMY_LOGIN,                                                   NetworkClientManager.API_LABEL_PASSWORD : NetworkClientManager.API_DUMMY_PASSWORD ]
+        requestUrlWithData.httpBody = self.reportAsData
+        requestUrlWithData.httpShouldHandleCookies = true
+        requestUrlWithData.setValue("Content-Type", forHTTPHeaderField: "application/json")
+
+        //requestUrlWithData.httpBody = requestParametersJSON
+        
+        //set request handler
+        
+        let request = URLSession.shared.dataTask(with: requestUrlWithData)
+        {
+            (data, response, error) in
+            
+            if let unwrappedError = error
+            {
+                self.fail(message: "sendData has error:\(unwrappedError)")
+                return
+            }
+            
+            // Check response data
+            guard let unwrappedData = data, let httpUrlResponse = response as? HTTPURLResponse else
+            {
+                self.fail(message: "sendData unwrapping response and data failed)")
+                return
+            }
+            
+            // check returned code
+            guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
+            {
+                print(response)
+                print(unwrappedData)
+                self.fail(message: "sendData has failed. Request status code:\(httpUrlResponse.statusCode)")
+                return
+            }
+            //print(httpUrlResponse)
+            
+            // What to do with server response
+            do
+            {
+                // Check json format, API version always fail on this
+                guard let unwrappedJSONData = try JSONSerialization.jsonObject(with: unwrappedData, options: []) as? [String: Any] else
+                {
+                    self.fail(message: "sendData, could not get JSON from responseData as dictionary")
+                    return
+                }
+                
+                // unwrapping result values (NOT status code)
+                guard let resultDictionary = unwrappedJSONData[RequestsResult.LABEL_RESULT] as? [String : Any] else
+                {
+                    self.fail(message: "sendData response data has not 'Result'")
+                    return
+                }
+                
+                // Iterate over result dictionary. There are only 3 KEY:VALUE pairs
+                for(key, value) in resultDictionary
+                {
+                    print("\(key) : \(value)")
+                    switch key
+                    {
+                    case RequestsResult.LABEL_SEND_STATUS:
+                        self.requestsResult.status = value as! String
+                    case RequestsResult.LABEL_SEND_INSERTED:
+                        self.requestsResult.inserted = value as! String
+                    case RequestsResult.LABEL_SEND_INSERTIDS:
+                        self.requestsResult.insertedids = value as! String
+                    default:
+                        self.fail(message: "WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
+                    }
+                }
+            }
+            catch
+            {
+                self.fail(message: "Error parsing response from sendData:\(error.localizedDescription)")
+                return
+            }
+            // Check picture sending
+            if let _ = self.reportToSend.image
+            {
+                //self.sendPhoto()
+                self.updateReport()
+            }
+            else
+            {
+                self.updateReport()
+            }
+        }
+        
+        request.resume()
     }
     
+    /**
+     * TODO
+     */
     func sendPhoto()
     {
-        self.updateReport()
-        //URLSessionUploadTask
+        let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LABEL_LAYER)\(self.self.requestsResult.layer)")!
+        print(requestUrl)
+        var requestUrlWithData = URLRequest(url: requestUrl)
+        requestUrlWithData.httpMethod = "POST"
+        //let requestParameters : [String : Any] = [ NetworkClientManager.API_LABEL_LOGIN : NetworkClientManager.API_DUMMY_LOGIN,                                                   NetworkClientManager.API_LABEL_PASSWORD : NetworkClientManager.API_DUMMY_PASSWORD ]
+        //requestUrlWithData.httpBody = self.reportAsData
+        requestUrlWithData.httpShouldHandleCookies = true
+        requestUrlWithData.setValue("Content-Type", forHTTPHeaderField: "application/json")
+        
+        //requestUrlWithData.httpBody = requestParametersJSON
+        
+        //set request handler
+        
+        let request = URLSession.shared.dataTask(with: requestUrlWithData)
+        {
+            (data, response, error) in
+            
+            if let unwrappedError = error
+            {
+                self.fail(message: "sendPhoto has error:\(unwrappedError)")
+                return
+            }
+            
+            // Check response data
+            guard let unwrappedData = data, let httpUrlResponse = response as? HTTPURLResponse else
+            {
+                self.fail(message: "sendPhoto unwrapping response and data failed)")
+                return
+            }
+            
+            // check returned code
+            guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
+            {
+                print(response)
+                print(unwrappedData)
+                self.fail(message: "sendPhoto has failed. Request status code:\(httpUrlResponse.statusCode)")
+                return
+            }
+            //print(httpUrlResponse)
+            /*
+            // What to do with server response
+            do
+            {
+                // Check json format, API version always fail on this
+                guard let unwrappedJSONData = try JSONSerialization.jsonObject(with: unwrappedData, options: []) as? [String: Any] else
+                {
+                    self.fail(message: "sendPhoto, could not get JSON from responseData as dictionary")
+                    return
+                }
+                
+                // unwrapping result values (NOT status code)
+                guard let resultDictionary = unwrappedJSONData[RequestsResult.LABEL_RESULT] as? [String : Any] else
+                {
+                    self.fail(message: "sendPhoto response data has not 'Result'")
+                    return
+                }
+                
+                // Iterate over result dictionary. There are only 3 KEY:VALUE pairs
+                for(key, value) in resultDictionary
+                {
+                    print("\(key) : \(value)")
+                    switch key
+                    {
+                    case RequestsResult.LABEL_SEND_STATUS:
+                        self.requestsResult.status = value as! String
+                    case RequestsResult.LABEL_SEND_INSERTED:
+                        self.requestsResult.inserted = value as! String
+                    case RequestsResult.LABEL_SEND_INSERTIDS:
+                        self.requestsResult.insertedids = value as! String
+                    default:
+                        self.fail(message: "WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
+                    }
+                }
+            }
+            catch
+            {
+                self.fail(message: "Error parsing response from sendPhoto:\(error.localizedDescription)")
+                return
+            }*/
+            
+            self.updateReport()
+
+        }
+        
+        request.resume()
     }
     
+    /**
+     *
+     */
     func updateReport()
     {
+        self.historyViewController.updateReport(createTime: self.reportToSend.createTime!)
         self.requestLogout()
     }
     
-    func getDecodedReport()
+    /**
+     * Take reportEntity and encode it to jsonData
+     */
+    func getDecodedReport() -> Bool
     {
         //dummy value
-        let reportToInsert = ReportToInsert(gid: "", login: NetworkClientManager.API_DUMMY_LOGIN, name: "Name", date: GlobalSettings.getDate(date: self.reportToSend.createTime), status: "1", type: "4", geom: "POINT(16.606837,49.195060)", description: self.reportToSend.reportDescription!)
-        print(JSONSerialization.isValidJSONObject(reportToInsert))
+        let reportToInsert = ReportToInsert(gid: "", login: NetworkClientManager.API_DUMMY_LOGIN, name: "Test", date: GlobalSettings.getDate(date: self.reportToSend.createTime), status: "1", type: "4", geom: "POINT(16.606837,49.195060)", description: self.reportToSend.reportDescription!)
+        //print(JSONSerialization.isValidJSONObject(reportToInsert))
         
         let transferReport = TransferReport(inserts: [reportToInsert])
-        print(JSONSerialization.isValidJSONObject(transferReport))
+        //print(JSONSerialization.isValidJSONObject(transferReport))
         
         let jsonEncoder = JSONEncoder()
         do
@@ -486,11 +677,13 @@ class NetworkClientManager : NSObject
             self.reportAsData = jsonData
             //let jsonString = String(data: jsonData, encoding: .utf8)
             //print("\(jsonString!)")
+            return true
         }
         catch
         {
             print("erorr")
             self.reportAsData = nil
+            return false
         }
     }
 }

@@ -195,7 +195,7 @@ class GlobalSettings: NSObject
     }
     
     
-    
+    /*
     static func sendReport(oneReport : ReportEntity)
     {
         print("\(oneReport.type) + \(oneReport.createTime)")
@@ -221,6 +221,7 @@ class GlobalSettings: NSObject
             break
         }
     }
+    */
     
     override private init()
     {
