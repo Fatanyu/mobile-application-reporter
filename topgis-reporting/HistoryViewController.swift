@@ -35,6 +35,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
             }
         }
     }
+    private var sending : Bool = false
 
     var detailViewController: ReportDetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -65,14 +66,15 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         }
         
      
-        print("here")
-        sendReports(reports: getReportsToSend())
+
         
     }
 
     override func viewWillAppear(_ animated: Bool)
     {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
+        print("here")
+        sendReports(reports: getReportsToSend())
         super.viewWillAppear(animated)
     }
 
@@ -102,8 +104,9 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         print("\(oneReport.type) + \(oneReport.createTime)")
         
         // TODO
-        //let networkClientManager = NetworkClientManager()
+        let networkClientManager = NetworkClientManager(report: oneReport)
         
+        networkClientManager.sendReport()
         //networkClientManager.requestLogin()
         
         //networkClientManager.requestLogout()
@@ -116,11 +119,21 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
     
     func sendReports(reports : [ReportEntity])
     {
+        if(self.sending)
+        {
+            return //I am already sending
+        }
+        else
+        {
+            self.sending = true
+        }
         for oneReport in reports
         {
             sendReport(oneReport: oneReport)
             break
         }
+        
+        self.sending = false
     }
     
     func getReportsToSend() -> [ReportEntity]

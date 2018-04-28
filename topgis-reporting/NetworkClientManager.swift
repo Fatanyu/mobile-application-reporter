@@ -68,13 +68,14 @@ class NetworkClientManager : NSObject
     //static let SERVER_URL_ADDRESS : String = "https://go-beta.topgis.cz"  // does not work right now (VPN needed)
     static let API_VERSION_ADDRESS : String = "/api/version"                // API for getting api version, place after SERVER_URL_ADDRESS
     //static let SERVER_URL_ADDRESS : String = "https://app.gisonline.cz"     // server address
-    static let SERVER_URL_ADDRESS : String = "https://app3.gisonline.cz"
+    static let SERVER_URL_ADDRESS : String = "https://appbeta.gisonline.cz"
     static let API_RUIAN : String = "/api/ruian/obce"                       // API for getting ruian data, place after SERVER_URL_ADDRESS
     static let API_RUIAN_SRID : String = "srid=4326"                        // API parameter which will be always used
     static let API_DUMMY_LOGIN : String = "tester"
     static let API_DUMMY_PASSWORD : String = "testujo106"
     static let API_LABEL_LOGIN : String = "login"
     static let API_LABEL_PASSWORD : String = "psw"
+    static let API_LABEL_LAYER : String = "/layers"
     static let API_LOGIN : String = "/api/login"
     static let API_LOGOUT : String = "/api/logout"
     
@@ -82,6 +83,7 @@ class NetworkClientManager : NSObject
     var requestsResult : RequestsResult         // Stored information retrieved from GisOnline server
     
     var reportToSend : ReportEntity
+    var alreadyLogin : Bool = false
     
     init(report : ReportEntity)
     {
@@ -132,9 +134,12 @@ class NetworkClientManager : NSObject
      */
     func requestLogin()
     {
+        //create url request
         let requestUrl : URL = URL(string: "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LOGIN)")!
+        //create url parameters, in this case login name and password
         let requestParameters : [String : Any] = [ NetworkClientManager.API_LABEL_LOGIN : NetworkClientManager.API_DUMMY_LOGIN,
                                                    NetworkClientManager.API_LABEL_PASSWORD : NetworkClientManager.API_DUMMY_PASSWORD ]
+        //Add parameters to json data
         let requestParametersJSON : Data
         do
         {
@@ -142,55 +147,70 @@ class NetworkClientManager : NSObject
         }
         catch
         {
-            print("TODO - request login")
+            self.fail(message: "Login prepare error:\(error.localizedDescription)")
             return
         }
         
+        //Create and set request
         var requestUrlWithData = URLRequest(url: requestUrl)
         requestUrlWithData.httpMethod = "POST"
         requestUrlWithData.httpBody = requestParametersJSON
         
-        
+        //set request handler
         let request = URLSession.shared.dataTask(with: requestUrlWithData)
         {
             (data, response, error) in
+            //in case of error
             if let unwrappedError = error
             {
-                print("POST login has error:\(unwrappedError)")
+                self.fail(message: "Login request has error:\(unwrappedError)")
                 return
             }
-            do
+            
+            // Check response data
+            guard let _ = data, let httpUrlResponse = response as? HTTPURLResponse else
             {
-                // Check response data
-                guard let responseData = data else
-                {
-                    print("No data available (nil)")
-                    return
-                }
-
-                let httpUrlResponse : HTTPURLResponse = response as! HTTPURLResponse
-                
-                //print(httpUrlResponse.allHeaderFields["Set-Cookie"]!)
-                
-                let setCookieResponse = httpUrlResponse.allHeaderFields["Set-Cookie"]!
-                let cookieAsString = "\(setCookieResponse)"
-                let cookieField = ["Set-Cookie" : "\(cookieAsString)"]
-
-                let cookie = HTTPCookie.cookies(withResponseHeaderFields: cookieField, for: URL(string: NetworkClientManager.SERVER_URL_ADDRESS)!)
-                //HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
-                HTTPCookieStorage.shared.setCookie(cookie.first!)
-                
-                self.requestPositionId(/*location: GPSLocation*/)
-                
-                //self.requestLogout()
-            }
-            catch
-            {
-                print("Some nasty exception:\(error)")
+                self.fail(message: "Login unwrapping response and data failed)")
+                return
             }
 
+            // check returned code
+            guard (httpUrlResponse.statusCode == 200) else
+            {
+                self.fail(message: "Login request failed. Request status code:\(httpUrlResponse.statusCode)")
+                return
+            }
+        
+            self.setCookie(httpUrlResponse: httpUrlResponse)
+            
+            //yes, I am login
+            self.alreadyLogin = true
+            
+            // Continue with sending
+            self.requestPositionId(/*location: GPSLocation*/)
         }
         request.resume()
+    }
+    
+    /**
+     * Store http cookie to global store
+     */
+    private func setCookie(httpUrlResponse : HTTPURLResponse)
+    {
+        //create cookie as it should be
+        //do {
+            let setCookieResponse = httpUrlResponse.allHeaderFields["Set-Cookie"]!
+            let cookieAsString = "\(setCookieResponse)"
+            let cookieField = ["Set-Cookie" : "\(cookieAsString)"]
+            let cookie = HTTPCookie.cookies(withResponseHeaderFields: cookieField, for: URL(string: NetworkClientManager.SERVER_URL_ADDRESS)!)
+            //Add cookie to phone storage
+            //HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
+            HTTPCookieStorage.shared.setCookie(cookie.first!) //there always will be cookie, even bad
+        //}
+        //catch
+        //{
+        //    self.fail(message: "Bad cookie:\(error.localizedDescription)")
+        //}
     }
     
     /**
@@ -205,12 +225,31 @@ class NetworkClientManager : NSObject
         let request = urlSession.dataTask(with: requestUrl)
         {
             (data, response, error) in
-            guard let responseData = data else
+            // In case of missing this one, there will be infinite cycle
+            self.alreadyLogin = false
+            
+            if let unwrappedError = error
             {
-                print("No data available (nil)")
+                self.fail(message: "Logout request has error:\(unwrappedError)")
                 return
             }
-            print(response)
+            
+            // Check response data
+            guard let _ = data, let httpUrlResponse = response as? HTTPURLResponse else
+            {
+                self.fail(message: "Logout unwrapping response and data failed)")
+                return
+            }
+            
+            // check returned code
+            guard (httpUrlResponse.statusCode == 200) else
+            {
+                self.fail(message: "Logout request failed. Request status code:\(httpUrlResponse.statusCode)")
+                return
+            }
+            
+            print("Logout successfull")
+            //print(response)
         }
         request.resume()
     }
@@ -223,7 +262,7 @@ class NetworkClientManager : NSObject
     func requestLayerInfo()
     {
         // Create layer API ending for URL
-        let urlParameterLayers = "/\(self.requestsResult.kod)/layers"
+        let urlParameterLayers = "/\(self.requestsResult.kod)\(NetworkClientManager.API_LABEL_LAYER)"
         
         // Create layer API URL
         let requestUrl : URL = URL(string: "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_RUIAN)\(urlParameterLayers)")!
@@ -233,32 +272,44 @@ class NetworkClientManager : NSObject
         {
             (data, response, error) in
             //What to do with server response
+            if let unwrappedError = error
+            {
+                self.fail(message: "requestPositionId has error:\(unwrappedError)")
+                return
+            }
+            
+            // Check response data
+            guard let unwrappedData = data, let httpUrlResponse = response as? HTTPURLResponse else
+            {
+                self.fail(message: "requestPositionId unwrapping response and data failed)")
+                return
+            }
+            
+            // check returned code
+            guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
+            {
+                self.fail(message: "requestPositionId has failed. Request status code:\(httpUrlResponse.statusCode)")
+                return
+            }
+            
+            
             do
             {
-                // Check if data exists
-                guard let responseData = data else
-                {
-                    print("No data available (nil)")
-                    return
-                }
-                
                 // Trying parse json data from server
-                guard let unwrappedResponseData = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else
+                guard let unwrappedJSONData = try JSONSerialization.jsonObject(with: unwrappedData, options: []) as? [String: Any] else
                 {
-                    // Always will fail for API version or another basic text, which is not json
-                    //print("Could not get JSON from responseData as dictionary")
+                    self.fail(message: "requestLayerInfo, could not get JSON from responseData as dictionary")
                     return
                 }
 
                 //print(unwrappedResponseData.description)
 
                 //
-                guard let resultDictionary = unwrappedResponseData[RequestsResult.LABEL_RESULT] as? [String : Any] else
+                guard let resultDictionary = unwrappedJSONData[RequestsResult.LABEL_RESULT] as? [String : Any] else
                 {
+                    self.fail(message: "requestLayerInfo response data has not 'Result'")
                     return
                 }
-                
-                //print(resultDictionary.first)
                 
                 // Iterate over result dictionary. There are only 3 KEY:VALUE pairs
                 for(key, value) in resultDictionary
@@ -276,18 +327,19 @@ class NetworkClientManager : NSObject
                         self.requestsResult.title = value as! String
                         //print("\(key):::\(value)")
                     default:
-                        print("WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
+                        self.fail(message: "WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
                     }
                 }
-                //here should continue TODO
-                self.requestLogout()
+                
             }
             catch
             {
-                print("Error parsing response from requestLayer")
+                self.fail(message: "Error parsing response from requestLayerInfo:\(error.localizedDescription)")
                 return
             }
         }
+        //here should continue TODO
+        self.requestLogout()
         
         // run request
         request.resume()
@@ -298,16 +350,16 @@ class NetworkClientManager : NSObject
      * * ID is internal number for specific village
      * * GPS coordinates are needed for creating API request and getting location
      */
-    func requestPositionId(/*location : GPSLocation*/)
+    func requestPositionId()
     {
         //x == longitude
         //y == latitude
-        //let urlParameterX="x=\(location.longitude)"
-        //let urlParameterY="y=\(location.latitude)"
+        //let urlParameterX="x=\(self.reportToSend.longitude)"
+        //let urlParameterY="y=\(self.reportToSend.latitude)"
         
-        let urlParameterX="x=\(self.reportToSend.longitude)"
-        let urlParameterY="y=\(self.reportToSend.latitude)"
-        
+        //dummy data
+        let urlParameterX="x=16.606837"
+        let urlParameterY="y=49.195060"
         
         // Example: https://app.gisonline.cz/api/ruian/obce?x=16.606837&y=49.195060&srid=4326
         // Create API URL
@@ -317,34 +369,43 @@ class NetworkClientManager : NSObject
         let request = URLSession.shared.dataTask(with: requestUrl)
         {
             (data, response, error) in
-            //print(data)
-            //print(response)
             
-            //What to do with server response
+            if let unwrappedError = error
+            {
+                self.fail(message: "requestPositionId has error:\(unwrappedError)")
+                return
+            }
+            
+            // Check response data
+            guard let unwrappedData = data, let httpUrlResponse = response as? HTTPURLResponse else
+            {
+                self.fail(message: "requestPositionId unwrapping response and data failed)")
+                return
+            }
+            
+            // check returned code
+            guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
+            {
+                self.fail(message: "requestPositionId has failed. Request status code:\(httpUrlResponse.statusCode)")
+                return
+            }
+            
+            // What to do with server response
             do
             {
-                // Check response data
-                guard let responseData = data else
-                {
-                    print("No data available (nil)")
-                    return
-                }
-                
                 // Check json format, API version always fail on this
-                guard let unwrappedResponseData = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] else
+                guard let unwrappedJSONData = try JSONSerialization.jsonObject(with: unwrappedData, options: []) as? [String: Any] else
                 {
-                    print("Could not get JSON from responseData as dictionary")
-                    return
-                }
-                //print("getId json result is: " + unwrappedResponseData.description) //json format
-                
-                //
-                guard let resultDictionary = unwrappedResponseData[RequestsResult.LABEL_RESULT] as? [String : Any] else
-                {
+                    self.fail(message: "requestPositionId, could not get JSON from responseData as dictionary")
                     return
                 }
                 
-                //print(resultDictionary.first)
+                // unwrapping result values (NOT status code)
+                guard let resultDictionary = unwrappedJSONData[RequestsResult.LABEL_RESULT] as? [String : Any] else
+                {
+                    self.fail(message: "requestPositionId response data has not 'Result'")
+                    return
+                }
                 
                 // Iterate over result dictionary. There are only 3 KEY:VALUE pairs
                 for(key, value) in resultDictionary
@@ -359,20 +420,39 @@ class NetworkClientManager : NSObject
                     case RequestsResult.LABEL_NAZEV:
                         self.requestsResult.nazev = value as! String
                     default:
-                        print("WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
+                        self.fail(message: "WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
                     }
                 }
-                self.requestLayerInfo()
             }
             catch
             {
-                print("Error parsing response from requestPositionId")
+                self.fail(message: "Error parsing response from requestPositionId:\(error.localizedDescription)")
                 return
             }
-            // we have result
+            // we have result, sequence can continue
             self.requestLayerInfo()
         }
         // Run request 
         request.resume()
+    }
+    
+    func fail(message : String)
+    {
+        print(message)
+        if(alreadyLogin)
+        {
+            self.requestLogout()
+        }
+        self.alreadyLogin = false
+    }
+    
+    func sendData()
+    {
+        //URLSessionUploadTask
+    }
+    
+    func sendPhoto()
+    {
+        //URLSessionUploadTask
     }
 }
