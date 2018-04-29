@@ -2,16 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Pro získání fotografie z kamery potřebujeme oprávnění</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Pro získání fotografie z úložiště potřebujeme oprávnění</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Pro odeslání hlášení je třeba získat Vaši pozici pomocí GPS</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Pro odeslání hlášení je třeba získat Vaši pozici pomocí GPS</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>topgis-reporting</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,6 +22,14 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Pro získání fotografie z kamery potřebujeme oprávnění</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Pro odeslání hlášení je třeba získat Vaši pozici pomocí GPS</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Pro odeslání hlášení je třeba získat Vaši pozici pomocí GPS</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pro získání fotografie z úložiště potřebujeme oprávnění</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

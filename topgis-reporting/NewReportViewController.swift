@@ -9,6 +9,7 @@
 import UIKit
 import MobileCoreServices
 import AVFoundation //camera and library request
+import Photos
 
 /**
  * Based on MVC, this class is controller for screen. which is using for creation of new reports.
@@ -156,18 +157,54 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.mediaTypes = [kUTTypeImage as String]
+        picker.allowsEditing = false
         
         // virtual devices does not have camera
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
         {
-            picker.sourceType = UIImagePickerControllerSourceType.camera;
+            AVCaptureDevice.requestAccess(for: AVMediaType.video)
+            {
+                response in
+                if (response)
+                {
+                    //access granted
+                    picker.sourceType = UIImagePickerControllerSourceType.camera;
+                    self.present(picker, animated: true, completion: nil)
+                }
+                else
+                {
+                    //yep, do nothing
+                }
+            }
+            
             //self.requestCameraAccess(picker: picker)
         }
         else
         {
-            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+            if(PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatus.authorized)
+            {
+                picker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+                self.present(picker, animated: true, completion: nil)
+            }
+            else
+            {
+                PHPhotoLibrary.requestAuthorization(
+                    {
+                        (status) in
+                        if (status == PHAuthorizationStatus.authorized)
+                        {
+                            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+                            self.present(picker, animated: true, completion: nil)
+                        }
+                        else
+                        {
+                            //yep, do nothing
+                        }
+                })
+            }
+            
         }
-        self.present(picker, animated: true, completion: nil)
+        
     }
     
     /**
@@ -261,6 +298,8 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
             }
         }
     }
+    
+    
     /*
     func requestLibraryAccess()
     {
