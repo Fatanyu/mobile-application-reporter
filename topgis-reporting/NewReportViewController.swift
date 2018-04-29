@@ -180,19 +180,21 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         }
         else
         {
-            if(PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatus.authorized)
+            if(PHPhotoLibrary.authorizationStatus() == .authorized)
             {
                 picker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+                picker.modalPresentationStyle = UIModalPresentationStyle.popover
                 self.present(picker, animated: true, completion: nil)
             }
-            else
+            else if(PHPhotoLibrary.authorizationStatus() == .notDetermined)
             {
                 PHPhotoLibrary.requestAuthorization(
                     {
                         (status) in
-                        if (status == PHAuthorizationStatus.authorized)
+                        if (status == .authorized)
                         {
-                            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+                            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+                            picker.modalPresentationStyle = UIModalPresentationStyle.popover
                             self.present(picker, animated: true, completion: nil)
                         }
                         else

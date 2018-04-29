@@ -204,7 +204,7 @@ class NetworkClientManager : NSObject
             
             // Continue with sending
             print("request Login successful")
-            self.requestPositionId(/*location: GPSLocation*/)
+            self.requestPositionId()
         }
         request.resume()
     }
@@ -486,7 +486,7 @@ class NetworkClientManager : NSObject
         
         let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LABEL_LAYER)\(self.requestsResult.layer)")!
         
-        print(requestUrl)
+        //(requestUrl)
         var requestUrlWithData = URLRequest(url: requestUrl)
         requestUrlWithData.httpMethod = "POST"
         //let requestParameters : [String : Any] = [ NetworkClientManager.API_LABEL_LOGIN : NetworkClientManager.API_DUMMY_LOGIN,                                                   NetworkClientManager.API_LABEL_PASSWORD : NetworkClientManager.API_DUMMY_PASSWORD ]
@@ -495,8 +495,8 @@ class NetworkClientManager : NSObject
         //requestUrlWithData.setValue("application/json", forHTTPHeaderField: "Content-Type")
         //requestUrlWithData.setValue("application/json", forHTTPHeaderField: "Accept")
         //requestUrlWithData.setValue("text/html", forHTTPHeaderField: "Accept")
-        requestUrlWithData.setValue("text/html", forHTTPHeaderField: "Content-Type")
-
+        requestUrlWithData.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        requestUrlWithData.setValue("application/json", forHTTPHeaderField: "Accept")
         //requestUrlWithData.httpBody = requestParametersJSON
         
         //set request handler
@@ -521,8 +521,8 @@ class NetworkClientManager : NSObject
             // check returned code
             guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
             {
-                print(response.debugDescription)
-                print(unwrappedData)
+                //print(response.debugDescription)
+                //print(unwrappedData)
                 self.fail(message: "sendData has failed. Request status code:\(httpUrlResponse.statusCode)")
                 return
             }
@@ -620,8 +620,8 @@ class NetworkClientManager : NSObject
             // check returned code
             guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
             {
-                print(response.debugDescription)
-                print(unwrappedData)
+                //print(response.debugDescription)
+                //print(unwrappedData)
                 self.fail(message: "sendPhoto has failed. Request status code:\(httpUrlResponse.statusCode)")
                 return
             }
@@ -690,10 +690,8 @@ class NetworkClientManager : NSObject
     {
         //dummy value
         let reportToInsert = ReportToInsert(gid: "", login: NetworkClientManager.API_DUMMY_LOGIN, name: "Test", date: GlobalSettings.getDate(date: self.reportToSend.createTime), status: "1", type: "4", geom: "POINT(16.606837,49.195060)", description: self.reportToSend.reportDescription!)
-        //print(JSONSerialization.isValidJSONObject(reportToInsert))
         
         let transferReport = TransferReport(inserts: [reportToInsert])
-        //print(JSONSerialization.isValidJSONObject(transferReport))
         
         let jsonEncoder = JSONEncoder()
         do
@@ -702,8 +700,8 @@ class NetworkClientManager : NSObject
             self.reportAsData = jsonData
             
             //print json as string
-            let jsonString = String(data: jsonData, encoding: .utf8)
-            print("\(jsonString!)")
+            //let jsonString = String(data: jsonData, encoding: .utf8)
+            //print("\(jsonString!)")
             
             return true
         }
