@@ -60,7 +60,8 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         self.reportTypePicker.dataSource = self
         self.reportTypePicker.delegate = self
         self.setImage()
-
+        //https://stackoverflow.com/questions/24049020/nsnotificationcenter-addobserver-in-swift
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateLocation(notification:)), name: Notification.Name("HasNewLocation"), object: nil)
         // Do any additional setup after loading the view.
     }
     
@@ -69,8 +70,6 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
      */
     override func viewWillAppear(_ animated: Bool)
     {
-        //https://stackoverflow.com/questions/24049020/nsnotificationcenter-addobserver-in-swift
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateLocation(notification:)), name: Notification.Name("HasNewLocation"), object: nil)
         location.requestLocationUpdate()
     }
 
@@ -261,7 +260,7 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     /**
      * Method managing what to do with user's image pick
      */
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String:Any])
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String:Any])
     {
         if let possibleImage = info["UIImagePickerControllerEditedImage"] as? UIImage
         {
@@ -277,52 +276,8 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
+    @objc func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {
         dismiss(animated: true, completion: nil)
     }
-    
-    func requestCameraAccess(picker : UIImagePickerController)
-    {
-    //Camera
-        AVCaptureDevice.requestAccess(for: AVMediaType.video)
-        {
-            response in if response
-            {
-                //access granted
-                self.present(picker, animated: true, completion: nil)
-            }
-            else
-            {
-    //TODO
-            }
-        }
-    }
-    
-    
-    /*
-    func requestLibraryAccess()
-    {
-        //Photos
-        let photos = PHPhotoLibrary.authorizationStatus()
-        if photos == .notDetermined {
-            PHPhotoLibrary.requestAuthorization({status in
-                if status == .authorized{
-                    
-    } else {}
-    })
-    }
-    }*/
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
