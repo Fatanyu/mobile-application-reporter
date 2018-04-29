@@ -13,6 +13,7 @@ import UIKit
  */
 class GlobalSettings: NSObject
 {
+    // Global constants (czech localization) for showing info
     static let GPS_NOT_SET = "Neznámá"
     static let DATE_NOT_SEND = "Neposláno"
     static let BOOL_STRING_YES = "Ano"
@@ -59,7 +60,7 @@ class GlobalSettings: NSObject
     }
     
     /**
-     * Getter for server date
+     * Getter for server date format
      */
     static func getDate(date : Date?) -> String
     {
@@ -101,10 +102,16 @@ class GlobalSettings: NSObject
      */
     static func saveImage(chosenImage: UIImage?, createTime : Date) -> String
     {
+        // create default (empty) path
         var filePath : String = ""
+        
+        // check if image exists
         if let unwrappedImage = chosenImage
         {
+            // Create directory path string
             let directoryPath =  NSHomeDirectory().appending(GlobalSettings.IMAGE_DIRECTORY_PATH)
+            
+            // Make sure directory exists
             if !FileManager.default.fileExists(atPath: directoryPath)
             {
                 do
@@ -113,22 +120,26 @@ class GlobalSettings: NSObject
                 }
                 catch
                 {
+                    // Directory do not exists and can not be created
                     print(error)
+                    return filePath
                 }
             }
-            //        let filename = NSDate().string(withDateFormatter: yyyytoss).appending(".jpg")
+            // Create file name and path to it. Store path as result which will be return
             let fileName = GlobalSettings.getImageName(date: createTime)
             filePath = directoryPath.appending(fileName)
+            
+            // Store picture
             let url = NSURL.fileURL(withPath: filePath)
             do
             {
                 try UIImageJPEGRepresentation(unwrappedImage, 1.0)?.write(to: url, options: .atomic)
-                print(FileManager.default.fileExists(atPath : filePath))
+                //print(FileManager.default.fileExists(atPath : filePath))
             }
             catch
             {
                 print(error)
-                print("file cant not be save at path \(filePath), with error : \(error)");
+                print("file can not be save at path \(filePath), with error : \(error)");
                 filePath = ""
             }
         }
@@ -142,7 +153,10 @@ class GlobalSettings: NSObject
      */
     static func loadImage(imagePath : String?) -> UIImage?
     {
+        // Create result variable
         var storedImage : UIImage? = nil
+        
+        // Check if file exists
         if let unwrappedPath = imagePath
         {
             let fileManager = FileManager.default
@@ -193,35 +207,6 @@ class GlobalSettings: NSObject
             print("Picture '\(unwrappedPath)' has not been deleted")
         }
     }
-    
-    
-    /*
-    static func sendReport(oneReport : ReportEntity)
-    {
-        print("\(oneReport.type) + \(oneReport.createTime)")
-        
-        // TODO
-        let networkClientManager = NetworkClientManager(report : oneReport)
-        networkClientManager.sendReport()
-        //networkClientManager.requestLogin()
-        
-        //networkClientManager.requestLogout()
-        
-        //brno
-        //networkClientManager.requestPositionId(location : GPSLocation(longitude: "16.606837", latitude: "49.195060"))
-        //sokolov
-        //networkClientManager.requestPositionId(longitude: 12.642791, latitude: 50.179958)
-    }
-    
-    static func sendReports(reports : [ReportEntity])
-    {
-        for oneReport in reports
-        {
-            sendReport(oneReport: oneReport)
-            break
-        }
-    }
-    */
     
     override private init()
     {

@@ -8,13 +8,13 @@
 
 import UIKit
 
-// Report
+// Report which will be encoded
 struct ReportToInsert : Encodable
 {
     let gid, login, name, date, status, type, geom, description : String
 }
 
-//Report sugar for transport
+// Report sugar for transporting (it will be encoded)
 struct TransferReport : Encodable
 {
     let inserts : [ReportToInsert]
@@ -22,11 +22,6 @@ struct TransferReport : Encodable
     let geomName : String = "geom"
     let srs : String = "4326"
 }
-
-/*
-var reportValues = ["gid" : "", "login" : "", "name" : "", "date" : "", "status" : "1", "type" : "4", "geom" : "POINT(12.135165,31.1358135)", "description" : "sakmdlkasjdla"]
-
-*/
 
 /**
  * Contains information from GisOnline server (responses)
@@ -56,11 +51,15 @@ struct RequestsResult
     var info : String
     var title : String
     
+    // Constants and variables from sendData
+    // * constants represents KEYs from KEY:VALUE pairs
+    // * variables represents VALUEs from KEY:VALUE pairs
+    // * only important variable is 'insertids', it contains identifier for sending picture
     static let LABEL_SEND_STATUS : String = "status"
     static let LABEL_SEND_INSERTIDS : String = "insertIds"
     static let LABEL_SEND_INSERTED : String = "inserted"
     var status : String
-    var insertedids : String
+    var insertids : String
     var inserted : String
     
     // JSON Constants
@@ -84,7 +83,7 @@ struct RequestsResult
         self.info = ""
         self.title = ""
         self.inserted = ""
-        self.insertedids = ""
+        self.insertids = ""
         self.status = ""
     }
 }
@@ -101,21 +100,31 @@ class NetworkClientManager : NSObject
     static let SERVER_URL_ADDRESS : String = "https://appbeta.gisonline.cz"
     static let API_RUIAN : String = "/api/ruian/obce"                       // API for getting ruian data, place after SERVER_URL_ADDRESS
     static let API_RUIAN_SRID : String = "srid=4326"                        // API parameter which will be always used
-    static let API_DUMMY_LOGIN : String = "tester"
-    static let API_DUMMY_PASSWORD : String = "testujo106"
-    static let API_LABEL_LOGIN : String = "login"
-    static let API_LABEL_PASSWORD : String = "psw"
-    static let LABEL_LAYER : String = "/layers"
-    static let API_LABEL_LAYER : String = "/api/layers/"
-    static let API_LOGIN : String = "/api/login"
-    static let API_LOGOUT : String = "/api/logout"
+    static let API_DUMMY_LOGIN : String = "tester"                          // Dummy login
+    static let API_DUMMY_PASSWORD : String = "testujo106"                   // Dummy password
+    static let API_LABEL_LOGIN : String = "login"                           // request identifier for login
+    static let API_LABEL_PASSWORD : String = "psw"                          // request identifier for password
+    static let LABEL_LAYER : String = "/layers"                             // request label for layers (needed for getting layer info)
+    static let API_LABEL_LAYER : String = "/api/layers/"                    // API for sending data to specific layer
+    static let API_LOGIN : String = "/api/login"                            // API for login
+    static let API_LOGOUT : String = "/api/logout"                          // API for logout
     
+    // Server returns auth cookie, it is stored here
     let cookie : HTTPCookie?
-    var requestsResult : RequestsResult         // Stored information retrieved from GisOnline server
+    
+    // Stored information retrieved from GisOnline server
+    var requestsResult : RequestsResult
+    
+    // It is needed for updating objects in core data
     let historyViewController : HistoryViewController
     
+    // encoded data for sendData request
     var reportAsData : Data? = nil
+    
+    // report from core data
     var reportToSend : ReportEntity
+    
+    // logging flag, true when app is logged on server
     var alreadyLogin : Bool = false
     
     init(report : ReportEntity, historyViewController : HistoryViewController)
@@ -194,6 +203,7 @@ class NetworkClientManager : NSObject
             self.alreadyLogin = true
             
             // Continue with sending
+            print("request Login successful")
             self.requestPositionId(/*location: GPSLocation*/)
         }
         request.resume()
@@ -213,6 +223,8 @@ class NetworkClientManager : NSObject
             //Add cookie to phone storage
             //HTTPCookieStorage.shared.setCookies(cookie, for: URL(string: "app3.gisonline.cz")!, mainDocumentURL: nil)
             HTTPCookieStorage.shared.setCookie(cookie.first!) //there always will be cookie, even bad
+            print("set Cookie \(cookieAsString) successful")
+
         //}
         //catch
         //{
@@ -221,7 +233,7 @@ class NetworkClientManager : NSObject
     }
     
     /**
-     * TODO
+     * Logout from the server
      */
     func requestLogout()
     {
@@ -346,6 +358,7 @@ class NetworkClientManager : NSObject
             }
             //here should continue TODO
             //self.requestLogout()
+            print("requestLayerInfo successful")
             self.sendData()
         }
 
@@ -439,12 +452,16 @@ class NetworkClientManager : NSObject
                 return
             }
             // we have result, sequence can continue
+            print("requestPoisitionId successful")
             self.requestLayerInfo()
         }
         // Run request 
         request.resume()
     }
     
+    /**
+     * Print message, terminate session if exists
+     */
     func fail(message : String)
     {
         print(message)
@@ -455,6 +472,10 @@ class NetworkClientManager : NSObject
         self.alreadyLogin = false
     }
     
+    /**
+     * Send data to the server. This method DO NOT send picture
+     * * can not be called alone, must be in chain requestLogin() -> requestPositionId() -> requestLayerInfo() -> sendData()
+     */
     func sendData()
     {
         if(!self.getDecodedReport())
@@ -463,20 +484,24 @@ class NetworkClientManager : NSObject
             return
         }
         
-        let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LABEL_LAYER)\(self.self.requestsResult.layer)")!
+        let requestUrl : URL = URL(string : "\(NetworkClientManager.SERVER_URL_ADDRESS)\(NetworkClientManager.API_LABEL_LAYER)\(self.requestsResult.layer)")!
+        
         print(requestUrl)
         var requestUrlWithData = URLRequest(url: requestUrl)
         requestUrlWithData.httpMethod = "POST"
         //let requestParameters : [String : Any] = [ NetworkClientManager.API_LABEL_LOGIN : NetworkClientManager.API_DUMMY_LOGIN,                                                   NetworkClientManager.API_LABEL_PASSWORD : NetworkClientManager.API_DUMMY_PASSWORD ]
         requestUrlWithData.httpBody = self.reportAsData
         requestUrlWithData.httpShouldHandleCookies = true
-        requestUrlWithData.setValue("Content-Type", forHTTPHeaderField: "application/json")
+        //requestUrlWithData.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //requestUrlWithData.setValue("application/json", forHTTPHeaderField: "Accept")
+        //requestUrlWithData.setValue("text/html", forHTTPHeaderField: "Accept")
+        requestUrlWithData.setValue("text/html", forHTTPHeaderField: "Content-Type")
 
         //requestUrlWithData.httpBody = requestParametersJSON
         
         //set request handler
-        
-        let request = URLSession.shared.dataTask(with: requestUrlWithData)
+        let urlSession = URLSession(configuration: .default)
+        let request = urlSession.dataTask(with: requestUrlWithData)
         {
             (data, response, error) in
             
@@ -496,7 +521,7 @@ class NetworkClientManager : NSObject
             // check returned code
             guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
             {
-                print(response)
+                print(response.debugDescription)
                 print(unwrappedData)
                 self.fail(message: "sendData has failed. Request status code:\(httpUrlResponse.statusCode)")
                 return
@@ -531,7 +556,7 @@ class NetworkClientManager : NSObject
                     case RequestsResult.LABEL_SEND_INSERTED:
                         self.requestsResult.inserted = value as! String
                     case RequestsResult.LABEL_SEND_INSERTIDS:
-                        self.requestsResult.insertedids = value as! String
+                        self.requestsResult.insertids = value as! String
                     default:
                         self.fail(message: "WTF??? If you see this in output, API has changed ...") //if this is in output, API has changed ...
                     }
@@ -595,7 +620,7 @@ class NetworkClientManager : NSObject
             // check returned code
             guard (httpUrlResponse.statusCode == 200 && !httpUrlResponse.allHeaderFields.isEmpty) else
             {
-                print(response)
+                print(response.debugDescription)
                 print(unwrappedData)
                 self.fail(message: "sendPhoto has failed. Request status code:\(httpUrlResponse.statusCode)")
                 return
@@ -650,7 +675,7 @@ class NetworkClientManager : NSObject
     }
     
     /**
-     *
+     * Update object/record in core data
      */
     func updateReport()
     {
@@ -675,8 +700,11 @@ class NetworkClientManager : NSObject
         {
             let jsonData = try jsonEncoder.encode(transferReport)
             self.reportAsData = jsonData
-            //let jsonString = String(data: jsonData, encoding: .utf8)
-            //print("\(jsonString!)")
+            
+            //print json as string
+            let jsonString = String(data: jsonData, encoding: .utf8)
+            print("\(jsonString!)")
+            
             return true
         }
         catch

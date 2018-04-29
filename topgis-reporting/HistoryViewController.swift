@@ -272,7 +272,7 @@ class HistoryViewController: UITableViewController, NSFetchedResultsControllerDe
         // Image is stored elsewhere
         report.image = GlobalSettings.saveImage(chosenImage: newReport.picture, createTime: newReport.CreateTime)
 
-        // Save the context.
+        // Save the context (== save to core data)
         do
         {
             try context.save()

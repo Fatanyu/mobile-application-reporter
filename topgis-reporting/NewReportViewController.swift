@@ -50,7 +50,9 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
     @IBOutlet weak var reportTypePicker: UIPickerView!
     @IBOutlet weak var reportDescriptionLabel: UITextView!
 
-    
+    /**
+     * What to do after view is load
+     */
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -60,6 +62,10 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
 
         // Do any additional setup after loading the view.
     }
+    
+    /**
+     * What to do before View will appear
+     */
     override func viewWillAppear(_ animated: Bool)
     {
         //https://stackoverflow.com/questions/24049020/nsnotificationcenter-addobserver-in-swift
@@ -73,12 +79,19 @@ class NewReportViewController: UIViewController, UIPickerViewDataSource, UIPicke
         // Dispose of any resources that can be recreated.
     }
     
+    /**
+     * Button Cancel is clicked, only dismiss view
+     */
     @IBAction func clickedCancel(_ sender: Any)
     {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
+    /**
+     * Button Save is clicked
+     * * if location is dummy (unknown), do nothing
+     * * store report, picture and dismiss view
+     */
     @IBAction func clickedSave(_ sender: Any)
     {
         
