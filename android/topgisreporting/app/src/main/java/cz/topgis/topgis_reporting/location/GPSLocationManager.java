@@ -115,6 +115,15 @@ public class GPSLocationManager implements LocationListener
 		else this.actualLocation = GPSLocation.getDummyLocation();
 	}
 
+	/**
+	 * Simple getter
+	 * @return Actual location as GPSLocation
+	 */
+	public GPSLocation getActualLocation()
+	{
+		return actualLocation;
+	}
+
 	//
 	// LocationListener inferface implementation
 	//
