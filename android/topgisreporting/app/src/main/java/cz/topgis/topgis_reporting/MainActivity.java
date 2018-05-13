@@ -1,6 +1,7 @@
 package cz.topgis.topgis_reporting;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -91,7 +92,9 @@ public class MainActivity extends AppCompatActivity
 		else // Permission granted
 		{
 			GPSLocationManager.getInstance(this).registerListener();
-			Basics.giveMeToast(this);
+			//Basics.giveMeToast(this);
+			Intent intent = new Intent(this,MainPrototypeActivity.class);
+			startActivity(intent);
 			//TODO - start activity AddNewRecord
 		}
 
