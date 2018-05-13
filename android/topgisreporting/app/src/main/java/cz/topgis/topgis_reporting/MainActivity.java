@@ -110,13 +110,12 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	/**
-	 * What happens after closing Activity. It stops GPS tracking
+	 * What happens after closing Activity
 	 */
 	@Override
 	protected void onStop()
 	{
 		super.onStop();
-		GPSLocationManager.getInstance(this).unregisterListener(); //Off GPS tracking
 	}
 
 	/**
@@ -142,5 +141,13 @@ public class MainActivity extends AppCompatActivity
 					Toast.makeText(this,"Really need that permission", Toast.LENGTH_SHORT).show(); //TODO
 			}
 		}
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		//Toast.makeText(this,"On Destroy", Toast.LENGTH_SHORT).show();
+		GPSLocationManager.getInstance(this).unregisterListener(); //Off GPS tracking
+		super.onDestroy();
 	}
 }
