@@ -21,7 +21,7 @@ public class Report
 		this.setDescription(description);
 		this.setLocation(location);
 		this.setReportType(reportType);
-		this.send = true;
+		this.send = false;
 	}
 
 	public Date getCreateTime()
