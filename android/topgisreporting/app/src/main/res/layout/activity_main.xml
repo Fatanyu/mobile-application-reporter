@@ -38,6 +38,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimaryDark"
         app:srcCompat="@android:drawable/ic_input_add"
-        android:onClick="addButtonOnClick"/>
+        android:onClick="addReportButtonOnClick"/>
 
 </android.support.design.widget.CoordinatorLayout>

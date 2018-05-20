@@ -5,4 +5,5 @@
     <string name="gps_not_set">Neznámá poloha</string>
     <string name="title_history">Historie</string>
     <string name="title_add_report">Přidat hlášení</string>
+    <string name="save_button_label">Přidat</string>
 </resources>

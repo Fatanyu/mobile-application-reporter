@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	/**
-	 * TODO - find out what exactly this method should do
-	 * @param item
-	 * @return
+	 * This method implements Toolbar selection
+	 * @param item Identifier of toolbar button/item
+	 * @return Success or Failure
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	/**
-	 * This method invoke AddNewRecord activity and starts listener
+	 * This method invoke AddReport activity and starts listener
 	 * @param view View caller
 	 */
-	public void addButtonOnClick(View view)
+	public void addReportButtonOnClick(View view)
 	{
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity
 			case MainActivity.REQUEST_CODE_PERMISSION_GPS:
 			{
 				if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
-					this.addButtonOnClick(null);
+					this.addReportButtonOnClick(null);
 				else //Do not have permission
 					Toast.makeText(this,"Really need that permission", Toast.LENGTH_SHORT).show(); //TODO
 			}
