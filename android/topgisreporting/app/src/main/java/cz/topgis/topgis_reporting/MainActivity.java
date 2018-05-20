@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity
 		{
 			GPSLocationManager.getInstance(this).registerListener();
 			//Basics.giveMeToast(this);
-			Intent intent = new Intent(this,MainPrototypeActivity.class);
-			startActivity(intent);
+			//Intent intent = new Intent(this,MainPrototypeActivity.class);
+			//startActivity(intent);
 			//TODO - start activity AddNewRecord
 		}
 
