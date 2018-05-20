@@ -11,6 +11,7 @@ public class Report
 	private String description;
 	private GPSLocation location;
 	private ReportType reportType;
+	private Boolean send;
 	//picture TODO
 
 	public Report(Date createTime, Date sendTime, String description, GPSLocation location, ReportType reportType)
@@ -20,6 +21,7 @@ public class Report
 		this.setDescription(description);
 		this.setLocation(location);
 		this.setReportType(reportType);
+		this.send = true;
 	}
 
 	public Date getCreateTime()
@@ -70,5 +72,15 @@ public class Report
 	public void setReportType(ReportType reportType)
 	{
 		this.reportType = reportType;
+	}
+
+	public String isSend()
+	{
+		return this.send.toString();
+	}
+
+	public static Report getDummyReport()
+	{
+		return new Report(new Date(), null, "lalala", GPSLocation.getDummyLocation(), new ReportType("Bordel"));
 	}
 }

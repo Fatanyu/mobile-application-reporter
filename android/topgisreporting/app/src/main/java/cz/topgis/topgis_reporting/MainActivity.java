@@ -7,13 +7,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import cz.topgis.topgis_reporting.basics.Basics;
+import cz.topgis.topgis_reporting.database.Report;
+import cz.topgis.topgis_reporting.database.ReportAdapter;
+import cz.topgis.topgis_reporting.location.GPSLocation;
 import cz.topgis.topgis_reporting.location.GPSLocationManager;
 
 /**
@@ -22,6 +32,11 @@ import cz.topgis.topgis_reporting.location.GPSLocationManager;
 public class MainActivity extends AppCompatActivity
 {
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
+
+	private List<Report> reportList = new ArrayList<>();
+	private RecyclerView recyclerView;
+	private ReportAdapter reportAdapter;
+
 
 	/**
 	 * This method will be called after activity creations
@@ -32,9 +47,19 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//TODO change toolbar!!
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+
+
+		this.recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+		this.reportAdapter = new ReportAdapter(reportList);
+		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+		this.recyclerView.setLayoutManager(layoutManager);
+		this.recyclerView.setItemAnimator(new DefaultItemAnimator());
+		this.recyclerView.setAdapter(reportAdapter);
+
+		this.prepareDummyData();
 	}
 
 	/**
@@ -97,6 +122,26 @@ public class MainActivity extends AppCompatActivity
 			startActivity(intent);
 			//TODO - start activity AddNewRecord
 		}
+
+	}
+
+
+	private void prepareDummyData()
+	{
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportList.add(Report.getDummyReport());
+		this.reportAdapter.notifyDataSetChanged();
 
 	}
 
