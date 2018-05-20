@@ -3,4 +3,6 @@
     <string name="app_name">topgis-reporting</string>
     <string name="action_settings">Nastavení</string>
     <string name="gps_not_set">Neznámá poloha</string>
+    <string name="title_history">Historie</string>
+    <string name="title_add_report">Přidat hlášení</string>
 </resources>

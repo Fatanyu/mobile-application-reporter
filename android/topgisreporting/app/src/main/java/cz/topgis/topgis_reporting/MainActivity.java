@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cz.topgis.topgis_reporting.activities.AddReportActivity;
 import cz.topgis.topgis_reporting.basics.Basics;
 import cz.topgis.topgis_reporting.database.Report;
 import cz.topgis.topgis_reporting.database.ReportAdapter;
@@ -118,8 +119,8 @@ public class MainActivity extends AppCompatActivity
 		{
 			GPSLocationManager.getInstance(this).registerListener();
 			//Basics.giveMeToast(this);
-			//Intent intent = new Intent(this,MainPrototypeActivity.class);
-			//startActivity(intent);
+			Intent intent = new Intent(this,AddReportActivity.class);
+			startActivity(intent);
 			//TODO - start activity AddNewRecord
 		}
 
