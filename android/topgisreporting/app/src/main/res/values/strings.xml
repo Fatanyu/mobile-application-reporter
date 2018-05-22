@@ -6,4 +6,6 @@
     <string name="title_history">History</string>
     <string name="title_add_report">Add new report</string>
     <string name="save_button_label">Save</string>
+    <string name="title_activity_report_detail" translatable="false">ReportDetailActivity</string>
+    <string name="report_missing">Error. Report is missing</string>
 </resources>

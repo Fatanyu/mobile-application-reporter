@@ -6,6 +6,8 @@ import cz.topgis.topgis_reporting.location.GPSLocation;
 
 public class Report
 {
+	public static final String REPORT_IDENTIFIER = "reportId";
+	private Integer dbId;
 	private Date createTime;
 	private Date sendTime;
 	private String description;
@@ -16,6 +18,7 @@ public class Report
 
 	public Report(Date createTime, Date sendTime, String description, GPSLocation location, ReportType reportType)
 	{
+		this.dbId = 0;
 		this.setCreateTime(createTime);
 		this.setSendTime(sendTime);
 		this.setDescription(description);
@@ -77,6 +80,11 @@ public class Report
 	public String isSend()
 	{
 		return this.send.toString();
+	}
+
+	public Integer getDbId()
+	{
+		return dbId;
 	}
 
 	public static Report getDummyReport()

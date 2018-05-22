@@ -6,4 +6,5 @@
     <string name="title_history">Historie</string>
     <string name="title_add_report">Přidat hlášení</string>
     <string name="save_button_label">Přidat</string>
+    <string name="report_missing">Chyba. Hlášení nelze najít.</string>
 </resources>

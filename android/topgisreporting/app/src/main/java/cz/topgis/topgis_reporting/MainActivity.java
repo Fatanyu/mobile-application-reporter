@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import cz.topgis.topgis_reporting.activities.AddReportActivity;
+import cz.topgis.topgis_reporting.activities.ReportDetailActivity;
 import cz.topgis.topgis_reporting.basics.Basics;
 import cz.topgis.topgis_reporting.database.Report;
 import cz.topgis.topgis_reporting.database.ReportAdapter;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
 
 	private List<Report> reportList = new ArrayList<>();
+	//https://www.sitepoint.com/mastering-complex-lists-with-the-android-recyclerview/
 	private RecyclerView recyclerView;
 	private ReportAdapter reportAdapter;
 
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity
 		this.recyclerView.setLayoutManager(layoutManager);
 		this.recyclerView.setItemAnimator(new DefaultItemAnimator());
 		this.recyclerView.setAdapter(reportAdapter);
+		this.recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
 		this.prepareDummyData();
 	}
@@ -121,7 +125,6 @@ public class MainActivity extends AppCompatActivity
 			//Basics.giveMeToast(this);
 			Intent intent = new Intent(this,AddReportActivity.class);
 			startActivity(intent);
-			//TODO - start activity AddNewRecord
 		}
 
 	}
@@ -195,5 +198,15 @@ public class MainActivity extends AppCompatActivity
 		//Toast.makeText(this,"On Destroy", Toast.LENGTH_SHORT).show();
 		GPSLocationManager.getInstance(this).unregisterListener(); //Off GPS tracking
 		super.onDestroy();
+	}
+
+	public void onClickShowReportDetail(View view)
+	{
+		int childLayoutPosition = this.recyclerView.getChildLayoutPosition(view); //get clicked row id
+		Toast.makeText(this, "id is: " + childLayoutPosition, Toast.LENGTH_SHORT).show();
+		Report report = this.reportList.get(childLayoutPosition);
+		Intent intent = new Intent(this, ReportDetailActivity.class);
+		intent.putExtra("reportId",report.getDbId());
+		startActivity(intent);
 	}
 }
