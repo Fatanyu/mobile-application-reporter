@@ -1,5 +1,7 @@
 package cz.topgis.topgis_reporting.database;
 
+import android.content.ContentValues;
+
 import java.util.Date;
 
 import cz.topgis.topgis_reporting.location.GPSLocation;
@@ -90,5 +92,20 @@ public class Report
 	public static Report getDummyReport()
 	{
 		return new Report(new Date(), null, "lalala", GPSLocation.getDummyLocation(), new ReportType("Bordel"));
+	}
+
+	public ContentValues toContentValues()
+	{
+		ContentValues contentValues = new ContentValues();
+//TODO
+		contentValues.put(DBConstants.COLUMN_NAME_CREATE_TIME, this.createTime.toString());
+		contentValues.putNull(DBConstants.COLUMN_NAME_SEND_TIME);
+		contentValues.put(DBConstants.COLUMN_NAME_DESCRIPTION, this.description);
+		contentValues.put(DBConstants.COLUMN_NAME_LATITUDE, this.location.getLatitude());
+		contentValues.put(DBConstants.COLUMN_NAME_LONGITUDE, this.location.getLongitude());
+		contentValues.put(DBConstants.COLUMN_NAME_SEND, this.send);
+		contentValues.put(DBConstants.COLUMN_REPORT_TYPE, this.reportType.getReportType());
+
+		return contentValues;
 	}
 }

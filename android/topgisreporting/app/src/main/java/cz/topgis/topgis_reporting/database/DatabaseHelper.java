@@ -10,31 +10,28 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  *
  */
-public class DBHelperWrapper extends SQLiteOpenHelper
+public class DatabaseHelper extends SQLiteOpenHelper implements DBConstants
 {
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "topgis_reporting_client_db";
 
-	public DBHelperWrapper(Context context)
+	public DatabaseHelper(Context context)
 	{
-		super(context, DBHelperWrapper.DATABASE_NAME, null, DBHelperWrapper.DATABASE_VERSION);
+		super(context, DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		db.execSQL(DBInfo.SQL_CREATE_TABLE_REPORT);
+		db.execSQL(DBContentProvider.SQL_CREATE_TABLE_REPORT);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		db.execSQL(DBInfo.SQL_DROP_TABLE_REPORT);
+		db.execSQL(DBContentProvider.SQL_DROP_TABLE_REPORT);
 		this.onCreate(db);
 	}
 
-	public boolean insertReport(Report report)
-	{
-		return true;
-	}
+
 }
