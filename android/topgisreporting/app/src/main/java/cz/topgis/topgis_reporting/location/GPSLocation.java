@@ -26,7 +26,7 @@ public final class GPSLocation
 	 * @param latitude Latitude GPS position as String
 	 * @param longitude Longitude GPS position as String
 	 */
-	private GPSLocation(String latitude, String longitude)
+	public GPSLocation(String latitude, String longitude)
 	{
 		this.latitude = latitude;
 		this.longitude = longitude;

@@ -24,6 +24,7 @@ import java.util.List;
 import cz.topgis.topgis_reporting.activities.AddReportActivity;
 import cz.topgis.topgis_reporting.activities.ReportDetailActivity;
 import cz.topgis.topgis_reporting.basics.Basics;
+import cz.topgis.topgis_reporting.database.DBContentProvider;
 import cz.topgis.topgis_reporting.database.Report;
 import cz.topgis.topgis_reporting.database.ReportAdapter;
 import cz.topgis.topgis_reporting.location.GPSLocation;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
+		this.prepareRealData();
+
 
 		this.recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 		this.recyclerView.setAdapter(reportAdapter);
 		this.recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-		this.prepareDummyData();
+		//this.prepareDummyData();
 	}
 
 	/**
@@ -149,6 +152,13 @@ public class MainActivity extends AppCompatActivity
 
 	}
 
+	private void prepareRealData()
+	{
+		DBContentProvider dbContentProvider = new DBContentProvider(this);
+
+		this.reportList = dbContentProvider.getAllReports();
+	}
+
 	/**
 	 * What happens after openning Activity
 	 */
@@ -206,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 		Toast.makeText(this, "id is: " + childLayoutPosition, Toast.LENGTH_SHORT).show();
 		Report report = this.reportList.get(childLayoutPosition);
 		Intent intent = new Intent(this, ReportDetailActivity.class);
-		intent.putExtra("reportId",report.getDbId());
+		intent.putExtra(DBContentProvider._ID, report.getDbId());
 		startActivity(intent);
 	}
 }

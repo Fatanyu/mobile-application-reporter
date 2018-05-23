@@ -12,6 +12,6 @@ interface DBConstants
 	static final String COLUMN_NAME_LATITUDE = "latitude";
 	static final String COLUMN_NAME_LONGITUDE = "longitude";
 	static final String COLUMN_NAME_SEND = "send";
-	static final String COLUMN_REPORT_TYPE = "report_type";
+	static final String COLUMN_NAME_REPORT_TYPE = "report_type";
 
 }

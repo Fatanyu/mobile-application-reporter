@@ -12,8 +12,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements DBConstants
 {
-	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_NAME = "topgis_reporting_client_db";
+	private static final int DATABASE_VERSION = 5;
+	private static final String DATABASE_NAME = "topgis_reporting_client_db_beta";
 
 	public DatabaseHelper(Context context)
 	{

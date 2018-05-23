@@ -13,11 +13,12 @@ import android.widget.Toast;
 import java.util.Objects;
 
 import cz.topgis.topgis_reporting.R;
+import cz.topgis.topgis_reporting.database.DBContentProvider;
 import cz.topgis.topgis_reporting.database.Report;
 
 public class ReportDetailActivity extends AppCompatActivity
 {
-	private Integer reportId;
+	private Long reportId;
 	private Report report;
 
 
@@ -25,6 +26,7 @@ public class ReportDetailActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		this.findReport();
 		setContentView(R.layout.activity_report_detail);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -59,8 +61,9 @@ public class ReportDetailActivity extends AppCompatActivity
 	private boolean findReportId()
 	{
 		Intent intent = getIntent();
-		int defaultValue = -1;
-		this.reportId = intent.getIntExtra(Report.REPORT_IDENTIFIER, defaultValue);
+		Long defaultValue = Long.valueOf(-1);
+		this.reportId = intent.getLongExtra(DBContentProvider._ID, defaultValue);
+		Toast.makeText(this, "ID z DB je '" + this.reportId + "", Toast.LENGTH_SHORT).show();
 		return this.reportId != defaultValue;
 	}
 
@@ -86,6 +89,11 @@ public class ReportDetailActivity extends AppCompatActivity
 	 */
 	private void findReport()
 	{
-
+		if(this.findReportId())
+		{
+			DBContentProvider dbContentProvider = new DBContentProvider(this);
+			this.report = dbContentProvider.getOneReport(this.reportId);
+		}
+		else this.report = null;
 	}
 }
