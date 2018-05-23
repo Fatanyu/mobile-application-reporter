@@ -18,16 +18,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cz.topgis.topgis_reporting.activities.AddReportActivity;
 import cz.topgis.topgis_reporting.activities.ReportDetailActivity;
-import cz.topgis.topgis_reporting.basics.Basics;
 import cz.topgis.topgis_reporting.database.DBContentProvider;
 import cz.topgis.topgis_reporting.database.Report;
 import cz.topgis.topgis_reporting.database.ReportAdapter;
-import cz.topgis.topgis_reporting.location.GPSLocation;
 import cz.topgis.topgis_reporting.location.GPSLocationManager;
 
 /**

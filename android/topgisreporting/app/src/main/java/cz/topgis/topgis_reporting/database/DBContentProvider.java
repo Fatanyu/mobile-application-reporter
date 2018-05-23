@@ -9,7 +9,6 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.topgis.topgis_reporting.location.GPSLocation;
 
 public class DBContentProvider implements BaseColumns, DBConstants
 {
@@ -68,6 +67,11 @@ public class DBContentProvider implements BaseColumns, DBConstants
 		return reportList;
 	}
 
+	/**
+	 *
+	 * @param dbId
+	 * @return
+	 */
 	public Report getOneReport(Long dbId)
 	{
 		if (dbId < 0) throw new AssertionError();

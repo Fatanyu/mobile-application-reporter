@@ -2,12 +2,9 @@ package cz.topgis.topgis_reporting.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -64,7 +61,7 @@ public class ReportDetailActivity extends AppCompatActivity
 		Long defaultValue = Long.valueOf(-1);
 		this.reportId = intent.getLongExtra(DBContentProvider._ID, defaultValue);
 		Toast.makeText(this, "ID z DB je '" + this.reportId + "", Toast.LENGTH_SHORT).show();
-		return this.reportId != defaultValue;
+		return this.reportId.equals(defaultValue);
 	}
 
 	/**

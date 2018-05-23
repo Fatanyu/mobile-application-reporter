@@ -21,7 +21,8 @@
         android:layout_alignParentTop="true"
         android:textColor="@color/date"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_toStartOf="@id/text_view_send"/>
 
     <TextView
         android:id="@+id/text_view_type_name"
@@ -35,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:textColor="@color/send" />
+        android:textColor="@color/send"
+        android:layout_gravity="end"/>
 
 </RelativeLayout>

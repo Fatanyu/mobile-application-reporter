@@ -42,9 +42,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 		this.reportsList = reportsList;
 	}
 
+
 	@NonNull
 	@Override
-	public RowViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public RowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.report_list_row, parent, false);
 
@@ -52,10 +53,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 	}
 
 	@Override
-	public void onBindViewHolder(RowViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull RowViewHolder holder, int position)
 	{
 		Report report = reportsList.get(position);
-		holder.textViewDate.setText(report.getCreateTime().toString());
+		holder.textViewDate.setText(report.getCreateTime());
 		holder.textViewTypeName.setText(report.getReportType().getReportType());
 		holder.textViewSend.setText(report.isSend());
 	}
