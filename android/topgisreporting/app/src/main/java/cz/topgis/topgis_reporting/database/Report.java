@@ -7,21 +7,60 @@ import java.util.Date;
 
 import cz.topgis.topgis_reporting.location.GPSLocation;
 
+/**
+ * Represents one record from user
+ */
 public class Report
 {
-	public static final String REPORT_IDENTIFIER = "reportId";
+	/**
+	 * ID from DB - is empty during user creation
+	 */
 	private Long dbId;
+
+	/**
+	 * Time of creation
+	 */
 	private String createTime;
+
+	/**
+	 * Time of sending to server
+	 */
 	private String sendTime;
+
+	/**
+	 * Description of the report
+	 */
 	private String description;
+
+	/**
+	 * GPS location without elevation
+	 */
 	private GPSLocation location;
+
+	/**
+	 * What kind of report is this
+	 */
 	private ReportType reportType;
+
+	/**
+	 * Already send (true/false) - it can be deleted, BUT it is easier/faster to work with it
+	 */
 	private Boolean send;
+
 	//picture TODO
 
+	/**
+	 * Basic constructor for USER creation
+	 * TODO probably dummy - createtime should be actual time and send time is always null at this moment
+	 * @param createTime Time of creation
+	 * @param sendTime Always null now
+	 * @param description Definition of the problem
+	 * @param location GPS location of the problem
+	 * @param reportType Type of the report
+	 */
 	public Report(Date createTime, Date sendTime, String description, GPSLocation location, ReportType reportType)
 	{
-		this.setDbId(Long.valueOf(0));
+		this.setDbId(Long.valueOf(0)); // Simple 0 gives error
 		this.setCreateTime(createTime);
 		this.setSendTime(sendTime);
 		this.setDescription(description);
@@ -29,7 +68,16 @@ public class Report
 		this.setReportType(reportType);
 	}
 
-	public Report(Long dbId, String createTime, String sendTime, String description, GPSLocation location, ReportType reportType)
+	/**
+	 * Constructor for creation from database cursor
+	 * @param dbId Database row ID
+	 * @param createTime Time of report creation
+	 * @param sendTime Time of sending, can be null
+	 * @param description Definition of the problem
+	 * @param location GPS location of the problem
+	 * @param reportType type of the report
+	 */
+	private Report(Long dbId, String createTime, String sendTime, String description, GPSLocation location, ReportType reportType)
 	{
 		this.setDbId(dbId);
 		this.setCreateTime(createTime);
@@ -39,48 +87,88 @@ public class Report
 		this.setReportType(reportType);
 	}
 
+	/**
+	 * Setter for databaseID. Must have Long.valueOf()
+	 * Database counts from 1
+	 * @param dbId ID
+	 */
 	private void setDbId(Long dbId)
 	{
 		if (dbId > 0) this.dbId = dbId;
 		else this.dbId = Long.valueOf(0);
 	}
 
+	/**
+	 * Simple getter
+	 * @return Time of creation
+	 */
 	public String getCreateTime()
 	{
 		return createTime;
 	}
 
+	/**
+	 * Simple setter which calls its overloaded method
+	 * @param createTime Time of creation
+	 */
 	private void setCreateTime(Date createTime)
 	{
+		//TODO localized format
 		this.setCreateTime(createTime.toString());
 	}
+
+	/**
+	 * Simple setter
+	 * @param createTime Time of creation
+	 */
 	private void setCreateTime(String createTime)
 	{
+		//TODO localized format
 		this.createTime = createTime;
 	}
 
+	/**
+	 * Simple getter
+	 * @return Time of sending
+	 */
 	public String getSendTime()
 	{
 		return sendTime;
 	}
 
+	/**
+	 * Setter which will also set this.send
+	 * @param sendTime Time of sending
+	 */
 	public void setSendTime(String sendTime)
 	{
 		this.send = sendTime != null;
 		if(this.send) this.sendTime = sendTime;
 	}
 
+	/**
+	 * Setter which will also set this.send. It also calls its overloaded self
+	 * @param sendTime Time of sending
+	 */
 	public void setSendTime(Date sendTime)
 	{
 		this.send = sendTime != null;
 		if(this.send) this.sendTime = sendTime.toString();
 	}
 
+	/**
+	 * Simple getter
+	 * @return Description of the problem
+	 */
 	public String getDescription()
 	{
 		return description;
 	}
 
+	/**
+	 * 
+	 * @param description
+	 */
 	public void setDescription(String description)
 	{
 		this.description = description;

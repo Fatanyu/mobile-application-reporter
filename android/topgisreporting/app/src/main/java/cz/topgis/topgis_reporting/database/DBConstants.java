@@ -3,7 +3,7 @@ package cz.topgis.topgis_reporting.database;
 interface DBConstants
 {
 	/**
-	 * Table and column names
+	 * Table 'report' and its column names
 	 */
 	static final String TABLE_NAME_REPORT = "report";
 	static final String COLUMN_NAME_CREATE_TIME = "create_time";
@@ -14,4 +14,10 @@ interface DBConstants
 	static final String COLUMN_NAME_SEND = "send";
 	static final String COLUMN_NAME_REPORT_TYPE = "report_type";
 
+
+	/**
+	 * Table 'report_type' and its column names
+	 */
+	static final String TABLE_NAME_REPORT_TYPE = "report_type";
+	static final String COLUMN_NAME_TYPE_NAME = "type_name";
 }
