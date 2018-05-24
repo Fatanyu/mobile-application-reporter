@@ -22,9 +22,17 @@ public class AddReportActivity extends AppCompatActivity
 		setSupportActionBar(toolbar);
 		Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 	}
+
+
 	//https://developer.android.com/training/appbar/setting-up
 	//https://developer.android.com/training/implementing-navigation/ancestral
 	//https://stackoverflow.com/questions/28954586/change-title-color-in-toolbar?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+	/**
+	 * It is called when something in toolbar is selected
+	 * @param item
+	 * @return
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -42,6 +50,7 @@ public class AddReportActivity extends AppCompatActivity
 
 	public void saveNewReportOnClick(View view)
 	{
+		//TODO
 		finish();
 	}
 }

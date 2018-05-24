@@ -166,49 +166,82 @@ public class Report
 	}
 
 	/**
-	 * 
-	 * @param description
+	 * Simple setter
+	 * @param description Description of the problem
 	 */
 	public void setDescription(String description)
 	{
 		this.description = description;
 	}
 
+	/**
+	 * Simple getter
+	 * @return GPS location without elevation
+	 */
 	public GPSLocation getLocation()
 	{
 		return location;
 	}
 
+	/**
+	 * Simple setter
+	 * @param location GPS location without elevation
+	 */
 	private void setLocation(GPSLocation location)
 	{
 		this.location = location;
 	}
 
+	/**
+	 * Simple getter
+	 * @return Type of the report
+	 */
 	public ReportType getReportType()
 	{
 		return reportType;
 	}
 
+	/**
+	 * Simple setter
+	 * @param reportType Type of the report
+	 */
 	private void setReportType(ReportType reportType)
 	{
 		this.reportType = reportType;
 	}
 
+	/**
+	 * Return String which explain if the report has been send
+	 * @return String true/false TODO
+	 */
 	public String isSend()
 	{
 		return this.send.toString();
 	}
 
+	/**
+	 * Simple getter
+	 * @return Database ID, zero when it's not in database
+	 */
 	public Long getDbId()
 	{
 		return dbId;
 	}
 
+	/**
+	 * Static Report Builder (dummy class from scratch)
+	 * @return Dummy report instance
+	 */
 	public static Report getDummyReport()
 	{
 		return new Report(new Date(), null, "lalala", GPSLocation.getDummyLocation(), new ReportType("Bordel"));
 	}
 
+	/**
+	 * Static Report Builder (from database cursor)
+	 * @param cursor Database connection which holds one report
+	 * @return Report instance which creation is based on cursor
+	 */
 	public static Report getReportFromCursor(Cursor cursor)
 	{
 		return new Report(
@@ -223,6 +256,10 @@ public class Report
 		);
 	}
 
+	/**
+	 * Creates ContentValues from this instance. Id does not add database ID
+	 * @return ContentValues for DB operations
+	 */
 	public ContentValues toContentValues()
 	{
 		ContentValues contentValues = new ContentValues();

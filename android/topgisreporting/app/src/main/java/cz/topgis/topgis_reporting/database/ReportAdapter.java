@@ -21,22 +21,44 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 	 */
 	private List<Report> reportsList;
 
+	/**
+	 * Inner class representing ViewHolder
+	 */
 	class RowViewHolder extends RecyclerView.ViewHolder
 	{
+		/**
+		 * Represents date of creation
+		 */
 		TextView textViewDate;
+
+		/**
+		 * Represents report type
+		 */
 		TextView textViewTypeName;
+
+		/**
+		 * Represents if report has been send
+		 */
 		TextView textViewSend;
 
+		/**
+		 * Basic constructor
+		 * @param view Represents textViews location
+		 */
 		RowViewHolder(View view)
 		{
 			super(view);
+			// Connection views
 			textViewDate = (TextView) view.findViewById(R.id.text_view_date);
 			textViewTypeName = (TextView) view.findViewById(R.id.text_view_type_name);
 			textViewSend = (TextView) view.findViewById(R.id.text_view_send);
 		}
 	}
 
-
+	/**
+	 * Basic constructor
+	 * @param reportsList List of reports to show
+	 */
 	public ReportAdapter(List<Report> reportsList)
 	{
 		this.reportsList = reportsList;
@@ -52,6 +74,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 		return new RowViewHolder(itemView);
 	}
 
+	/**
+	 * Set content from Report to ViewHolder
+	 * @param holder Holds views, which will be shown
+	 * @param position Report position in the list
+	 */
 	@Override
 	public void onBindViewHolder(@NonNull RowViewHolder holder, int position)
 	{
@@ -61,6 +88,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 		holder.textViewSend.setText(report.isSend());
 	}
 
+	/**
+	 * Simple size getter
+	 * @return Size of the list
+	 */
 	@Override
 	public int getItemCount()
 	{

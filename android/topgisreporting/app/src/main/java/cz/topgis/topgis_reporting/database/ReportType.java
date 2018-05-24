@@ -5,14 +5,15 @@ package cz.topgis.topgis_reporting.database;
  */
 final class ReportType
 {
+	//TODO database ID
 	private String reportType;
 
-	public ReportType(String reportType)
+	ReportType(String reportType)
 	{
 		this.reportType = reportType;
 	}
 
-	public String getReportType()
+	String getReportType()
 	{
 		return reportType;
 	}
