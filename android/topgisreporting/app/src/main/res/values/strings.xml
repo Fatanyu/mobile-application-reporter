@@ -8,4 +8,11 @@
     <string name="save_button_label">Save</string>
     <string name="title_activity_report_detail" translatable="false">ReportDetailActivity</string>
     <string name="report_missing">Error. Report is missing</string>
+    <string name="label_type">Type</string>
+    <string name="label_create_time">Create time</string>
+    <string name="label_send_time">Send time</string>
+    <string name="label_latitude">Latitude</string>
+    <string name="label_longitude">Longitude</string>
+    <string name="label_description">Description</string>
+    <string name="report_picture">Report picture</string>
 </resources>

@@ -5,4 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="row_padding_vertical">10dp</dimen>
     <dimen name="toolbar_text_size">20sp</dimen>
+    <dimen name="fifty_percentage">50</dimen>
+    <dimen name="report_detail_activity_layout_margin">10dp</dimen>
+    <dimen name="report_detail_activity_text_size">20sp</dimen>
 </resources>

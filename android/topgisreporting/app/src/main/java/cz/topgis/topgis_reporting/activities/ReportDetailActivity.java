@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -18,17 +20,52 @@ public class ReportDetailActivity extends AppCompatActivity
 	private Long reportId;
 	private Report report;
 
+	private TextView textViewContentType;
+	private TextView textViewContentCreateTime;
+	private TextView textViewContentSendTime;
+	private TextView textViewContentLatitude;
+	private TextView textViewContentLongitude;
+	private TextView textViewContentDescription;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		this.findReport();
 		setContentView(R.layout.activity_report_detail);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		// add back button
 		Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+		this.boundTextViews();
+		this.findReport();
+		this.setContentToTextViews();
+	}
+
+	/**
+	 *
+	 */
+	private void setContentToTextViews()
+	{
+		if(this.report == null) return;
+		this.textViewContentType.setText(this.report.getReportType());
+		this.textViewContentCreateTime.setText(this.report.getCreateTime());
+		this.textViewContentSendTime.setText(this.report.getSendTime());
+		this.textViewContentLatitude.setText(this.report.getLocation().getLatitude());
+		this.textViewContentLongitude.setText(this.report.getLocation().getLongitude());
+		this.textViewContentDescription.setText(this.report.getDescription());
+	}
+
+	/**
+	 * Connect textViews from layout to class members
+	 */
+	private void boundTextViews()
+	{
+		this.textViewContentType = findViewById(R.id.text_view_content_type);
+		this.textViewContentCreateTime = findViewById(R.id.text_view_content_create_time);
+		this.textViewContentSendTime = findViewById(R.id.text_view_content_send_time);
+		this.textViewContentLatitude = findViewById(R.id.text_view_content_latitude);
+		this.textViewContentLongitude = findViewById(R.id.text_view_content_longitude);
+		this.textViewContentDescription = findViewById(R.id.text_view_content_description);
 	}
 
 	/**
@@ -60,7 +97,7 @@ public class ReportDetailActivity extends AppCompatActivity
 		Intent intent = getIntent();
 		Long defaultValue = Long.valueOf(-1);
 		this.reportId = intent.getLongExtra(DBContentProvider._ID, defaultValue);
-		Toast.makeText(this, "ID z DB je '" + this.reportId + "", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "ID z DB je '" + this.reportId + "'", Toast.LENGTH_SHORT).show();
 		return this.reportId.equals(defaultValue);
 	}
 
@@ -70,7 +107,7 @@ public class ReportDetailActivity extends AppCompatActivity
 	@Override
 	protected void onStart()
 	{
-		super.onStart();
+		super.onStart();/*
 		if(this.findReportId())
 		{
 			this.findReport();
@@ -78,7 +115,7 @@ public class ReportDetailActivity extends AppCompatActivity
 		else
 		{
 			Toast.makeText(this, getResources().getString(R.string.report_missing), Toast.LENGTH_SHORT).show();
-		}
+		}*/
 	}
 
 	/**
@@ -86,7 +123,7 @@ public class ReportDetailActivity extends AppCompatActivity
 	 */
 	private void findReport()
 	{
-		if(this.findReportId())
+		if(!this.findReportId())
 		{
 			DBContentProvider dbContentProvider = new DBContentProvider(this);
 			this.report = dbContentProvider.getOneReport(this.reportId);

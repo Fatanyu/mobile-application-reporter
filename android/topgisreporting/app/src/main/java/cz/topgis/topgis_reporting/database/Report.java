@@ -194,11 +194,11 @@ public class Report
 
 	/**
 	 * Simple getter
-	 * @return Type of the report
+	 * @return Type of the report as String
 	 */
-	public ReportType getReportType()
+	public String getReportType()
 	{
-		return reportType;
+		return reportType.getReportType();
 	}
 
 	/**

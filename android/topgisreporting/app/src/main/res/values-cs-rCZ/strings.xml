@@ -7,4 +7,11 @@
     <string name="title_add_report">Přidat hlášení</string>
     <string name="save_button_label">Přidat</string>
     <string name="report_missing">Chyba. Hlášení nelze najít.</string>
+    <string name="label_type">Typ</string>
+    <string name="label_create_time">Čas vytvoření</string>
+    <string name="label_send_time">Čas odeslání</string>
+    <string name="label_latitude">Zeměpisná šířka</string>
+    <string name="label_longitude">Zeměpisná délka</string>
+    <string name="label_description">Popis</string>
+    <string name="report_picture">Obrázek reportu</string>
 </resources>

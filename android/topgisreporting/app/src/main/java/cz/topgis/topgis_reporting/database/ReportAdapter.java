@@ -84,7 +84,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 	{
 		Report report = reportsList.get(position);
 		holder.textViewDate.setText(report.getCreateTime());
-		holder.textViewTypeName.setText(report.getReportType().getReportType());
+		holder.textViewTypeName.setText(report.getReportType());
 		holder.textViewSend.setText(report.isSend());
 	}
 
