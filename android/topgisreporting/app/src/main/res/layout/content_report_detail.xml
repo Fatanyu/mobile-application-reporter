@@ -16,7 +16,7 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/text_view_label_type"
+        android:id="@+id/detail_text_view_label_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:text="@string/label_type"/>
 
     <TextView
-        android:id="@+id/text_view_content_type"
+        android:id="@+id/detail_text_view_content_type"
         android:textSize="@dimen/report_detail_activity_text_size"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_view_label_create_time"
+            android:id="@+id/detail_text_view_label_create_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -47,7 +47,7 @@
             android:text="@string/label_create_time"/>
 
         <TextView
-            android:id="@+id/text_view_content_create_time"
+            android:id="@+id/detail_text_view_content_create_time"
             android:textSize="@dimen/report_detail_activity_text_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_view_label_send_time"
+            android:id="@+id/detail_text_view_label_send_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -69,7 +69,7 @@
             android:text="@string/label_send_time"/>
 
         <TextView
-            android:id="@+id/text_view_content_send_time"
+            android:id="@+id/detail_text_view_content_send_time"
             android:textSize="@dimen/report_detail_activity_text_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_view_label_latitude"
+            android:id="@+id/detail_text_view_label_latitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -91,7 +91,7 @@
             android:text="@string/label_latitude"/>
 
         <TextView
-            android:id="@+id/text_view_content_latitude"
+            android:id="@+id/detail_text_view_content_latitude"
             android:textSize="@dimen/report_detail_activity_text_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_view_label_longitude"
+            android:id="@+id/detail_text_view_label_longitude"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -113,7 +113,7 @@
             android:text="@string/label_longitude"/>
 
         <TextView
-            android:id="@+id/text_view_content_longitude"
+            android:id="@+id/detail_text_view_content_longitude"
             android:textSize="@dimen/report_detail_activity_text_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_view_label_description"
+            android:id="@+id/detail_text_view_label_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -134,14 +134,19 @@
             android:text="@string/label_description"/>
 
         <TextView
-            android:id="@+id/text_view_content_description"
+            android:id="@+id/detail_text_view_content_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:lines="8"
+            android:minLines="6"
             android:scrollbars="vertical"
-            android:textSize="@dimen/report_detail_activity_text_size" />
+            android:textIsSelectable="true"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:visibility="visible" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/detail_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"

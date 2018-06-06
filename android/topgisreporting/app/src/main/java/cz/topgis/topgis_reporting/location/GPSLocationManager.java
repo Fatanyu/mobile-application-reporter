@@ -92,8 +92,15 @@ public class GPSLocationManager implements LocationListener
 			Toast.makeText(this.context, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
 			return;
 		}
+		if (ActivityCompat.checkSelfPermission(this.context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+		{
+			Toast.makeText(this.context, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		Toast.makeText(this.context, "Zapinam GPS listener", Toast.LENGTH_SHORT).show();
 		this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this.locationListener);
+		this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this.locationListener);
+		//this.locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
 	}
 
 	/**
@@ -167,7 +174,7 @@ public class GPSLocationManager implements LocationListener
 	@Override
 	public void onProviderDisabled(String provider)
 	{
-		Toast.makeText(this.context, MESSAGE_PROVIDER_DISABLED,Toast.LENGTH_SHORT).show();
+		Toast.makeText(this.context, MESSAGE_PROVIDER_DISABLED + "( " + provider + " )",Toast.LENGTH_SHORT).show();
 	}
 
 

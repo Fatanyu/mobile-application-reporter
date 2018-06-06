@@ -1,11 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/report_detail_activity_layout_margin"
     tools:context=".activities.AddReportActivity"
     tools:showIn="@layout/activity_add_report">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/add_text_view_label_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_weight="@dimen/fifty_percentage"
+            android:text="@string/label_type"/>
+
+        <Spinner
+            android:id="@+id/add_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="@dimen/fifty_percentage" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/add_text_view_label_create_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_weight="@dimen/fifty_percentage"
+            android:text="@string/label_create_time"/>
+
+        <TextView
+            android:id="@+id/add_text_view_content_create_time"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="@dimen/fifty_percentage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/add_text_view_label_latitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_weight="@dimen/fifty_percentage"
+            android:text="@string/label_latitude"/>
+
+        <TextView
+            android:id="@+id/add_text_view_content_latitude"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="@dimen/fifty_percentage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/add_text_view_label_longitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_weight="@dimen/fifty_percentage"
+            android:text="@string/label_longitude"/>
+
+        <TextView
+            android:id="@+id/add_text_view_content_longitude"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="@dimen/fifty_percentage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/add_text_view_label_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:text="@string/label_description"/>
+
+        <EditText
+            android:id="@+id/add_edit_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fadeScrollbars="false"
+            android:gravity="top|start"
+            android:hint="@string/add_report_description_hint"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:minLines="6"
+            android:scrollbars="vertical" />
+
+        <ImageView
+            android:id="@+id/add_image_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:scaleType="center"
+            android:visibility="visible"
+            android:contentDescription="@string/report_picture"
+            android:onClick="onClickImagePicker"/>
+
+    </LinearLayout>
+
+</LinearLayout>

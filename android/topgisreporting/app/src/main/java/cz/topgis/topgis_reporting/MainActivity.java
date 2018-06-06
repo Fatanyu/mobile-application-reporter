@@ -3,6 +3,7 @@ package cz.topgis.topgis_reporting;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity
 {
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
 
+	private GPSLocationManager gpsLocationManager;
+
 	private List<Report> reportList = new ArrayList<>();
 	//https://www.sitepoint.com/mastering-complex-lists-with-the-android-recyclerview/
 	private RecyclerView recyclerView;
@@ -53,8 +56,7 @@ public class MainActivity extends AppCompatActivity
 		setSupportActionBar(toolbar);
 
 		this.prepareRealData();
-
-
+		this.gpsLocationManager = GPSLocationManager.getInstance(this);
 		this.recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 		this.reportAdapter = new ReportAdapter(reportList);
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity
 		this.recyclerView.setAdapter(reportAdapter);
 		this.recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
+		this.askGPSPermission();
 		//this.prepareDummyData();
 	}
 
@@ -108,6 +111,19 @@ public class MainActivity extends AppCompatActivity
 	 */
 	public void addReportButtonOnClick(View view)
 	{
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+		{
+			Intent intent = new Intent(this, AddReportActivity.class);
+			startActivity(intent);
+		}
+		else
+		{
+			this.askGPSPermission();
+		}
+	}
+
+	public void askGPSPermission()
+	{
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
 			// TODO: Consider calling
@@ -117,18 +133,14 @@ public class MainActivity extends AppCompatActivity
 			//                                          int[] grantResults)
 			// to handle the case where the user grants the permission. See the documentation
 			// for ActivityCompat#requestPermissions for more details.
-			ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.REQUEST_CODE_PERMISSION_GPS);
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.REQUEST_CODE_PERMISSION_GPS);
 		}
 		else // Permission granted
 		{
-			GPSLocationManager.getInstance(this).registerListener();
+			this.gpsLocationManager.registerListener();
 			//Basics.giveMeToast(this);
-			Intent intent = new Intent(this,AddReportActivity.class);
-			startActivity(intent);
 		}
-
 	}
-
 
 	private void prepareDummyData()
 	{
@@ -203,7 +215,7 @@ public class MainActivity extends AppCompatActivity
 	protected void onDestroy()
 	{
 		//Toast.makeText(this,"On Destroy", Toast.LENGTH_SHORT).show();
-		GPSLocationManager.getInstance(this).unregisterListener(); //Off GPS tracking
+		this.gpsLocationManager.unregisterListener(); //Off GPS tracking
 		super.onDestroy();
 	}
 

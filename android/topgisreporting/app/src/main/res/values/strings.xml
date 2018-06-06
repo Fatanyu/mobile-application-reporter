@@ -15,4 +15,5 @@
     <string name="label_longitude">Longitude</string>
     <string name="label_description">Description</string>
     <string name="report_picture">Report picture</string>
+    <string name="add_report_description_hint">Description of the report</string>
 </resources>

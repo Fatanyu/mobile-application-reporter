@@ -14,4 +14,5 @@
     <string name="label_longitude">Zeměpisná délka</string>
     <string name="label_description">Popis</string>
     <string name="report_picture">Obrázek reportu</string>
+    <string name="add_report_description_hint">Popis hlášení</string>
 </resources>

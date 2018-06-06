@@ -60,12 +60,12 @@ public class ReportDetailActivity extends AppCompatActivity
 	 */
 	private void boundTextViews()
 	{
-		this.textViewContentType = findViewById(R.id.text_view_content_type);
-		this.textViewContentCreateTime = findViewById(R.id.text_view_content_create_time);
-		this.textViewContentSendTime = findViewById(R.id.text_view_content_send_time);
-		this.textViewContentLatitude = findViewById(R.id.text_view_content_latitude);
-		this.textViewContentLongitude = findViewById(R.id.text_view_content_longitude);
-		this.textViewContentDescription = findViewById(R.id.text_view_content_description);
+		this.textViewContentType = findViewById(R.id.detail_text_view_content_type);
+		this.textViewContentCreateTime = findViewById(R.id.detail_text_view_content_create_time);
+		this.textViewContentSendTime = findViewById(R.id.detail_text_view_content_send_time);
+		this.textViewContentLatitude = findViewById(R.id.detail_text_view_content_latitude);
+		this.textViewContentLongitude = findViewById(R.id.detail_text_view_content_longitude);
+		this.textViewContentDescription = findViewById(R.id.detail_text_view_content_description);
 	}
 
 	/**
