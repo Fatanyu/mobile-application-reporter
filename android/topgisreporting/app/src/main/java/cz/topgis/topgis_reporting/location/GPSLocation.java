@@ -1,5 +1,7 @@
 package cz.topgis.topgis_reporting.location;
 
+import android.location.Location;
+
 import java.util.Objects;
 
 /**
@@ -41,6 +43,12 @@ public final class GPSLocation
 	{
 		this.latitude = latitude.toString();
 		this.longitude = longitude.toString();
+	}
+
+	public GPSLocation(Location location)
+	{
+		this.latitude = "" + location.getLatitude();
+		this.longitude = "" + location.getLongitude();
 	}
 
 	/**

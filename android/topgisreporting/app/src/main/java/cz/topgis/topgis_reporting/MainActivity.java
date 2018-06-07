@@ -3,7 +3,6 @@ package cz.topgis.topgis_reporting;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -26,16 +25,12 @@ import cz.topgis.topgis_reporting.activities.ReportDetailActivity;
 import cz.topgis.topgis_reporting.database.DBContentProvider;
 import cz.topgis.topgis_reporting.database.Report;
 import cz.topgis.topgis_reporting.database.ReportAdapter;
-import cz.topgis.topgis_reporting.location.GPSLocationManager;
 
 /**
  * Main app Activity. It also works as controller for history records.
  */
 public class MainActivity extends AppCompatActivity
 {
-	static final int REQUEST_CODE_PERMISSION_GPS = 100;
-
-	private GPSLocationManager gpsLocationManager;
 
 	private List<Report> reportList = new ArrayList<>();
 	//https://www.sitepoint.com/mastering-complex-lists-with-the-android-recyclerview/
@@ -56,7 +51,6 @@ public class MainActivity extends AppCompatActivity
 		setSupportActionBar(toolbar);
 
 		this.prepareRealData();
-		this.gpsLocationManager = GPSLocationManager.getInstance(this);
 		this.recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 		this.reportAdapter = new ReportAdapter(reportList);
@@ -65,8 +59,6 @@ public class MainActivity extends AppCompatActivity
 		this.recyclerView.setItemAnimator(new DefaultItemAnimator());
 		this.recyclerView.setAdapter(reportAdapter);
 		this.recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-		this.askGPSPermission();
 		//this.prepareDummyData();
 	}
 
@@ -111,35 +103,8 @@ public class MainActivity extends AppCompatActivity
 	 */
 	public void addReportButtonOnClick(View view)
 	{
-		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-		{
-			Intent intent = new Intent(this, AddReportActivity.class);
-			startActivity(intent);
-		}
-		else
-		{
-			this.askGPSPermission();
-		}
-	}
-
-	public void askGPSPermission()
-	{
-		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-		{
-			// TODO: Consider calling
-			//    ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
-			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.REQUEST_CODE_PERMISSION_GPS);
-		}
-		else // Permission granted
-		{
-			this.gpsLocationManager.registerListener();
-			//Basics.giveMeToast(this);
-		}
+		Intent intent = new Intent(this, AddReportActivity.class);
+		startActivity(intent);
 	}
 
 	private void prepareDummyData()
@@ -186,36 +151,11 @@ public class MainActivity extends AppCompatActivity
 		super.onStop();
 	}
 
-	/**
-	 * When app request some permission, this method is invoked after user allow/deny that permission.
-	 * @param requestCode Unique identifier for request
-	 * @param permissions Array of requested permissions as Strings
-	 * @param grantResults Array of granted/denied values. Every value in permissions[] have value in grandResults
-	 */
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-	{
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-		//Manage request code
-		switch(requestCode)
-		{
-			// Request GPS permission from addButtonOnClick
-			case MainActivity.REQUEST_CODE_PERMISSION_GPS:
-			{
-				if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
-					this.addReportButtonOnClick(null);
-				else //Do not have permission
-					Toast.makeText(this,"Really need that permission", Toast.LENGTH_SHORT).show(); //TODO
-			}
-		}
-	}
 
 	@Override
 	protected void onDestroy()
 	{
 		//Toast.makeText(this,"On Destroy", Toast.LENGTH_SHORT).show();
-		this.gpsLocationManager.unregisterListener(); //Off GPS tracking
 		super.onDestroy();
 	}
 
