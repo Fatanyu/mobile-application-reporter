@@ -181,9 +181,15 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	public void saveNewReportOnClick(View view)
 	{
+		if(!(this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && this.locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)))
+		{
+			Toast.makeText(this, R.string.message_providers_disabled, Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		if(this.isDummyLocation())
 		{
-			Toast.makeText(this,"Have not location yet",Toast.LENGTH_SHORT).show(); //TODO constant + (language)
+			Toast.makeText(this, R.string.message_getting_location, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		Report report = this.createReport();
@@ -257,6 +263,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		}
 
 	}
+
 
 	/**
 	 * When phone has new location, set it as GPSLocation
@@ -428,5 +435,14 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		}
 
 
+	}
+
+	public void deleteOnClick(View view)
+	{
+		this.imageView.setImageBitmap(null);
+		this.imageView.setVisibility(ImageView.GONE);
+		findViewById(R.id.text_view_label_picture).setVisibility(TextView.GONE);
+		findViewById(R.id.button_delete_picture).setVisibility(Button.GONE);
+		Toast.makeText(this, R.string.message_report_deleted, Toast.LENGTH_SHORT).show();
 	}
 }

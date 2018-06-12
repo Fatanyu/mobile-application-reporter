@@ -22,4 +22,7 @@
     <string name="menu_delete_all">Smazat vše</string>
     <string name="label_picture">Obrázek</string>
     <string name="label_picture_delete">Smazat obrázek</string>
+    <string name="message_picture_deleted">Obrázek byl smazán</string>
+    <string name="message_getting_location">Stále získávám souřadnice. Zkuste to znovu za pár vteřin</string>
+    <string name="message_providers_disabled">Zapněte prosím určování polohy</string>
 </resources>

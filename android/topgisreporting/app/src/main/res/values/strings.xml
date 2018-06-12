@@ -19,4 +19,7 @@
     <string name="title_activity_report_detail">Report detail</string>
     <string name="message_report_deleted">Report has been deleted</string>
     <string name="menu_delete_all">Delete all reports</string>
+    <string name="message_picture_deleted">Picture has been deleted</string>
+    <string name="message_getting_location">Still getting location. Try again in few seconds</string>
+    <string name="message_providers_disabled">Enable Location</string>
 </resources>
