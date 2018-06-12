@@ -50,14 +50,11 @@ public class MainActivity extends AppCompatActivity
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-		this.prepareRealData();
 		this.recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-		this.reportAdapter = new ReportAdapter(reportList);
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 		this.recyclerView.setLayoutManager(layoutManager);
 		this.recyclerView.setItemAnimator(new DefaultItemAnimator());
-		this.recyclerView.setAdapter(reportAdapter);
 		this.recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 		//this.prepareDummyData();
 	}
@@ -72,6 +69,7 @@ public class MainActivity extends AppCompatActivity
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		getMenuInflater().inflate(R.menu.delete_all_from_db, menu);
 		return true;
 	}
 
@@ -91,6 +89,13 @@ public class MainActivity extends AppCompatActivity
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_settings)
 		{
+			return true;
+		}
+
+		if (id == R.id.delete_all_from_db)
+		{
+			this.deleteAllReports();
+			this.prepareReportAdapter(); //reset recycler view
 			return true;
 		}
 
@@ -142,6 +147,14 @@ public class MainActivity extends AppCompatActivity
 		super.onStart();
 	}
 
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		// Preparing reportAdapter - must be here ->
+		this.prepareReportAdapter();
+	}
+
 	/**
 	 * What happens after closing Activity
 	 */
@@ -167,5 +180,19 @@ public class MainActivity extends AppCompatActivity
 		Intent intent = new Intent(this, ReportDetailActivity.class);
 		intent.putExtra(DBContentProvider._ID, report.getDbId());
 		startActivity(intent);
+	}
+
+	private void prepareReportAdapter()
+	{
+		this.prepareRealData();
+		this.reportAdapter = new ReportAdapter(reportList);
+		this.recyclerView.setAdapter(reportAdapter);
+
+	}
+
+	private void deleteAllReports()
+	{
+		DBContentProvider dbContentProvider = new DBContentProvider(this);
+		dbContentProvider.deleteAllReports();
 	}
 }

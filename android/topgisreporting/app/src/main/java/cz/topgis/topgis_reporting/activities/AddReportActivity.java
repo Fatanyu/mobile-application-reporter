@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -24,24 +25,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import cz.topgis.topgis_reporting.MainActivity;
 import cz.topgis.topgis_reporting.R;
+import cz.topgis.topgis_reporting.database.DBContentProvider;
+import cz.topgis.topgis_reporting.database.Report;
+import cz.topgis.topgis_reporting.database.ReportType;
 import cz.topgis.topgis_reporting.location.GPSLocation;
 
-public class AddReportActivity extends AppCompatActivity implements LocationListener
+public class AddReportActivity extends AppCompatActivity implements LocationListener, AdapterView.OnItemSelectedListener
 {
 	private static final String MESSAGE_PROVIDER_DISABLED="Provider is disabled";
 	private static final String MESSAGE_PROVIDER_ENABLED="Provider is enabled";
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
 
 
-	private Spinner textViewContentType;
+	private Spinner spinnerContentType;
 	private TextView textViewContentCreateTime;
 	private TextView textViewContentLatitude;
 	private TextView textViewContentLongitude;
 	private EditText editTextDescription;
 
 	private GPSLocation currentLocation;
+
+	private ReportType selectedReportType;
+	private Date createTime;
 
 	/**
 	 * Instance of LocationManager
@@ -53,7 +59,10 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	{
 		super.onCreate(savedInstanceState);
 		this.initLocationManager();
+
 		this.registerListener();
+
+
 		setContentView(R.layout.activity_add_report);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -81,7 +90,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, reportTypes);
 		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		this.textViewContentType.setAdapter(adapter);
+		this.spinnerContentType.setAdapter(adapter);
+		this.spinnerContentType.setOnItemSelectedListener(this);
 	}
 
 	/**
@@ -90,9 +100,14 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	private void setContentToTextViews()
 	{
 		this.setSpinner();
-		this.textViewContentCreateTime.setText(new Date().toString());
+		this.setCreateTime();
 		this.setLocationToViews();
+	}
 
+	private void setCreateTime()
+	{
+		this.createTime = new Date();
+		this.textViewContentCreateTime.setText(this.createTime.toString());
 	}
 
 	private void setLocationToViews()
@@ -130,19 +145,48 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	 */
 	private void boundTextViews()
 	{
-		this.textViewContentType = findViewById(R.id.add_spinner);
+		this.spinnerContentType = findViewById(R.id.add_spinner);
 		this.textViewContentCreateTime = findViewById(R.id.add_text_view_content_create_time);
 		this.textViewContentLatitude = findViewById(R.id.add_text_view_content_latitude);
 		this.textViewContentLongitude = findViewById(R.id.add_text_view_content_longitude);
 		this.editTextDescription = findViewById(R.id.add_edit_text_description);
 	}
 
+	private boolean isDummyLocation()
+	{
+		return this.createGPSLocation().isDummy();
+	}
+
+	private GPSLocation createGPSLocation()
+	{
+		return new GPSLocation(this.textViewContentLatitude.getText().toString(),this.textViewContentLongitude.getText().toString());
+	}
 
 	public void saveNewReportOnClick(View view)
 	{
-		//TODO
+		if(this.isDummyLocation())
+		{
+			Toast.makeText(this,"Have not location yet",Toast.LENGTH_SHORT).show(); //TODO constant + (language)
+			return;
+		}
+		Report report = this.createReport();
+		this.insertReportToDB(report);
 		this.unregisterListener();
 		finish();
+	}
+
+	private void insertReportToDB(Report report)
+	{
+		DBContentProvider dbContentProvider = new DBContentProvider(this);
+		dbContentProvider.insertReport(report);
+	}
+
+	private Report createReport()
+	{
+		return new Report(this.createTime,
+				null, this.editTextDescription.getText().toString(),
+				this.createGPSLocation(),
+				this.selectedReportType);
 	}
 
 	public void onClickImagePicker(View view)
@@ -191,6 +235,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	 */
 	private boolean registerListener()
 	{
+		this.askGPSPermission();
+
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
 			Toast.makeText(this, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
@@ -212,13 +258,6 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	{
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
-			// TODO: Consider calling
-			//    ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, AddReportActivity.REQUEST_CODE_PERMISSION_GPS);
 		}
 	}
@@ -267,5 +306,18 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 					Toast.makeText(this,"Really need that permission", Toast.LENGTH_SHORT).show(); //TODO
 			}
 		}
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+	{
+		//Toast.makeText(this,"Spinner selected value: " + (String) this.spinnerContentType.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+		this.selectedReportType = new ReportType((String) this.spinnerContentType.getItemAtPosition(position));
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent)
+	{
+
 	}
 }

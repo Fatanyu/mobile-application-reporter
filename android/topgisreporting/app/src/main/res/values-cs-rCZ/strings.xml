@@ -15,4 +15,9 @@
     <string name="label_description">Popis</string>
     <string name="report_picture">Obrázek reportu</string>
     <string name="add_report_description_hint">Popis hlášení</string>
+    <string name="delete">Smazat</string>
+    <string name="title_activity_add_report">Přidat hlášení</string>
+    <string name="title_activity_report_detail">Detail hlášení</string>
+    <string name="message_report_deleted">Hlášení bylo smazáno</string>
+    <string name="menu_delete_all">Smazat vše</string>
 </resources>

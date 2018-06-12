@@ -107,15 +107,7 @@ public class ReportDetailActivity extends AppCompatActivity
 	@Override
 	protected void onStart()
 	{
-		super.onStart();/*
-		if(this.findReportId())
-		{
-			this.findReport();
-		}
-		else
-		{
-			Toast.makeText(this, getResources().getString(R.string.report_missing), Toast.LENGTH_SHORT).show();
-		}*/
+		super.onStart();
 	}
 
 	/**
@@ -129,5 +121,15 @@ public class ReportDetailActivity extends AppCompatActivity
 			this.report = dbContentProvider.getOneReport(this.reportId);
 		}
 		else this.report = null;
+	}
+
+	public void deleteOnClick(View view)
+	{
+		DBContentProvider dbContentProvider = new DBContentProvider(this);
+		if(dbContentProvider.deleteOneReport(this.reportId))
+		{
+			Toast.makeText(this, R.string.message_report_deleted ,Toast.LENGTH_SHORT).show();
+			finish();
+		}
 	}
 }

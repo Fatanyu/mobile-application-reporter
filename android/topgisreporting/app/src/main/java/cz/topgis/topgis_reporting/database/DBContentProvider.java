@@ -44,7 +44,7 @@ public class DBContentProvider implements BaseColumns, DBConstants
 	public DBContentProvider(Context context)
 	{
 		this.dbHelper = new DatabaseHelper(context);
-		this.insertDummyData();
+		//this.insertDummyData();
 	}
 
 	/**
@@ -159,5 +159,20 @@ public class DBContentProvider implements BaseColumns, DBConstants
 
 		readableDatabase.close();
 		return reportList;
+	}
+
+	public boolean deleteOneReport(Long id)
+	{
+		final SQLiteDatabase readableDatabase = this.dbHelper.getWritableDatabase();
+		int count = readableDatabase.delete(TABLE_NAME_REPORT, _ID + "=?", new String[]{id.toString()});
+		readableDatabase.close();
+		return count == 1 ; // True if 1 deleted row
+	}
+
+	public void deleteAllReports()
+	{
+		final SQLiteDatabase readableDatabase = this.dbHelper.getWritableDatabase();
+		readableDatabase.delete(TABLE_NAME_REPORT, null, null);
+		readableDatabase.close();
 	}
 }
