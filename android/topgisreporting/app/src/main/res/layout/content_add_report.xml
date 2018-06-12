@@ -100,7 +100,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -127,12 +127,12 @@
         <ImageView
             android:id="@+id/add_image_picker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:scaleType="center"
-            android:visibility="visible"
+            android:layout_height="match_parent"
+            android:clickable="true"
             android:contentDescription="@string/report_picture"
-            android:onClick="onClickImagePicker"/>
+            android:focusable="true"
+            android:scaleType="centerCrop"
+            android:visibility="visible" />
 
     </LinearLayout>
 

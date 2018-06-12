@@ -20,17 +20,18 @@
 
             <Button
                 android:id="@+id/trash"
+                style="@android:style/Widget.Material.Button.Borderless.Small"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="end"
                 android:background="@color/colorPrimary"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="@android:drawable/ic_menu_delete"
+                android:onClick="deleteOnClick"
                 android:textAllCaps="false"
-                android:text="@string/delete"
-                android:visibility="visible"
-                android:onClick="deleteOnClick"/>
+                android:visibility="visible" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

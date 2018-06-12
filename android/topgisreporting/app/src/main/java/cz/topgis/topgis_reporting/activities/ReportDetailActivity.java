@@ -15,6 +15,9 @@ import cz.topgis.topgis_reporting.R;
 import cz.topgis.topgis_reporting.database.DBContentProvider;
 import cz.topgis.topgis_reporting.database.Report;
 
+/**
+ * Managing Report detail screen
+ */
 public class ReportDetailActivity extends AppCompatActivity
 {
 	private Long reportId;

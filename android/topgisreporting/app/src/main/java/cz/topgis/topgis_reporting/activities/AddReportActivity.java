@@ -2,11 +2,15 @@ package cz.topgis.topgis_reporting.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +41,15 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	private static final String MESSAGE_PROVIDER_DISABLED="Provider is disabled";
 	private static final String MESSAGE_PROVIDER_ENABLED="Provider is enabled";
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
-
+	static final int REQUEST_CODE_TAKE_PICTURE_CAMERA = 200;
+	static final int REQUEST_CODE_TAKE_PICTURE_LIBRARY = 201;
 
 	private Spinner spinnerContentType;
 	private TextView textViewContentCreateTime;
 	private TextView textViewContentLatitude;
 	private TextView textViewContentLongitude;
 	private EditText editTextDescription;
+	private ImageView imageView;
 
 	private GPSLocation currentLocation;
 
@@ -87,7 +94,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		reportTypes.add("Bordel");
 		reportTypes.add("Skladka");
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, reportTypes);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, reportTypes);
 		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		this.spinnerContentType.setAdapter(adapter);
@@ -122,8 +129,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	/**
 	 * It is called when something in toolbar is selected
-	 * @param item
-	 * @return
+	 * @param item Item which has been pressed
+	 * @return True if is it known, otherwise delegate to super
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
@@ -150,6 +157,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		this.textViewContentLatitude = findViewById(R.id.add_text_view_content_latitude);
 		this.textViewContentLongitude = findViewById(R.id.add_text_view_content_longitude);
 		this.editTextDescription = findViewById(R.id.add_edit_text_description);
+		this.imageView = findViewById(R.id.add_image_picker);
 	}
 
 	private boolean isDummyLocation()
@@ -191,6 +199,43 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	public void onClickImagePicker(View view)
 	{
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+		{
+			startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE_CAMERA);
+		}
+
+
+		//Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		//startActivityForResult(pickPhoto , REQUEST_CODE_TAKE_PICTURE_LIBRARY);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(requestCode)
+		{
+			case REQUEST_CODE_TAKE_PICTURE_CAMERA:
+				if(resultCode == RESULT_OK)
+				{
+					Bundle extras = data.getExtras();
+					Bitmap imageBitmap = (Bitmap) extras.get("data");
+					this.imageView.setImageBitmap(imageBitmap);
+				}
+
+				break;
+			case REQUEST_CODE_TAKE_PICTURE_LIBRARY:
+				if(resultCode == RESULT_OK)
+				{
+					Bundle extras = data.getExtras();
+					Bitmap imageBitmap = (Bitmap) extras.get("data");
+					this.imageView.setImageBitmap(imageBitmap);
+				}
+				break;
+		}
+
+
 	}
 
 	/**
