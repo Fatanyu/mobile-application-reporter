@@ -1,14 +1,21 @@
 package cz.topgis.topgis_reporting.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Objects;
 
 import cz.topgis.topgis_reporting.R;
@@ -29,6 +36,7 @@ public class ReportDetailActivity extends AppCompatActivity
 	private TextView textViewContentLatitude;
 	private TextView textViewContentLongitude;
 	private TextView textViewContentDescription;
+	private ImageView imageView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +64,38 @@ public class ReportDetailActivity extends AppCompatActivity
 		this.textViewContentLatitude.setText(this.report.getLocation().getLatitude());
 		this.textViewContentLongitude.setText(this.report.getLocation().getLongitude());
 		this.textViewContentDescription.setText(this.report.getDescription());
+
+		this.initImageView();
+	}
+
+	private void initImageView()
+	{
+		Bitmap imageFromInternalStorage = this.getImageFromInternalStorage();
+		if(imageFromInternalStorage != null)
+		{
+//			this.imageView.setVisibility(ImageView.INVISIBLE);
+			this.imageView.setVisibility(ImageView.VISIBLE);
+			this.imageView.setImageBitmap(imageFromInternalStorage);
+		}
+	}
+
+	private Bitmap getImageFromInternalStorage()
+	{
+		Bitmap image = null;
+		if(report.hasPicture())
+		{
+			try
+			{
+				File file = new File(report.getPicturePath(), report.getCreateTime() + ".jpg");
+				image = BitmapFactory.decodeStream(new FileInputStream(file));
+			}
+			catch (FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return image;
 	}
 
 	/**
@@ -69,6 +109,7 @@ public class ReportDetailActivity extends AppCompatActivity
 		this.textViewContentLatitude = findViewById(R.id.detail_text_view_content_latitude);
 		this.textViewContentLongitude = findViewById(R.id.detail_text_view_content_longitude);
 		this.textViewContentDescription = findViewById(R.id.detail_text_view_content_description);
+		this.imageView = findViewById(R.id.detail_image_view);
 	}
 
 	/**

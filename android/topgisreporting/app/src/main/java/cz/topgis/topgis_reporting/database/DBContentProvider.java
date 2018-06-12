@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +30,13 @@ public class DBContentProvider implements BaseColumns, DBConstants
 			COLUMN_NAME_LATITUDE + " TEXT," +
 			COLUMN_NAME_LONGITUDE + " TEXT," +
 			COLUMN_NAME_SEND + " INTEGER," +
-			COLUMN_NAME_REPORT_TYPE + " TEXT" +
+			COLUMN_NAME_REPORT_TYPE + " TEXT," +
+			COLUMN_NAME_PICTURE_PATH + " TEXT" +
 			")";
 
 	//*************************************************************************
+
+	 static final String ERROR_MESSAGE = "Některé obrázky se nepovedlo smazat";
 
 	/**
 	 * Member which can get writable/readable database
@@ -163,14 +169,42 @@ public class DBContentProvider implements BaseColumns, DBConstants
 
 	public boolean deleteOneReport(Long id)
 	{
+		boolean pictureDeleted = this.deleteOneImage(id);
 		final SQLiteDatabase readableDatabase = this.dbHelper.getWritableDatabase();
 		int count = readableDatabase.delete(TABLE_NAME_REPORT, _ID + "=?", new String[]{id.toString()});
 		readableDatabase.close();
-		return count == 1 ; // True if 1 deleted row
+		return count == 1 && pictureDeleted; // True if 1 deleted row and picture
+	}
+
+	private boolean deleteOneImage(Long id)
+	{
+		Report report = this.getOneReport(id);
+		boolean pictureDeleted = true;
+		if(report.hasPicture())
+		{
+			File file = new File(report.getPicturePath(), report.getCreateTime() + ".jpg");
+			pictureDeleted = file.delete();
+		}
+		return pictureDeleted;
+	}
+
+	private boolean deleteAllImages()
+	{
+		boolean allDeleted = true;
+		List<Report> allReports = this.getAllReports();
+		for (Report report : allReports)
+		{
+			if(!this.deleteOneImage(report.getDbId())) allDeleted = false;
+		}
+		return allDeleted;
 	}
 
 	public void deleteAllReports()
 	{
+		if(!this.deleteAllImages())
+		{
+			Log.e("IMAGE_DELETE_FAIL", DBContentProvider.ERROR_MESSAGE);
+		}
 		final SQLiteDatabase readableDatabase = this.dbHelper.getWritableDatabase();
 		readableDatabase.delete(TABLE_NAME_REPORT, null, null);
 		readableDatabase.close();

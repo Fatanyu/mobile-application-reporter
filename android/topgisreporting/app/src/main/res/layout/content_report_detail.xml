@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,152 +7,164 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical"
     android:layout_margin="@dimen/report_detail_activity_layout_margin"
-    tools:context=".activities.ReportDetailActivity"
-    tools:showIn="@layout/activity_report_detail">
+    tools:context=".activities.AddReportActivity"
+    tools:showIn="@layout/activity_add_report">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/detail_text_view_label_type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="@dimen/report_detail_activity_text_size"
-        android:layout_weight="@dimen/fifty_percentage"
-        android:text="@string/label_type"/>
-
-    <TextView
-        android:id="@+id/detail_text_view_content_type"
-        android:textSize="@dimen/report_detail_activity_text_size"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="@dimen/fifty_percentage" />
-</LinearLayout>
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/report_detail_activity_layout_margin"
+        tools:context=".activities.ReportDetailActivity"
+        tools:showIn="@layout/activity_report_detail">
 
-        <TextView
-            android:id="@+id/detail_text_view_label_create_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_weight="@dimen/fifty_percentage"
-            android:text="@string/label_create_time"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/detail_text_view_content_create_time"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/fifty_percentage" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/detail_text_view_label_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:text="@string/label_description"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/detail_text_view_content_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="8"
+                android:minLines="6"
+                android:scrollbars="vertical"
+                android:textIsSelectable="true"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:visibility="visible" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/detail_text_view_label_send_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_weight="@dimen/fifty_percentage"
-            android:text="@string/label_send_time"/>
-
-        <TextView
-            android:id="@+id/detail_text_view_content_send_time"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/fifty_percentage" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/detail_text_view_label_latitude"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_weight="@dimen/fifty_percentage"
-            android:text="@string/label_latitude"/>
-
-        <TextView
-            android:id="@+id/detail_text_view_content_latitude"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/fifty_percentage" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/detail_text_view_label_longitude"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_weight="@dimen/fifty_percentage"
-            android:text="@string/label_longitude"/>
-
-        <TextView
-            android:id="@+id/detail_text_view_content_longitude"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/fifty_percentage" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/detail_text_view_label_description"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:text="@string/label_description"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/detail_text_view_content_description"
+            <TextView
+                android:id="@+id/detail_text_view_label_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_weight="@dimen/fifty_percentage"
+                android:text="@string/label_type"/>
+
+            <TextView
+                android:id="@+id/detail_text_view_content_type"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/fifty_percentage" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:lines="8"
-            android:minLines="6"
-            android:scrollbars="vertical"
-            android:textIsSelectable="true"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:visibility="visible" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_text_view_label_create_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_weight="@dimen/fifty_percentage"
+                android:text="@string/label_create_time"/>
+
+            <TextView
+                android:id="@+id/detail_text_view_content_create_time"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/fifty_percentage" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_text_view_label_send_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_weight="@dimen/fifty_percentage"
+                android:text="@string/label_send_time"/>
+
+            <TextView
+                android:id="@+id/detail_text_view_content_send_time"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/fifty_percentage" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_text_view_label_latitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_weight="@dimen/fifty_percentage"
+                android:text="@string/label_latitude"/>
+
+            <TextView
+                android:id="@+id/detail_text_view_content_latitude"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/fifty_percentage" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_text_view_label_longitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_weight="@dimen/fifty_percentage"
+                android:text="@string/label_longitude"/>
+
+            <TextView
+                android:id="@+id/detail_text_view_content_longitude"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/fifty_percentage" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/detail_image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:scaleType="center"
-            android:visibility="visible"
-            android:contentDescription="@string/report_picture" />
-    </LinearLayout>
+            android:layout_height="500dp"
+            android:contentDescription="@string/report_picture"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
 
-</LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

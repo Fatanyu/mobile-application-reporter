@@ -48,6 +48,7 @@ public class Report
 	private Boolean send;
 
 	//picture TODO
+	private String picturePath;
 
 	/**
 	 * Basic constructor for USER creation
@@ -66,6 +67,7 @@ public class Report
 		this.setDescription(description);
 		this.setLocation(location);
 		this.setReportType(reportType);
+		this.setPicturePath("");
 	}
 
 	/**
@@ -77,7 +79,7 @@ public class Report
 	 * @param location GPS location of the problem
 	 * @param reportType type of the report
 	 */
-	private Report(Long dbId, String createTime, String sendTime, String description, GPSLocation location, ReportType reportType)
+	private Report(Long dbId, String createTime, String sendTime, String description, GPSLocation location, ReportType reportType, String picturePath)
 	{
 		this.setDbId(dbId);
 		this.setCreateTime(createTime);
@@ -85,7 +87,9 @@ public class Report
 		this.setDescription(description);
 		this.setLocation(location);
 		this.setReportType(reportType);
+		this.setPicturePath(picturePath);
 	}
+
 
 	/**
 	 * Setter for databaseID. Must have Long.valueOf()
@@ -252,7 +256,8 @@ public class Report
 				new GPSLocation(cursor.getString(cursor.getColumnIndex(DBContentProvider.COLUMN_NAME_LATITUDE)),
 						cursor.getString(cursor.getColumnIndex(DBContentProvider.COLUMN_NAME_LONGITUDE))
 				),
-				new ReportType(cursor.getString(cursor.getColumnIndex(DBContentProvider.COLUMN_NAME_REPORT_TYPE)))
+				new ReportType(cursor.getString(cursor.getColumnIndex(DBContentProvider.COLUMN_NAME_REPORT_TYPE))),
+				cursor.getString(cursor.getColumnIndex(DBContentProvider.COLUMN_NAME_PICTURE_PATH))
 		);
 	}
 
@@ -274,7 +279,23 @@ public class Report
 		contentValues.put(DBConstants.COLUMN_NAME_LATITUDE, this.location.getLatitude());
 		contentValues.put(DBConstants.COLUMN_NAME_LONGITUDE, this.location.getLongitude());
 		contentValues.put(DBConstants.COLUMN_NAME_REPORT_TYPE, this.reportType.getReportType());
+		contentValues.put(DBConstants.COLUMN_NAME_PICTURE_PATH, this.picturePath);
 
 		return contentValues;
+	}
+
+	public String getPicturePath()
+	{
+		return picturePath;
+	}
+
+	public void setPicturePath(String picturePath)
+	{
+		this.picturePath = picturePath;
+	}
+
+	public boolean hasPicture()
+	{
+		return !this.picturePath.equals("");
 	}
 }

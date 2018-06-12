@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,45 @@
     android:layout_margin="@dimen/report_detail_activity_layout_margin"
     tools:context=".activities.AddReportActivity"
     tools:showIn="@layout/activity_add_report">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/report_detail_activity_layout_margin"
+    tools:context=".activities.AddReportActivity"
+    tools:showIn="@layout/activity_add_report">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/add_text_view_label_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_description"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/add_edit_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fadeScrollbars="false"
+            android:gravity="top|start"
+            android:hint="@string/add_report_description_hint"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:minLines="6"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -96,44 +135,50 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="@dimen/fifty_percentage" />
+
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/add_text_view_label_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/report_detail_activity_text_size"
-            android:text="@string/label_description"/>
-
-        <EditText
-            android:id="@+id/add_edit_text_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:fadeScrollbars="false"
-            android:gravity="top|start"
-            android:hint="@string/add_report_description_hint"
-            android:inputType="textMultiLine"
-            android:lines="8"
-            android:minLines="6"
-            android:scrollbars="vertical" />
-
-        <ImageView
-            android:id="@+id/add_image_picker"
+        <LinearLayout
+            android:id="@+id/layout_picture_head"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:contentDescription="@string/report_picture"
-            android:focusable="true"
-            android:scaleType="centerCrop"
-            android:visibility="visible" />
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/text_view_label_picture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:textStyle="bold"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:text="@string/label_picture"
+                android:visibility="gone"
+                />
+
+            <Button
+                android:id="@+id/button_delete_picture"
+                style="@android:style/Widget.Material.Button.Borderless.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/label_picture_delete"
+                android:textColor="@color/deleteButton"
+                android:textSize="@dimen/report_detail_activity_text_size"
+                android:textStyle="bold"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+        <ImageView
+        android:id="@+id/add_image_picker"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:clickable="true"
+        android:contentDescription="@string/report_picture"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
 
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

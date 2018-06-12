@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#ff8c00</color>
     <color name="colorAccent">#fdd985</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="deleteButton">#ffffff</color>
+    <color name="deleteButton">#ff0000</color>
 
     <color name="rowDate">#999999</color>
     <color name="rowTypeName">#222222</color>

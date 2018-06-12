@@ -2,9 +2,12 @@ package cz.topgis.topgis_reporting.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,12 +22,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +50,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
 	static final int REQUEST_CODE_TAKE_PICTURE_CAMERA = 200;
 	static final int REQUEST_CODE_TAKE_PICTURE_LIBRARY = 201;
+
+	static final String IMAGE_DIRECTORY_NAME = "imageDirectory";
 
 	private Spinner spinnerContentType;
 	private TextView textViewContentCreateTime;
@@ -178,6 +187,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 			return;
 		}
 		Report report = this.createReport();
+		saveImageToInternalStorage(report);
 		this.insertReportToDB(report);
 		this.unregisterListener();
 		finish();
@@ -219,22 +229,32 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 			case REQUEST_CODE_TAKE_PICTURE_CAMERA:
 				if(resultCode == RESULT_OK)
 				{
-					Bundle extras = data.getExtras();
-					Bitmap imageBitmap = (Bitmap) extras.get("data");
-					this.imageView.setImageBitmap(imageBitmap);
+					this.setImage(data);
 				}
 
 				break;
 			case REQUEST_CODE_TAKE_PICTURE_LIBRARY:
 				if(resultCode == RESULT_OK)
 				{
-					Bundle extras = data.getExtras();
-					Bitmap imageBitmap = (Bitmap) extras.get("data");
-					this.imageView.setImageBitmap(imageBitmap);
+					this.setImage(data);
 				}
 				break;
 		}
+	}
 
+	private void setImage(Intent data)
+	{
+		Bundle extras = data.getExtras();
+		if (extras != null)
+		{
+			Bitmap imageBitmap = (Bitmap) extras.get("data");
+			this.imageView.setImageBitmap(imageBitmap);
+
+			findViewById(R.id.text_view_label_picture).setVisibility(TextView.VISIBLE);
+			findViewById(R.id.button_delete_picture).setVisibility(Button.VISIBLE);
+			this.imageView.setVisibility(ImageView.VISIBLE);
+
+		}
 
 	}
 
@@ -278,25 +298,24 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	/**
 	 * Start tracking GPS location
 	 */
-	private boolean registerListener()
+	private void registerListener()
 	{
 		this.askGPSPermission();
 
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
 			Toast.makeText(this, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
-			return false;
+			return;
 		}
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
 			Toast.makeText(this, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
-			return false;
+			return;
 		}
 		Toast.makeText(this, "Zapinam GPS listener", Toast.LENGTH_SHORT).show();
 		this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 		this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		//this.locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
-		return true;
 	}
 
 	public void askGPSPermission()
@@ -363,6 +382,51 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	@Override
 	public void onNothingSelected(AdapterView<?> parent)
 	{
+
+	}
+
+	private void saveImageToInternalStorage(Report report)
+	{
+		Drawable bitmapDrawable = this.imageView.getDrawable();
+		if(bitmapDrawable == null)
+		{
+			report.setPicturePath("");
+		}
+		else
+		{
+			Bitmap bitmapImage = ((BitmapDrawable) bitmapDrawable).getBitmap();
+
+			ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+			// path to /data/data/yourapp/app_data/imageDir
+			File directory = contextWrapper.getDir(IMAGE_DIRECTORY_NAME, Context.MODE_PRIVATE);
+			// Create imageDir
+			File mypath=new File(directory,report.getCreateTime() + ".jpg"); //TODO image names
+
+			FileOutputStream fos = null;
+			try
+			{
+				fos = new FileOutputStream(mypath);
+				// Use the compress method on the BitMap object to write image to the OutputStream
+				bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				try
+				{
+					if(fos != null) fos.close();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			report.setPicturePath(directory.getAbsolutePath());
+		}
+
 
 	}
 }

@@ -4,7 +4,7 @@
     <string name="action_settings">Nastavení</string>
     <string name="gps_not_set">Neznámá poloha</string>
     <string name="title_history">Historie</string>
-    <string name="title_add_report">Přidat hlášení</string>
+    <string name="title_add_report">Nové hlášení</string>
     <string name="save_button_label">Přidat</string>
     <string name="report_missing">Chyba. Hlášení nelze najít.</string>
     <string name="label_type">Typ</string>
@@ -20,4 +20,6 @@
     <string name="title_activity_report_detail">Detail hlášení</string>
     <string name="message_report_deleted">Hlášení bylo smazáno</string>
     <string name="menu_delete_all">Smazat vše</string>
+    <string name="label_picture">Obrázek</string>
+    <string name="label_picture_delete">Smazat obrázek</string>
 </resources>
