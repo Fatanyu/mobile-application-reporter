@@ -76,6 +76,7 @@ public class ReportDetailActivity extends AppCompatActivity
 //			this.imageView.setVisibility(ImageView.INVISIBLE);
 			this.imageView.setVisibility(ImageView.VISIBLE);
 			this.imageView.setImageBitmap(imageFromInternalStorage);
+			findViewById(R.id.detail_text_view_label_picture).setVisibility(TextView.VISIBLE);
 		}
 	}
 

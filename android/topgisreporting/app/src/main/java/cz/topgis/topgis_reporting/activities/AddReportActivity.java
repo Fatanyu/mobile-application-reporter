@@ -181,7 +181,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	public void saveNewReportOnClick(View view)
 	{
-		if(!(this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && this.locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)))
+		if(!(this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || this.locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)))
 		{
 			Toast.makeText(this, R.string.message_providers_disabled, Toast.LENGTH_SHORT).show();
 			return;

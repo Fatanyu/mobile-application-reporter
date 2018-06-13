@@ -163,6 +163,7 @@
                 android:visibility="gone"
                 android:clickable="true"
                 android:focusable="true"
+                android:textAllCaps="false"
                 android:onClick="deleteOnClick"
                 />
         </LinearLayout>

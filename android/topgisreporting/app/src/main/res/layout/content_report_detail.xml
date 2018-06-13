@@ -156,6 +156,15 @@
                 android:layout_weight="@dimen/fifty_percentage" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/detail_text_view_label_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/report_detail_activity_text_size"
+            android:text="@string/label_picture"
+            android:visibility="gone"/>
+
         <ImageView
             android:id="@+id/detail_image_view"
             android:layout_width="match_parent"

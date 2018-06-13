@@ -22,4 +22,6 @@
     <string name="message_picture_deleted">Picture has been deleted</string>
     <string name="message_getting_location">Still getting location. Try again in few seconds</string>
     <string name="message_providers_disabled">Enable Location</string>
+    <string name="label_picture">Picture</string>
+    <string name="label_picture_delete">Delete picture</string>
 </resources>
