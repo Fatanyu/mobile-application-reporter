@@ -25,4 +25,7 @@
     <string name="message_picture_deleted">Obrázek byl smazán</string>
     <string name="message_getting_location">Stále získávám souřadnice. Zkuste to znovu za pár vteřin</string>
     <string name="message_providers_disabled">Zapněte prosím určování polohy</string>
+    <string name="message_start_getting_location">Vyhledávám polohu ...</string>
+    <string name="message_provider_disabled">Poloha je vypnutá, hlášení nemůže být vytvořeno</string>
+    <string name="message_picture_removed">Fotografie byla smazána</string>
 </resources>

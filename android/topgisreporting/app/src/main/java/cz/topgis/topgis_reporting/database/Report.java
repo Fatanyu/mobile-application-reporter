@@ -47,7 +47,9 @@ public class Report
 	 */
 	private Boolean send;
 
-	//picture TODO
+	/**
+	 * Path to image in the local store
+	 */
 	private String picturePath;
 
 	/**
@@ -284,16 +286,28 @@ public class Report
 		return contentValues;
 	}
 
+	/**
+	 * Simple getter
+	 * @return Path to local store with image
+	 */
 	public String getPicturePath()
 	{
 		return picturePath;
 	}
 
+	/**
+	 * Simple setter
+	 * @param picturePath New path
+	 */
 	public void setPicturePath(String picturePath)
 	{
 		this.picturePath = picturePath;
 	}
 
+	/**
+	 * Check if picture exists
+	 * @return True if image exists
+	 */
 	public boolean hasPicture()
 	{
 		return !this.picturePath.equals("");

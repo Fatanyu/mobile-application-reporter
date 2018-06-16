@@ -18,10 +18,13 @@ import java.util.List;
 public class DBContentProvider implements BaseColumns, DBConstants
 {
 	/**
-	 * SQL commands
+	 * SQL command for dropping table report
 	 */
 	static final String SQL_DROP_TABLE_REPORT = "DROP TABLE IF EXISTS " + TABLE_NAME_REPORT;
 
+	/**
+	 * SQL command for creating table report
+	 */
 	static final String SQL_CREATE_TABLE_REPORT = "CREATE TABLE " + TABLE_NAME_REPORT + " (" +
 			_ID + " INTEGER PRIMARY KEY," +
 			COLUMN_NAME_CREATE_TIME + " TEXT," +
@@ -36,7 +39,7 @@ public class DBContentProvider implements BaseColumns, DBConstants
 
 	//*************************************************************************
 
-	 static final String ERROR_MESSAGE = "Některé obrázky se nepovedlo smazat";
+	 private static final String ERROR_MESSAGE = "Některé obrázky se nepovedlo smazat";
 
 	/**
 	 * Member which can get writable/readable database
@@ -167,15 +170,27 @@ public class DBContentProvider implements BaseColumns, DBConstants
 		return reportList;
 	}
 
+	/**
+	 * Delete one report from database and its image
+	 * @param id Database report ID
+	 * @return True when report AND picture has been successfully deleted
+	 */
 	public boolean deleteOneReport(Long id)
 	{
 		boolean pictureDeleted = this.deleteOneImage(id);
+
 		final SQLiteDatabase readableDatabase = this.dbHelper.getWritableDatabase();
 		int count = readableDatabase.delete(TABLE_NAME_REPORT, _ID + "=?", new String[]{id.toString()});
 		readableDatabase.close();
+
 		return count == 1 && pictureDeleted; // True if 1 deleted row and picture
 	}
 
+	/**
+	 * Delete one image from internal storage
+	 * @param id Database report ID
+	 * @return True when image is deleted
+	 */
 	private boolean deleteOneImage(Long id)
 	{
 		Report report = this.getOneReport(id);
@@ -188,9 +203,14 @@ public class DBContentProvider implements BaseColumns, DBConstants
 		return pictureDeleted;
 	}
 
+	/**
+	 * Delete all images from internal store (and held by database)
+	 * @return True when all images are successfully deleted
+	 */
 	private boolean deleteAllImages()
 	{
 		boolean allDeleted = true;
+		//get all reports
 		List<Report> allReports = this.getAllReports();
 		for (Report report : allReports)
 		{
@@ -199,12 +219,18 @@ public class DBContentProvider implements BaseColumns, DBConstants
 		return allDeleted;
 	}
 
+	/**
+	 * Delete all reports from database, including images from local store
+	 */
 	public void deleteAllReports()
 	{
+		//delete images
 		if(!this.deleteAllImages())
 		{
 			Log.e("IMAGE_DELETE_FAIL", DBContentProvider.ERROR_MESSAGE);
 		}
+
+		//drop DB
 		final SQLiteDatabase readableDatabase = this.dbHelper.getWritableDatabase();
 		readableDatabase.delete(TABLE_NAME_REPORT, null, null);
 		readableDatabase.close();

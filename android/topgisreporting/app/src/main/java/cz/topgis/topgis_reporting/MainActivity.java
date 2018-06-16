@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	/**
-	 * What happens after openning Activity
+	 * What happens after Activity shows up
 	 */
 	@Override
 	protected void onStart()
@@ -172,24 +172,33 @@ public class MainActivity extends AppCompatActivity
 		super.onDestroy();
 	}
 
+	/**
+	 * User clicked on row, show me details
+	 * @param view Clicked view
+	 */
 	public void onClickShowReportDetail(View view)
 	{
 		int childLayoutPosition = this.recyclerView.getChildLayoutPosition(view); //get clicked row id
-		Toast.makeText(this, "id is: " + childLayoutPosition, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "id is: " + childLayoutPosition, Toast.LENGTH_SHORT).show();
 		Report report = this.reportList.get(childLayoutPosition);
 		Intent intent = new Intent(this, ReportDetailActivity.class);
 		intent.putExtra(DBContentProvider._ID, report.getDbId());
 		startActivity(intent);
 	}
 
+	/**
+	 * Create report adapter, set listeners and prepare data to show
+	 */
 	private void prepareReportAdapter()
 	{
 		this.prepareRealData();
 		this.reportAdapter = new ReportAdapter(reportList);
 		this.recyclerView.setAdapter(reportAdapter);
-
 	}
 
+	/**
+	 * Delete all reports from database
+	 */
 	private void deleteAllReports()
 	{
 		DBContentProvider dbContentProvider = new DBContentProvider(this);

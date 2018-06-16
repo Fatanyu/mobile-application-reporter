@@ -45,6 +45,10 @@ public final class GPSLocation
 		this.longitude = longitude.toString();
 	}
 
+	/**
+	 * Overrided constructor, which takes values from Location
+	 * @param location Location to store
+	 */
 	public GPSLocation(Location location)
 	{
 		this.latitude = "" + location.getLatitude();

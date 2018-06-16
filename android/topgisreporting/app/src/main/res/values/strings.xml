@@ -24,4 +24,7 @@
     <string name="message_providers_disabled">Enable Location</string>
     <string name="label_picture">Picture</string>
     <string name="label_picture_delete">Delete picture</string>
+    <string name="message_start_getting_location">Getting location ...</string>
+    <string name="message_provider_disabled">Location is disabled, report can not created</string>
+    <string name="message_picture_removed">Picture has been removed</string>
 </resources>

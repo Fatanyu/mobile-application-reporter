@@ -23,41 +23,88 @@ import cz.topgis.topgis_reporting.database.DBContentProvider;
 import cz.topgis.topgis_reporting.database.Report;
 
 /**
- * Managing Report detail screen
+ * Controller for report detail screen
  */
 public class ReportDetailActivity extends AppCompatActivity
 {
+	/**
+	 * Id from database, which is send by clicked row
+	 */
 	private Long reportId;
+
+	/**
+	 * Report which will be shown
+	 */
 	private Report report;
 
+	/**
+	 * TextView which is connected to layout
+	 */
 	private TextView textViewContentType;
+
+	/**
+	 * TextView which is connected to layout
+	 */
 	private TextView textViewContentCreateTime;
+
+	/**
+	 * TextView which is connected to layout
+	 */
 	private TextView textViewContentSendTime;
+
+	/**
+	 * TextView which is connected to layout
+	 */
 	private TextView textViewContentLatitude;
+
+	/**
+	 * TextView which is connected to layout
+	 */
 	private TextView textViewContentLongitude;
+
+	/**
+	 * TextView which is connected to layout
+	 */
 	private TextView textViewContentDescription;
+
+	/**
+	 * ImageView which is connected to layout
+	 */
 	private ImageView imageView;
 
+	/**
+	 * Initialize screen
+	 * @param savedInstanceState Is not used
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		//setting layout
 		setContentView(R.layout.activity_report_detail);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		// add back button
 		Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+		//bound views to layout
 		this.boundTextViews();
+
+		//find report in DB
 		this.findReport();
+
+		//set content
 		this.setContentToTextViews();
 	}
 
 	/**
-	 *
+	 * Setter which sets everything at once to layout from this.report
 	 */
 	private void setContentToTextViews()
 	{
 		if(this.report == null) return;
+
 		this.textViewContentType.setText(this.report.getReportType());
 		this.textViewContentCreateTime.setText(this.report.getCreateTime());
 		this.textViewContentSendTime.setText(this.report.getSendTime());
@@ -68,18 +115,26 @@ public class ReportDetailActivity extends AppCompatActivity
 		this.initImageView();
 	}
 
+	/**
+	 * Initializer for ImageView
+	 */
 	private void initImageView()
 	{
 		Bitmap imageFromInternalStorage = this.getImageFromInternalStorage();
+		//check if there is any image
 		if(imageFromInternalStorage != null)
 		{
-//			this.imageView.setVisibility(ImageView.INVISIBLE);
+			//show imageView and sets image
 			this.imageView.setVisibility(ImageView.VISIBLE);
 			this.imageView.setImageBitmap(imageFromInternalStorage);
 			findViewById(R.id.detail_text_view_label_picture).setVisibility(TextView.VISIBLE);
 		}
 	}
 
+	/**
+	 * Getter which gets image from internal storage
+	 * @return Image or null, if non exists
+	 */
 	private Bitmap getImageFromInternalStorage()
 	{
 		Bitmap image = null;
@@ -87,6 +142,7 @@ public class ReportDetailActivity extends AppCompatActivity
 		{
 			try
 			{
+				//get picture and convert it to bitmap
 				File file = new File(report.getPicturePath(), report.getCreateTime() + ".jpg");
 				image = BitmapFactory.decodeStream(new FileInputStream(file));
 			}
@@ -142,7 +198,7 @@ public class ReportDetailActivity extends AppCompatActivity
 		Intent intent = getIntent();
 		Long defaultValue = Long.valueOf(-1);
 		this.reportId = intent.getLongExtra(DBContentProvider._ID, defaultValue);
-		Toast.makeText(this, "ID z DB je '" + this.reportId + "'", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "ID z DB je '" + this.reportId + "'", Toast.LENGTH_SHORT).show();
 		return this.reportId.equals(defaultValue);
 	}
 
@@ -168,6 +224,10 @@ public class ReportDetailActivity extends AppCompatActivity
 		else this.report = null;
 	}
 
+	/**
+	 * Deletes this report and close screen
+	 * @param view Clicked item
+	 */
 	public void deleteOnClick(View view)
 	{
 		DBContentProvider dbContentProvider = new DBContentProvider(this);

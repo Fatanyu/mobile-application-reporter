@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -43,50 +42,127 @@ import cz.topgis.topgis_reporting.database.Report;
 import cz.topgis.topgis_reporting.database.ReportType;
 import cz.topgis.topgis_reporting.location.GPSLocation;
 
+/**
+ * Controller for adding new report
+ * - it uses gps location (needs permission)
+ * - it takes pictures from camera (needs permission)
+ */
 public class AddReportActivity extends AppCompatActivity implements LocationListener, AdapterView.OnItemSelectedListener
 {
+	//debug messages
 	private static final String MESSAGE_PROVIDER_DISABLED="Provider is disabled";
 	private static final String MESSAGE_PROVIDER_ENABLED="Provider is enabled";
+
+	/**
+	 * GPS permission internal request code
+	 */
 	static final int REQUEST_CODE_PERMISSION_GPS = 100;
+
+	/**
+	 * Camera permission internal request code
+	 */
 	static final int REQUEST_CODE_TAKE_PICTURE_CAMERA = 200;
+
+	/**
+	 * Library permission internal request code
+	 */
 	static final int REQUEST_CODE_TAKE_PICTURE_LIBRARY = 201;
 
+	/**
+	 * Local directory name for images
+	 */
 	static final String IMAGE_DIRECTORY_NAME = "imageDirectory";
 
+	/**
+	 * Spinner for the report type connected to one in content_add_report.xml
+	 * - it is filled by default data for now
+	 * - it is not optional value
+	 */
 	private Spinner spinnerContentType;
+
+	/**
+	 * TextView for the report create time connected to one in content_add_report.xml
+	 * - it is filled by Date() value during activity creation
+	 */
 	private TextView textViewContentCreateTime;
+	/**
+	 * TextView for the report latitude connected to one in content_add_report.xml
+	 * - it is not filled by user
+	 */
+
 	private TextView textViewContentLatitude;
+	/**
+	 * TextView for the report longitude connected to one in content_add_report.xml
+	 * - it is not filled by user
+	 */
 	private TextView textViewContentLongitude;
+
+	/**
+	 * EditText for the report description connected to one in content_add_report.xml
+	 * - it is filled by user
+	 * - it is optional value
+	 */
 	private EditText editTextDescription;
+
+	/**
+	 * ImageView for the report image connected to one in content_add_report.xml
+	 * - it is filled, when user take picture from camera
+	 * - it is optional value
+	 */
 	private ImageView imageView;
 
+	/**
+	 * TODO Is it needed?
+	 */
 	private GPSLocation currentLocation;
 
+	/**
+	 * Current selected report type from the spinner
+	 */
 	private ReportType selectedReportType;
+
+	/**
+	 * TODO Is it needed?
+	 */
 	private Date createTime;
 
 	/**
-	 * Instance of LocationManager
+	 * LocationManager instance
 	 */
 	private LocationManager locationManager;
 
+	/**
+	 * Activity initialization part
+	 * - it inits location manager and starts its listener
+	 * - it sets layout
+	 * - it sets back button
+	 * - it bounds every view from layout to this controller
+	 * - it inits default values to bounded views
+	 * @param savedInstanceState Previous state stored in bundle
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		this.initLocationManager();
 
+		// gps part
+		this.initLocationManager();
 		this.registerListener();
 
-
+		// layout part
 		setContentView(R.layout.activity_add_report);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-		this.boundTextViews();
+
+		// views part
+		this.boundViews();
 		this.setContentToTextViews();
 	}
 
+	/**
+	 * LocationManager initialization and setting dummy location
+	 */
 	private void initLocationManager()
 	{
 		//Get system service
@@ -95,23 +171,32 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		this.currentLocation = GPSLocation.getDummyLocation();
 	}
 
+	/**
+	 * Sets and prepare spinner to use
+	 * - creating ArrayAdapter with data for spinner
+	 * - setting listener for spinner selection
+	 */
 	private void setSpinner()
 	{
+		//Report type array which will be used
 		List<String> reportTypes = new ArrayList<>();
 
-		//dummy data
+		// add dummy data
 		reportTypes.add("Bordel");
 		reportTypes.add("Skladka");
+		reportTypes.add("Neco dalsiho");
+		reportTypes.add("Neco hoooooodne hooodne hoooodne dlouheho");
 
+		//This default ArrayAdapter will be used for spinner
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, reportTypes);
-		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
 		this.spinnerContentType.setAdapter(adapter);
+
+		//sets this class as listener for selection
 		this.spinnerContentType.setOnItemSelectedListener(this);
 	}
 
 	/**
-	 *
+	 * Set content for entire layout
 	 */
 	private void setContentToTextViews()
 	{
@@ -120,12 +205,18 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		this.setLocationToViews();
 	}
 
+	/**
+	 * Simple setter
+	 */
 	private void setCreateTime()
 	{
 		this.createTime = new Date();
 		this.textViewContentCreateTime.setText(this.createTime.toString());
 	}
 
+	/**
+	 * Simple location setter
+	 */
 	private void setLocationToViews()
 	{
 		this.textViewContentLatitude.setText(this.currentLocation.getLatitude());
@@ -157,9 +248,9 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	}
 
 	/**
-	 * Connect textViews from layout to class members
+	 * Connect Views from layout to class members
 	 */
-	private void boundTextViews()
+	private void boundViews()
 	{
 		this.spinnerContentType = findViewById(R.id.add_spinner);
 		this.textViewContentCreateTime = findViewById(R.id.add_text_view_content_create_time);
@@ -169,42 +260,79 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		this.imageView = findViewById(R.id.add_image_picker);
 	}
 
-	private boolean isDummyLocation()
+	/**
+	 * Check if location is still dummy
+	 * @return True if location is dummy
+	 */
+	private boolean hasDummyLocation()
 	{
 		return this.createGPSLocation().isDummy();
 	}
 
+	/**
+	 * Takes data from views and creates GPS location
+	 * @return Current GPS location. Can be dummy
+	 */
 	private GPSLocation createGPSLocation()
 	{
 		return new GPSLocation(this.textViewContentLatitude.getText().toString(),this.textViewContentLongitude.getText().toString());
 	}
 
+	/**
+	 * Creates report from filled layout and save it to database
+	 * - checks enabled Location
+	 * - checks dummy current location
+	 * @param view Which was clicked
+	 */
 	public void saveNewReportOnClick(View view)
 	{
-		if(!(this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || this.locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)))
+		// Providers are disabled
+		if(this.providersDisabled())
 		{
 			Toast.makeText(this, R.string.message_providers_disabled, Toast.LENGTH_SHORT).show();
 			return;
 		}
 
-		if(this.isDummyLocation())
+		// Current location is dummy but at least one provider is ON (== still looking for location)
+		if(this.hasDummyLocation())
 		{
 			Toast.makeText(this, R.string.message_getting_location, Toast.LENGTH_SHORT).show();
 			return;
 		}
+		// Ok, everything is ready to save report
 		Report report = this.createReport();
+
+		//Store image
 		saveImageToInternalStorage(report);
 		this.insertReportToDB(report);
+
 		this.unregisterListener();
 		finish();
 	}
 
+	/**
+	 * Check location providers
+	 * @return True if all providers all disabled
+	 */
+	private boolean providersDisabled()
+	{
+		return !(this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || this.locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+	}
+
+	/**
+	 * Store report to local DB
+	 * @param report Report to store
+	 */
 	private void insertReportToDB(Report report)
 	{
 		DBContentProvider dbContentProvider = new DBContentProvider(this);
 		dbContentProvider.insertReport(report);
 	}
 
+	/**
+	 * Create report from layout views
+	 * @return Report from user input
+	 */
 	private Report createReport()
 	{
 		return new Report(this.createTime,
@@ -213,23 +341,36 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 				this.selectedReportType);
 	}
 
+	/**
+	 * Image picker (only from camera right now)
+	 * @param view
+	 */
 	public void onClickImagePicker(View view)
 	{
+		//intent for sending
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if (takePictureIntent.resolveActivity(getPackageManager()) != null)
 		{
 			startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE_CAMERA);
 		}
 
-
+		//This part is for library - which is not needed right now
 		//Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		//startActivityForResult(pickPhoto , REQUEST_CODE_TAKE_PICTURE_LIBRARY);
 	}
 
+	/**
+	 * Overrided method for receiving images from Camera/Library apps
+	 * @param requestCode Request identifier
+	 * @param resultCode Result from another activity (this time Camera/Library)
+	 * @param data Received data from another activity
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
+
+		//Handle request code
 		switch(requestCode)
 		{
 			case REQUEST_CODE_TAKE_PICTURE_CAMERA:
@@ -237,8 +378,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 				{
 					this.setImage(data);
 				}
-
 				break;
+
 			case REQUEST_CODE_TAKE_PICTURE_LIBRARY:
 				if(resultCode == RESULT_OK)
 				{
@@ -248,14 +389,23 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		}
 	}
 
+	/**
+	 * Image setter
+	 * - gets data from Intent
+	 * - convert data to bitmap
+	 * - show views and delete button in layout
+	 * @param data Stores image from another activity
+	 */
 	private void setImage(Intent data)
 	{
 		Bundle extras = data.getExtras();
 		if (extras != null)
 		{
+			//set image
 			Bitmap imageBitmap = (Bitmap) extras.get("data");
 			this.imageView.setImageBitmap(imageBitmap);
 
+			//show views and button
 			findViewById(R.id.text_view_label_picture).setVisibility(TextView.VISIBLE);
 			findViewById(R.id.button_delete_picture).setVisibility(Button.VISIBLE);
 			this.imageView.setVisibility(ImageView.VISIBLE);
@@ -263,7 +413,6 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 		}
 
 	}
-
 
 	/**
 	 * When phone has new location, set it as GPSLocation
@@ -288,7 +437,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	@Override
 	public void onProviderEnabled(String provider)
 	{
-		Toast.makeText(this, MESSAGE_PROVIDER_ENABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, MESSAGE_PROVIDER_ENABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.message_start_getting_location, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -298,7 +448,8 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	@Override
 	public void onProviderDisabled(String provider)
 	{
-		Toast.makeText(this, MESSAGE_PROVIDER_DISABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, MESSAGE_PROVIDER_DISABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.message_provider_disabled, Toast.LENGTH_SHORT).show();
 	}
 
 
@@ -392,14 +543,19 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	}
 
+	/**
+	 * Storing image to internal directory (not library!)
+	 * @param report Report with image
+	 */
 	private void saveImageToInternalStorage(Report report)
 	{
+		//get drawable part
 		Drawable bitmapDrawable = this.imageView.getDrawable();
-		if(bitmapDrawable == null)
+		if(bitmapDrawable == null) //no image
 		{
 			report.setPicturePath("");
 		}
-		else
+		else //some image is there
 		{
 			Bitmap bitmapImage = ((BitmapDrawable) bitmapDrawable).getBitmap();
 
@@ -409,12 +565,12 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 			// Create imageDir
 			File mypath=new File(directory,report.getCreateTime() + ".jpg"); //TODO image names
 
-			FileOutputStream fos = null;
+			FileOutputStream outputStream = null;
 			try
 			{
-				fos = new FileOutputStream(mypath);
+				outputStream = new FileOutputStream(mypath);
 				// Use the compress method on the BitMap object to write image to the OutputStream
-				bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 			}
 			catch (Exception e)
 			{
@@ -424,7 +580,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 			{
 				try
 				{
-					if(fos != null) fos.close();
+					if(outputStream != null) outputStream.close();
 				}
 				catch (IOException e)
 				{
@@ -437,12 +593,20 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	}
 
+	/**
+	 * Delete picture from view and hide views and button
+	 * @param view Clicked view
+	 */
 	public void deleteOnClick(View view)
 	{
+		//delete image
 		this.imageView.setImageBitmap(null);
+
+		//hide views and button
 		this.imageView.setVisibility(ImageView.GONE);
 		findViewById(R.id.text_view_label_picture).setVisibility(TextView.GONE);
 		findViewById(R.id.button_delete_picture).setVisibility(Button.GONE);
-		Toast.makeText(this, R.string.message_report_deleted, Toast.LENGTH_SHORT).show();
+
+		Toast.makeText(this, R.string.message_picture_removed, Toast.LENGTH_SHORT).show();
 	}
 }
