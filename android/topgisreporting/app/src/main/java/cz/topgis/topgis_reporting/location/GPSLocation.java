@@ -21,7 +21,7 @@ public final class GPSLocation
 	/**
 	 * Constant which represents unknown location
 	 */
-	static private final String GPS_NOT_SET = "Unknown location";
+	static private final String GPS_NOT_SET = "Unknown";
 
 	/**
 	 * Default constructor

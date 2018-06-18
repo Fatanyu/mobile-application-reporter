@@ -27,4 +27,9 @@
     <string name="message_start_getting_location">Getting location ...</string>
     <string name="message_provider_disabled">Location is disabled, report can not created</string>
     <string name="message_picture_removed">Picture has been removed</string>
+    <string name="message_permission_denied">App will not work without this permission</string>
+    <string name="message_missing_permission">Location permission is missing</string>
+    <string name="message_everything_deleted">Every report has been deleted</string>
+    <string name="gps_unknown">Unknown</string>
+    <string name="report_sent_true">Sent</string>
 </resources>

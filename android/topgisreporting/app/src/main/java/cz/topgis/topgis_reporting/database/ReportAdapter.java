@@ -83,9 +83,22 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.RowViewHol
 	public void onBindViewHolder(@NonNull RowViewHolder holder, int position)
 	{
 		Report report = reportsList.get(position);
+
 		holder.textViewDate.setText(report.getCreateTime());
 		holder.textViewTypeName.setText(report.getReportType());
-		holder.textViewSend.setText(report.isSend());
+		this.setViewSend(report, holder);
+
+	}
+
+	/**
+	 * Setter which takes string from resources
+	 * @param report Report which will be managing
+	 * @param holder Row holder which is used to RecyclerView
+	 */
+	private void setViewSend(Report report, RowViewHolder holder)
+	{
+		if(report.isSend()) holder.textViewSend.setText(R.string.report_sent_true);
+		else holder.textViewSend.setText("");
 	}
 
 	/**

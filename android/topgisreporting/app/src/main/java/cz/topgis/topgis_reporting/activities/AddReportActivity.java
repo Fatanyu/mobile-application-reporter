@@ -49,9 +49,11 @@ import cz.topgis.topgis_reporting.location.GPSLocation;
  */
 public class AddReportActivity extends AppCompatActivity implements LocationListener, AdapterView.OnItemSelectedListener
 {
-	//debug messages
-	private static final String MESSAGE_PROVIDER_DISABLED="Provider is disabled";
-	private static final String MESSAGE_PROVIDER_ENABLED="Provider is enabled";
+
+	/**
+	 * Flag which helps with messages for user. True when listener is listening
+	 */
+	private boolean checkingLocation = false;
 
 	/**
 	 * GPS permission internal request code
@@ -215,12 +217,21 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	}
 
 	/**
-	 * Simple location setter
+	 * Location setter
+	 * - set unknown GPS string line when dummy locations
 	 */
 	private void setLocationToViews()
 	{
-		this.textViewContentLatitude.setText(this.currentLocation.getLatitude());
-		this.textViewContentLongitude.setText(this.currentLocation.getLongitude());
+		if(this.currentLocation.isDummy())
+		{
+			this.textViewContentLongitude.setText(R.string.gps_not_set);
+			this.textViewContentLatitude.setText(R.string.gps_not_set);
+		}
+		else
+		{
+			this.textViewContentLatitude.setText(this.currentLocation.getLatitude());
+			this.textViewContentLongitude.setText(this.currentLocation.getLongitude());
+		}
 	}
 
 	//https://developer.android.com/training/appbar/setting-up
@@ -240,6 +251,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
 				//NavUtils.navigateUpFromSameTask(this);
+				this.unregisterListener();
 				finish();
 				return true;
 		}
@@ -432,24 +444,32 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 	/**
 	 * This method is called when location provider is enabled
-	 * @param provider Provider
+	 * @param provider The provider who is enabled (GPS or Network)
 	 */
 	@Override
 	public void onProviderEnabled(String provider)
 	{
 		//Toast.makeText(this, MESSAGE_PROVIDER_ENABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
-		Toast.makeText(this, R.string.message_start_getting_location, Toast.LENGTH_SHORT).show();
+		if(!this.checkingLocation || provider.equals(""))
+		{
+			this.checkingLocation = true;
+			Toast.makeText(this, R.string.message_start_getting_location, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	/**
 	 * This method is called when location provider is disabled
-	 * @param provider Provider
+	 * @param provider The provider who is disabled (GPS or Network)
 	 */
 	@Override
 	public void onProviderDisabled(String provider)
 	{
-		//Toast.makeText(this, MESSAGE_PROVIDER_DISABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
-		Toast.makeText(this, R.string.message_provider_disabled, Toast.LENGTH_SHORT).show();
+		if(this.checkingLocation || provider.equals(""))
+		{
+			this.checkingLocation = false;
+			Toast.makeText(this, R.string.message_provider_disabled, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, MESSAGE_PROVIDER_DISABLED + "( " + provider + " )", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 
@@ -462,20 +482,27 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
-			Toast.makeText(this, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.message_missing_permission, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
 		{
-			Toast.makeText(this, "Nemas pravo na informace k gps.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.message_missing_permission, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Toast.makeText(this, "Zapinam GPS listener", Toast.LENGTH_SHORT).show();
+
+		//intro messages
+		if(!this.providersDisabled()) this.onProviderEnabled("");
+		else this.onProviderDisabled("");
+
 		this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 		this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		//this.locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
 	}
 
+	/**
+	 *
+	 */
 	public void askGPSPermission()
 	{
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -485,11 +512,11 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 	}
 
 	/**
-	 * Stop tracking GPS location
+	 * Stop tracking GPS location. Must be called on every exit from this activity
 	 */
 	private void unregisterListener()
 	{
-		Toast.makeText(this, "Vypinam GPS listener", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Vypinam GPS listener", Toast.LENGTH_SHORT).show();
 		this.locationManager.removeUpdates(this);
 	}
 
@@ -525,11 +552,18 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 				if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
 					this.registerListener();
 				else //Do not have permission
-					Toast.makeText(this,"Really need that permission", Toast.LENGTH_SHORT).show(); //TODO
+					Toast.makeText(this,R.string.message_permission_denied, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
 
+	/**
+	 * What will happen after user select report type in spinner
+	 * @param parent Parent
+	 * @param view View
+	 * @param position Selected type position in spinner
+	 * @param id Id
+	 */
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 	{
@@ -561,7 +595,7 @@ public class AddReportActivity extends AppCompatActivity implements LocationList
 
 			ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
 			// path to /data/data/yourapp/app_data/imageDir
-			File directory = contextWrapper.getDir(IMAGE_DIRECTORY_NAME, Context.MODE_PRIVATE);
+			File directory = contextWrapper.getDir(AddReportActivity.IMAGE_DIRECTORY_NAME, Context.MODE_PRIVATE);
 			// Create imageDir
 			File mypath=new File(directory,report.getCreateTime() + ".jpg"); //TODO image names
 

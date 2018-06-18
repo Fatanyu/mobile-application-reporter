@@ -203,5 +203,6 @@ public class MainActivity extends AppCompatActivity
 	{
 		DBContentProvider dbContentProvider = new DBContentProvider(this);
 		dbContentProvider.deleteAllReports();
+		Toast.makeText(this, R.string.message_everything_deleted, Toast.LENGTH_SHORT).show();
 	}
 }

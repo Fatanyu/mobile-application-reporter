@@ -28,4 +28,9 @@
     <string name="message_start_getting_location">Vyhledávám polohu ...</string>
     <string name="message_provider_disabled">Poloha je vypnutá, hlášení nemůže být vytvořeno</string>
     <string name="message_picture_removed">Fotografie byla smazána</string>
+    <string name="message_permission_denied">Aplikace nebude fungovat bez těchto práv</string>
+    <string name="message_missing_permission">Chybí práva pro zjišťování polohy</string>
+    <string name="message_everything_deleted">Všechna hlášení byla smazána</string>
+    <string name="gps_unknown">Neznámá</string>
+    <string name="report_sent_true">Odesláno</string>
 </resources>

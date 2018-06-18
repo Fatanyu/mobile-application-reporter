@@ -218,11 +218,11 @@ public class Report
 
 	/**
 	 * Return String which explain if the report has been send
-	 * @return String true/false TODO
+	 * @return True/false
 	 */
-	public String isSend()
+	public Boolean isSend()
 	{
-		return this.send.toString();
+		return this.send;
 	}
 
 	/**
